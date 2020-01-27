@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"Project-Id-Version: Device Detector\n"
+"Project-Id-Version: Sessions\n"
 "POT-Creation-Date: 2020-01-22 13:58+0100\n"
 "PO-Revision-Date: 2019-07-08 14:07+0200\n"
 "Last-Translator: Pierre Lannoy <pierre@lannoy.fr>\n"
@@ -21,14 +21,14 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#. translators: as in the sentence "Device Detector Settings" or "WordPress Settings"
+#. translators: as in the sentence "Sessions Settings" or "WordPress Settings"
 #: admin/class-sessions-admin.php:88
 #: admin/partials/sessions-admin-settings-main.php:34
 #, php-format
 msgid "%s Settings"
 msgstr ""
 
-#. translators: as in the sentence "Device Detector Viewer"
+#. translators: as in the sentence "Sessions Viewer"
 #: admin/class-sessions-admin.php:92
 #, php-format
 msgid "%s Viewer"
@@ -95,7 +95,7 @@ msgstr ""
 
 #: admin/class-sessions-admin.php:350
 msgid ""
-"If checked, Device Detector will download favicons of websites to display "
+"If checked, Sessions will download favicons of websites to display "
 "them in reports."
 msgstr ""
 
@@ -112,7 +112,7 @@ msgstr ""
 #, php-format
 msgid ""
 "Your site does not use any logging plugin. To log all events triggered in "
-"Device Detector, I recommend you to install the excellent (and free) %s. "
+"Sessions, I recommend you to install the excellent (and free) %s. "
 "But it is not mandatory."
 msgstr ""
 
@@ -130,7 +130,7 @@ msgstr ""
 
 #: admin/class-sessions-admin.php:384
 msgid ""
-"If checked, Device Detector will use a public CDN (jsDelivr) to serve "
+"If checked, Sessions will use a public CDN (jsDelivr) to serve "
 "scripts and stylesheets."
 msgstr ""
 
@@ -144,12 +144,12 @@ msgstr ""
 
 #: admin/class-sessions-admin.php:400
 msgid ""
-"Allows Device Detector to display admin notices throughout the admin "
+"Allows Sessions to display admin notices throughout the admin "
 "dashboard."
 msgstr ""
 
 #: admin/class-sessions-admin.php:400
-msgid "Note: Device Detector respects DISABLE_NAG_NOTICES flag."
+msgid "Note: Sessions respects DISABLE_NAG_NOTICES flag."
 msgstr ""
 
 #: admin/class-sessions-admin.php:418
@@ -176,7 +176,7 @@ msgstr ""
 
 #: admin/class-sessions-admin.php:444
 msgid ""
-"If checked, Device Detector will store statistics about detected devices."
+"If checked, Sessions will store statistics about detected devices."
 msgstr ""
 
 #: admin/class-sessions-admin.php:452
@@ -198,7 +198,7 @@ msgstr ""
 #: admin/class-sessions-admin.php:485
 #, php-format
 msgid ""
-"If checked, the standard %s function will be improved by Device Detector."
+"If checked, the standard %s function will be improved by Sessions."
 msgstr ""
 
 #: admin/class-sessions-admin.php:503
@@ -470,7 +470,7 @@ msgid "Main Summary"
 msgstr ""
 
 #: includes/features/class-analytics.php:1142
-msgid "Return to Device Detector main page."
+msgid "Return to Sessions main page."
 msgstr ""
 
 #: includes/features/class-analytics.php:1165
@@ -1229,7 +1229,7 @@ msgid ""
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-msgid "Device Detector"
+msgid "Sessions"
 msgstr ""
 
 #. Plugin URI of the plugin/theme

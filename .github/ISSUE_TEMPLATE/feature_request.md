@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea for Device Detector
+about: Suggest an idea for Sessions
 title: ''
 labels: enhancement
 assignees: Pierre-Lannoy

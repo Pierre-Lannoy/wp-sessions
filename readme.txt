@@ -1,4 +1,4 @@
-=== Device Detector ===
+=== Sessions ===
 Contributors: PierreLannoy
 Tags: bot, detection, detector, device, mobile
 Requires at least: 5.2
@@ -12,16 +12,16 @@ Full featured analytics reporting and management tool that detects all devices a
 
 == Description ==
 
-**Device Detector** is a full featured analytics reporting and management tool that detects all devices accessing your WordPress site.
+**Sessions** is a full featured analytics reporting and management tool that detects all devices accessing your WordPress site.
 
-For each call made to your site, **Device Detector** analyzes the sent header, detects the device doing the call (and its characteristics) and can:
+For each call made to your site, **Sessions** analyzes the sent header, detects the device doing the call (and its characteristics) and can:
 
 * modify the `is_mobile()` WordPress core function to be more precise and reliable;
 * add some CSS classes to the `body` tag of your site (many classes to choose from);
 * let you use the result of the detection in your own developments;
 * record detected characteristics for reporting.
 
-**Device Detector** can report the following main items and characteristics:
+**Sessions** can report the following main items and characteristics:
 
 * KPIs: number of hits, class breakdown, clients types and engines;
 * Classes: Bot, Desktop, Mobile and Other;
@@ -34,13 +34,13 @@ For each call made to your site, **Device Detector** analyzes the sent header, d
 
 For a full list of items, characteristics and supported devices, please see the 'devices' tab in the plugin settings.
 
-**Device Detector** supports multisite report delegation and per site configuration (see FAQ).
+**Sessions** supports multisite report delegation and per site configuration (see FAQ).
 
-Based on the amazing [Matomo](https://github.com/matomo-org/matomo) UDD, Device Detector is a free and open source plugin for WordPress. It integrates many other free and open source works (as-is or modified). Please, see 'about' tab in the plugin settings to see the details.
+Based on the amazing [Matomo](https://github.com/matomo-org/matomo) UDD, Sessions is a free and open source plugin for WordPress. It integrates many other free and open source works (as-is or modified). Please, see 'about' tab in the plugin settings to see the details.
 
 = Developers =
 
-If you're a plugins / themes developer and want to take advantage of the detection features of Device Detector, visit the [GitHub repository](https://github.com/Pierre-Lannoy/wp-sessions) of the plugin to learn how to use it.
+If you're a plugins / themes developer and want to take advantage of the detection features of Sessions, visit the [GitHub repository](https://github.com/Pierre-Lannoy/wp-sessions) of the plugin to learn how to use it.
 
 = Support =
 
@@ -57,19 +57,19 @@ If you like this plugin or find it useful and want to thank me for the work done
 = From your WordPress dashboard =
 
 1. Visit 'Plugins > Add New'.
-2. Search for 'Device Detector'.
+2. Search for 'Sessions'.
 3. Click on the 'Install Now' button.
-4. Activate Device Detector.
+4. Activate Sessions.
 
 = From WordPress.org =
 
-1. Download Device Detector.
+1. Download Sessions.
 2. Upload the `sessions` directory to your `/wp-content/plugins/` directory, using your favorite method (ftp, sftp, scp, etc...).
-3. Activate Device Detector from your Plugins page.
+3. Activate Sessions from your Plugins page.
 
 = Once Activated =
 
-1. Visit 'Settings > Device Detector' in the left-hand menu of your WP Admin to adjust settings.
+1. Visit 'Settings > Sessions' in the left-hand menu of your WP Admin to adjust settings.
 2. Enjoy!
 
 == Frequently Asked Questions ==

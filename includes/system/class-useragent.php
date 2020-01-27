@@ -2,7 +2,7 @@
 /**
  * UserAgent handling
  *
- * Handles all UserAgent operations and detection (via Device Detector).
+ * Handles all UserAgent operations and detection (via Sessions).
  *
  * @package System
  * @author  Pierre Lannoy <https://pierre.lannoy.fr/>.
