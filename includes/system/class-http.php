@@ -9,7 +9,7 @@
  * @since   1.0.0
  */
 
-namespace WPPluginBoilerplate\System;
+namespace POSessions\System;
 
 /**
  * Define the HTTP functionality.
@@ -185,7 +185,7 @@ class Http {
 	 * @since  1.0.0
 	 */
 	public static function user_agent( $user_agent, $url ) {
-		return WPPB_PRODUCT_NAME . ' (' . Environment::wordpress_version_id() . '; ' . Environment::plugin_version_id() . '; +' . WPPB_PRODUCT_URL . ')';
+		return POSE_PRODUCT_NAME . ' (' . Environment::wordpress_version_id() . '; ' . Environment::plugin_version_id() . '; +' . POSE_PRODUCT_URL . ')';
 	}
 
 	/**

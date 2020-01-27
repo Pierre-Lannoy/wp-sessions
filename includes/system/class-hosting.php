@@ -7,7 +7,7 @@
  * @since   1.0.0
  */
 
-namespace WPPluginBoilerplate\System;
+namespace POSessions\System;
 
 /**
  * The class responsible to manage and detect hosting environment.

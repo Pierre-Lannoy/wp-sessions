@@ -7,7 +7,7 @@
  * @since   1.0.0
  */
 
-namespace WPPluginBoilerplate\Plugin;
+namespace POSessions\Plugin;
 
 /**
  * Fired during plugin deactivation.

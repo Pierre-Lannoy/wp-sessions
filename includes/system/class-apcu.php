@@ -9,11 +9,11 @@
  * @since   1.0.0
  */
 
-namespace WPPluginBoilerplate\System;
+namespace POSessions\System;
 
-use WPPluginBoilerplate\System\Logger;
-use WPPluginBoilerplate\System\Option;
-use WPPluginBoilerplate\System\File;
+use POSessions\System\Logger;
+use POSessions\System\Option;
+use POSessions\System\File;
 
 /**
  * Define the APCu functionality.
@@ -59,8 +59,8 @@ class APCu {
 	 * @since 1.0.0
 	 */
 	public static function perfopsone_apcu_info( $apcu ) {
-		$apcu[ WPPB_SLUG ] = [
-			'name' => WPPB_PRODUCT_NAME,
+		$apcu[ POSE_SLUG ] = [
+			'name' => POSE_PRODUCT_NAME,
 		];
 		return $apcu;
 	}

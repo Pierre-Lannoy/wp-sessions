@@ -7,15 +7,16 @@
  * @since   1.0.0
  *
  * @wordpress-plugin
- * Plugin Name:       WordPress plugin boilerplate
- * Plugin URI:        --
- * Description:       --
+ * Plugin Name:       Sessions
+ * Plugin URI:        https://github.com/Pierre-Lannoy/wp-sessions
+ * Description:       Full featured analytics reporting and management tool that detects all devices accessing your WordPress site.
  * Version:           1.0.0
  * Author:            Pierre Lannoy
  * Author URI:        https://pierre.lannoy.fr
- * License:           GPLv2 or later
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       wp-plugin-boilerplate
+ * License:           GPLv3
+ * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
+ * Network:           true
+ * Text Domain:       sessions
  * Domain Path:       /languages
  */
 
@@ -36,8 +37,8 @@ require_once __DIR__ . '/includes/libraries/autoload.php';
  *
  * @since 1.0.0
  */
-function wppb_activate() {
-	WPPluginBoilerplate\Plugin\Activator::activate();
+function pose_activate() {
+	POSessions\Plugin\Activator::activate();
 }
 
 /**
@@ -45,8 +46,8 @@ function wppb_activate() {
  *
  * @since 1.0.0
  */
-function wppb_deactivate() {
-	WPPluginBoilerplate\Plugin\Deactivator::deactivate();
+function pose_deactivate() {
+	POSessions\Plugin\Deactivator::deactivate();
 }
 
 /**
@@ -54,8 +55,8 @@ function wppb_deactivate() {
  *
  * @since 1.0.0
  */
-function wppb_uninstall() {
-	WPPluginBoilerplate\Plugin\Uninstaller::uninstall();
+function pose_uninstall() {
+	POSessions\Plugin\Uninstaller::uninstall();
 }
 
 /**
@@ -63,12 +64,12 @@ function wppb_uninstall() {
  *
  * @since 1.0.0
  */
-function wppb_run() {
-	$plugin = new WPPluginBoilerplate\Plugin\Core();
+function pose_run() {
+	$plugin = new POSessions\Plugin\Core();
 	$plugin->run();
 }
 
-register_activation_hook( __FILE__, 'wppb_activate' );
-register_deactivation_hook( __FILE__, 'wppb_deactivate' );
-register_uninstall_hook( __FILE__, 'wppb_uninstall' );
-wppb_run();
+register_activation_hook( __FILE__, 'pose_activate' );
+register_deactivation_hook( __FILE__, 'pose_deactivate' );
+register_uninstall_hook( __FILE__, 'pose_uninstall' );
+pose_run();

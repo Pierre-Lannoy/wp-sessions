@@ -7,15 +7,16 @@
  * @since   1.0.0
  */
 
-define( 'WPPB_PRODUCT_NAME', 'WordPress Plugin Boilerplate' );
-define( 'WPPB_PRODUCT_URL', 'https://github.com/Pierre-Lannoy' );
-define( 'WPPB_PRODUCT_SHORTNAME', 'PluginBoilerplate' );
-define( 'WPPB_PRODUCT_ABBREVIATION', 'wppb' );
-define( 'WPPB_SLUG', 'wp-plugin-boilerplate' );
-define( 'WPPB_VERSION', '1.0.0' );
-define( 'WPPB_CODENAME', '"-"' );
+define( 'POSE_PRODUCT_NAME', 'Sessions' );
+define( 'POSE_PRODUCT_URL', 'https://github.com/Pierre-Lannoy/wp-sessions' );
+define( 'POSE_PRODUCT_SHORTNAME', 'Sessions' );
+define( 'POSE_PRODUCT_ABBREVIATION', 'pose' );
+define( 'POSE_SLUG', 'sessions' );
+define( 'POSE_VERSION', '1.0.0-dev0' );
+define( 'POSE_CODENAME', '"-"' );
 
-define( 'WPPB_MINIMUM_WP_VERSION', '4.9' );
-define( 'WPPB_MINIMUM_PHP_VERSION', '7.2' );
+define( 'POSE_MINIMUM_WP_VERSION', '4.9' );
+define( 'POSE_MINIMUM_PHP_VERSION', '7.2' );
 
-define( 'WPPB_CDN_AVAILABLE', true );
+define( 'POSE_CDN_AVAILABLE', true );
+

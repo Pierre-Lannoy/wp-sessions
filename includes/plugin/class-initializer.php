@@ -7,7 +7,7 @@
  * @since   1.0.0
  */
 
-namespace WPPluginBoilerplate\Plugin;
+namespace POSessions\Plugin;
 
 /**
  * Fired after 'plugins_loaded' hook.
@@ -35,9 +35,11 @@ class Initializer {
 	 * @since 1.0.0
 	 */
 	public function initialize() {
-		\WPPluginBoilerplate\System\Logger::init();
-		\WPPluginBoilerplate\System\Cache::init();
-		\WPPluginBoilerplate\System\APCu::init();
+		\POSessions\System\Logger::init();
+		\POSessions\System\Cache::init();
+		\POSessions\System\Sitehealth::init();
+		\POSessions\Plugin\Feature\Schema::init();
+		\POSessions\System\APCu::init();
 	}
 
 }

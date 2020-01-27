@@ -7,15 +7,15 @@
  * @since   1.0.0
  */
 
-namespace WPPluginBoilerplate\Plugin;
+namespace POSessions\Plugin;
 
 use Parsedown;
-use WPPluginBoilerplate\System\Nag;
-use WPPluginBoilerplate\System\Option;
-use WPPluginBoilerplate\System\Role;
-use WPPluginBoilerplate\System\Logger;
-use WPPluginBoilerplate\System\Environment;
+use POSessions\System\Nag;
+use POSessions\System\Option;
 use Exception;
+use POSessions\System\Logger;
+use POSessions\System\Cache;
+use POSessions\Plugin\Feature\Schema;
 
 /**
  * Plugin updates handling.
@@ -36,21 +36,21 @@ class Updater {
 	 */
 	public function __construct() {
 		$old = Option::network_get( 'version' );
-		if ( TRAFFIC_VERSION !== $old ) {
+		if ( POSE_VERSION !== $old ) {
 			if ( '0.0.0' === $old ) {
 				$this->install();
 				// phpcs:ignore
-				$message = sprintf( esc_html__( '%1$s has been correctly installed.', 'wp-plugin-boilerplate' ), WPPB_PRODUCT_NAME );
+				$message = sprintf( esc_html__( '%1$s has been correctly installed.', 'sessions' ), POSE_PRODUCT_NAME );
 			} else {
 				$this->update( $old );
 				// phpcs:ignore
-				$message  = sprintf( esc_html__( '%1$s has been correctly updated from version %2$s to version %3$s.', 'wp-plugin-boilerplate' ), WPPB_PRODUCT_NAME, $old, WPPB_VERSION );
+				$message  = sprintf( esc_html__( '%1$s has been correctly updated from version %2$s to version %3$s.', 'sessions' ), POSE_PRODUCT_NAME, $old, POSE_VERSION );
 				Logger::notice( $message );
 				// phpcs:ignore
-				$message .= ' ' . sprintf( __( 'See <a href="%s">what\'s new</a>.', 'wp-plugin-boilerplate' ), admin_url( 'options-general.php?page=wp-plugin-boilerplate-settings&tab=about' ) );
+				$message .= ' ' . sprintf( __( 'See <a href="%s">what\'s new</a>.', 'sessions' ), admin_url( 'options-general.php?page=pose-settings&tab=about' ) );
 			}
 			Nag::add( 'update', 'info', $message );
-			Option::network_set( 'version', TRAFFIC_VERSION );
+			Option::network_set( 'version', POSE_VERSION );
 		}
 	}
 
@@ -70,50 +70,10 @@ class Updater {
 	 * @since 1.0.0
 	 */
 	private function update( $from ) {
-
-	}
-
-	/**
-	 * Is the WP update system enabled for plugins?
-	 *
-	 * @return  boolean  True if nothing blocks updates, false otherwise.
-	 * @since 1.0.0
-	 */
-	public function is_updatable() {
-		$filter = false === has_filter( 'auto_update_plugin', '__return_false' );
-		if ( defined( 'AUTOMATIC_UPDATER_DISABLED' ) ) {
-			$main = ! AUTOMATIC_UPDATER_DISABLED;
-		} else {
-			$main = true;
-		}
-		return $main && $filter;
-	}
-
-	/**
-	 * Is the plugin auto-update enabled?
-	 *
-	 * @return  boolean  True if plugin is auto-updatable, false otherwise.
-	 * @since 1.0.0
-	 */
-	public function is_autoupdatable() {
-		return ( $this->is_updatable() && Option::site_get( 'auto_update' ) );
-	}
-
-	/**
-	 * Choose if the plugin must be auto-updated or not.
-	 * Concerned hook: auto_update_plugin.
-	 *
-	 * @param   boolean $update The default answer.
-	 * @param   object  $item   The detail of the item (to update or not).
-	 * @return  boolean  True if plugin must be auto-updated, false otherwise.
-	 * @since 1.0.0
-	 */
-	public function auto_update_plugin( $update, $item ) {
-		if ( ( WPPB_SLUG === $item->slug ) && $this->is_autoupdatable() ) {
-			return true;
-		} else {
-			return $update;
-		}
+		$schema = new Schema();
+		$schema->update();
+		Cache::delete_global( 'data/*' );
+		Logger::notice( 'Cache purged.' );
 	}
 
 	/**
@@ -134,9 +94,9 @@ class Updater {
 		);
 		$style       = $_attributes['style'];
 		$mode        = $_attributes['mode'];
-		$error       = esc_html__( 'Sorry, unable to find or read changelog file.', 'wp-plugin-boilerplate' );
+		$error       = esc_html__( 'Sorry, unable to find or read changelog file.', 'sessions' );
 		$result      = esc_html( $error );
-		$changelog   = WPPB_PLUGIN_DIR . 'CHANGELOG.md';
+		$changelog   = POSE_PLUGIN_DIR . 'CHANGELOG.md';
 		if ( file_exists( $changelog ) ) {
 			try {
 				// phpcs:ignore

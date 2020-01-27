@@ -8,7 +8,9 @@
  * @noinspection PhpCSValidationInspection
  */
 
-namespace WPPluginBoilerplate\System;
+namespace POSessions\System;
+
+use POSessions\System\Conversion;
 
 /**
  * The class responsible to handle cache management.
@@ -25,7 +27,7 @@ class Cache {
 	 * @since  1.0.0
 	 * @var    string    $pool_name    The pool's name.
 	 */
-	private static $pool_name = WPPB_SLUG;
+	private static $pool_name = POSE_SLUG;
 
 	/**
 	 * Available TTLs.
@@ -109,8 +111,8 @@ class Cache {
 			wp_cache_add_global_groups( self::$pool_name );
 		}
 		self::$apcu_available = function_exists( 'apcu_delete' ) && function_exists( 'apcu_fetch' ) && function_exists( 'apcu_store' );
-		add_action( 'shutdown', [ 'Traffic\System\Cache', 'log_debug' ], 10, 0 );
-		add_filter( 'perfopsone_icache_introspection', [ 'Traffic\System\Cache', 'introspection' ] );
+		add_action( 'shutdown', [ 'POSessions\System\Cache', 'log_debug' ], 10, 0 );
+		add_filter( 'perfopsone_icache_introspection', [ 'POSessions\System\Cache', 'introspection' ] );
 	}
 
 	/**
@@ -119,7 +121,7 @@ class Cache {
 	 * @since 1.0.0
 	 */
 	public static function introspection( $endpoints ) {
-		$endpoints[ TRAFFIC_SLUG ] = [ 'name' => TRAFFIC_PRODUCT_NAME, 'version' => TRAFFIC_VERSION, 'endpoint' => [ 'Traffic\System\Cache', 'get_analytics' ] ];
+		$endpoints[ POSE_SLUG ] = [ 'name' => POSE_PRODUCT_NAME, 'version' => POSE_VERSION, 'endpoint' => [ 'POSessions\System\Cache', 'get_analytics' ] ];
 		return $endpoints;
 	}
 

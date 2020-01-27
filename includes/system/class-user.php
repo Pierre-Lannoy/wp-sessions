@@ -9,7 +9,7 @@
  * @since   1.0.0
  */
 
-namespace WPPluginBoilerplate\System;
+namespace POSessions\System;
 
 /**
  * Define the user functionality.
@@ -104,7 +104,7 @@ class User {
 	public static function delete_all_meta() {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'usermeta';
-		$sql        = 'DELETE FROM ' . $table_name . ' WHERE meta_key LIKE "%\_decalog-%";';
+		$sql        = 'DELETE FROM ' . $table_name . ' WHERE meta_key LIKE "%\_pose-%";';
 		// phpcs:ignore
 		return $wpdb->query( $sql );
 	}

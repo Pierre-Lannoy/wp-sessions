@@ -1,26 +1,9 @@
 # Changelog
-All notable changes to **WordPress plugin boilerplate** are documented in this *changelog*.
+All notable changes to **Device Detector** are documented in this *changelog*.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **WordPress plugin boilerplate** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Device Detector** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-### Added
-- New feature.
+## [Unreleased - will be 1.0.1]
 
-### Changed
-- Change in existing functionality.
-
-### Deprecated
-- Soon-to-be removed feature.
-
-### Removed
-- Now removed feature.
-
-### Fixed
-- Bug fix.
-
-### Security
-- Covered vulnerability.
-
-## [1.0.0] - XXXX-XX-XX
+## [1.0.0] - 2020-01-22
 ### Initial release

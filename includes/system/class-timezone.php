@@ -9,9 +9,9 @@
  * @since   1.0.0
  */
 
-namespace WPPluginBoilerplate\System;
+namespace POSessions\System;
 
-use WPPluginBoilerplate\System\Environment;
+use POSessions\System\Environment;
 
 /**
  * Define the timezone functionality.

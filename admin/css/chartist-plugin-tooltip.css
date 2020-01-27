@@ -1,0 +1,38 @@
+:root {
+    --tooltip-font-color: #FFFFFF;
+    --tooltip-background-color: #73879C;
+    --tooltip-box-shadow: 1px 1px 8px #DDDDDD;
+}
+
+.chartist-tooltip {
+    position: absolute;
+    display: inline-block;
+    opacity: 0;
+    background: var(--tooltip-background-color);
+    color: var(--tooltip-font-color);
+    font-size: 10px;
+    padding: 10px 15px;
+    border-radius: 4px;
+    text-align: center;
+    pointer-events: none;
+    z-index: 99;
+    transition: transform 400ms ease, opacity 400ms;
+    box-shadow: var(--tooltip-box-shadow);
+}
+
+.chartist-tooltip:before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    margin-left: -6px;
+    border: 6px solid transparent;
+    border-top-color: var(--tooltip-background-color);
+}
+
+.chartist-tooltip.tooltip-show {
+    opacity: 1;
+    transform: translateY(-10px);
+}

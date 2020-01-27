@@ -9,7 +9,7 @@
  * @since   1.0.0
  */
 
-namespace WPPluginBoilerplate\System;
+namespace POSessions\System;
 
 /**
  * Define the logging functionality.
@@ -45,7 +45,7 @@ class Logger {
 	 */
 	public static function init() {
 		if ( defined( 'DECALOG_VERSION' ) && class_exists( '\Decalog\Logger' ) ) {
-			self::$logger = new \Decalog\Logger( 'plugin', WPPB_PRODUCT_NAME, WPPB_VERSION );
+			self::$logger = new \Decalog\Logger( 'plugin', POSE_PRODUCT_NAME, POSE_VERSION );
 		}
 	}
 
