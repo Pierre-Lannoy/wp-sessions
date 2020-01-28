@@ -20,7 +20,7 @@ use POSessions\System\Form;
 use POSessions\System\Blog;
 use POSessions\System\Date;
 use POSessions\System\Timezone;
-use POSessions\Plugin\Feature\CSSModifier;
+use POSessions\System\GeoIP;
 
 /**
  * The admin-specific functionality of the plugin.
@@ -336,7 +336,7 @@ class Sessions_Admin {
 			$help .= sprintf( esc_html__('Your site is currently using %s.', 'sessions' ), '<em>Device Detector v' . PODD_VERSION .'</em>' );
 		} else {
 			$help  = '<img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'alert-triangle', 'none', '#FF8C00' ) . '" />&nbsp;';
-			$help .= sprintf( esc_html__('Your site does not use any device detection mechanism. To allow device differentiation in sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory.', 'sessions' ), '<a href="https://wordpress.org/plugins/device-detector/">Device Detector</a>' );
+			$help .= sprintf( esc_html__('Your site does not use any device detection mechanism. To allow device differentiation in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory.', 'sessions' ), '<a href="https://wordpress.org/plugins/device-detector/">Device Detector</a>' );
 		}
 		add_settings_field(
 			'pose_plugin_options_podd',
@@ -349,6 +349,25 @@ class Sessions_Admin {
 			]
 		);
 		register_setting( 'pose_plugin_options_section', 'pose_plugin_options_podd' );
+		$geo_ip = new GeoIP();
+		if ( $geo_ip->is_installed() ) {
+			$help  = '<img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'thumbs-up', 'none', '#00C800' ) . '" />&nbsp;';
+			$help .= sprintf( esc_html__('Your site is currently using %s.', 'sessions' ), '<em>' . $geo_ip->get_full_name() .'</em>' );
+		} else {
+			$help  = '<img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'alert-triangle', 'none', '#FF8C00' ) . '" />&nbsp;';
+			$help .= sprintf( esc_html__('Your site does not use any IP geographic information plugin. To allow country differentiation in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory.', 'sessions' ), '<a href="https://wordpress.org/plugins/geoip-detect/">GeoIP Detection</a>' );
+		}
+		add_settings_field(
+			'pose_plugin_options_geoip',
+			__( 'IP information', 'sessions' ),
+			[ $form, 'echo_field_simple_text' ],
+			'pose_plugin_options_section',
+			'pose_plugin_options_section',
+			[
+				'text' => $help
+			]
+		);
+		register_setting( 'pose_plugin_options_section', 'pose_plugin_options_geoip' );
 		add_settings_field(
 			'pose_plugin_options_usecdn',
 			esc_html__( 'Resources', 'sessions' ),
@@ -419,7 +438,7 @@ class Sessions_Admin {
 				'text'        => esc_html__( 'Activated', 'sessions' ),
 				'id'          => 'pose_plugin_features_analytics',
 				'checked'     => Option::network_get( 'analytics' ),
-				'description' => esc_html__( 'If checked, Sessions will store statistics about detected devices.', 'sessions' ),
+				'description' => esc_html__( 'If checked, Sessions will store statistics about logins and logouts.', 'sessions' ),
 				'full_width'  => true,
 				'enabled'     => true,
 			]

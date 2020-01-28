@@ -58,17 +58,6 @@ class Libraries {
 	 */
 	public static function init() {
 		self::$psr4_libraries              = [];
-		self::$psr4_libraries['udd']       = [
-			'name'    => 'Universal Device Detection',
-			'prefix'  => 'UDD',
-			'base'    => POSE_VENDOR_DIR . 'udd/',
-			'version' => '3.12.3',
-			// phpcs:ignore
-			'author'  => sprintf( esc_html__( '%s & contributors', 'sessions' ), 'Matomo Analytics' ),
-			'url'     => 'https://github.com/matomo-org/sessions',
-			'license' => 'lgpl3',
-			'langs'   => 'en',
-		];
 		self::$psr4_libraries['feather']   = [
 			'name'    => 'Feather',
 			'prefix'  => 'Feather',
@@ -80,17 +69,6 @@ class Libraries {
 			'license' => 'mit',
 			'langs'   => 'en',
 		];
-		self::$psr4_libraries['morpheus']  = [
-			'name'    => 'Morpheus Loader',
-			'prefix'  => 'Morpheus',
-			'base'    => POSE_VENDOR_DIR . 'morpheus/',
-			'version' => '1.0.0',
-			// phpcs:ignore
-			'author'  => 'Pierre Lannoy',
-			'url'     => 'https://pierre.lannoy.fr',
-			'license' => 'lgpl3',
-			'langs'   => 'en',
-		];
 		self::$mono_libraries              = [];
 		self::$mono_libraries['parsedown'] = [
 			'name'    => 'Parsedown',
@@ -100,17 +78,6 @@ class Libraries {
 			// phpcs:ignore
 			'author'  => sprintf( esc_html__( '%s & contributors', 'sessions' ), 'Emanuil Rusev' ),
 			'url'     => 'https://parsedown.org',
-			'license' => 'mit',
-			'langs'   => 'en',
-		];
-		self::$mono_libraries['spyc']      = [
-			'name'    => 'Spyc',
-			'detect'  => 'Spyc',
-			'base'    => POSE_VENDOR_DIR . 'spyc/',
-			'version' => '0.6.2',
-			// phpcs:ignore
-			'author'  => sprintf( esc_html__( '%s, %s & contributors', 'sessions' ), 'Vlad Andersen', 'Chris Wanstrath' ),
-			'url'     => 'https://github.com/mustangostang/spyc/',
 			'license' => 'mit',
 			'langs'   => 'en',
 		];
