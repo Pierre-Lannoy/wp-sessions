@@ -415,11 +415,11 @@ class Analytics {
 			$result .= '<script>';
 			$result .= 'jQuery(function ($) {';
 			$result .= ' var data' . $uuid . ' = ' . wp_json_encode(
-					[
-						'labels' => $labels,
-						'series' => $series,
-					]
-				) . ';';
+				[
+					'labels' => $labels,
+					'series' => $series,
+				]
+			) . ';';
 			$result .= ' var tooltip' . $uuid . ' = Chartist.plugins.tooltip({percentage: true, appendToBody: true});';
 			$result .= ' var option' . $uuid . ' = {width: ' . $size . ', height: ' . $size . ', showLabel: false, donut: true, donutWidth: "40%", startAngle: 270, plugins: [tooltip' . $uuid . ']};';
 			$result .= ' new Chartist.Pie("#pose-pie-' . $type . '", data' . $uuid . ', option' . $uuid . ');';
@@ -658,7 +658,14 @@ class Analytics {
 				$d[ $current ]['total'] += $row['sum_hit'];
 				$total                  += $row['sum_hit'];
 			}
-			uasort( $d, function ( $a, $b ) { if ( $a['total'] === $b['total'] ) { return 0; } return ( $a['total'] > $b['total'] ) ? -1 : 1 ;} );
+			uasort(
+				$d,
+				function ( $a, $b ) {
+					if ( $a['total'] === $b['total'] ) {
+						return 0;
+					} return ( $a['total'] > $b['total'] ) ? -1 : 1;
+				}
+			);
 			$result  = '<table class="pose-table">';
 			$result .= '<tr>';
 			$result .= '<th>&nbsp;</th>';
@@ -803,7 +810,14 @@ class Analytics {
 				$d[ $current ]['total'] += $row['sum_hit'];
 				$total                  += $row['sum_hit'];
 			}
-			uasort( $d, function ( $a, $b ) { if ( $a['total'] === $b['total'] ) { return 0; } return ( $a['total'] > $b['total'] ) ? -1 : 1 ;} );
+			uasort(
+				$d,
+				function ( $a, $b ) {
+					if ( $a['total'] === $b['total'] ) {
+						return 0;
+					} return ( $a['total'] > $b['total'] ) ? -1 : 1;
+				}
+			);
 			$result  = '<table class="pose-table">';
 			$result .= '<tr>';
 			$result .= '<th>&nbsp;</th>';
@@ -815,7 +829,14 @@ class Analytics {
 			$result .= '</tr>';
 			foreach ( $d as $item ) {
 				if ( 0 < count( $item['data'] ) ) {
-					uasort( $item['data'], function ( $a, $b ) { if ( $a['total'] === $b['total'] ) { return 0; } return ( $a['total'] > $b['total'] ) ? -1 : 1 ;} );
+					uasort(
+						$item['data'],
+						function ( $a, $b ) {
+							if ( $a['total'] === $b['total'] ) {
+								return 0;
+							} return ( $a['total'] > $b['total'] ) ? -1 : 1;
+						}
+					);
 				}
 				if ( '' === $icon_list ) {
 					$icon = Favicon::get_base64( $item['icon'] );
@@ -824,7 +845,7 @@ class Analytics {
 				}
 				$l = [
 					'type' => $link,
-					'id'   => $item[ 'id' ],
+					'id'   => $item['id'],
 				];
 				if ( '' !== $elink ) {
 					$name = $item['name'];
@@ -844,8 +865,8 @@ class Analytics {
 					if ( '' !== $elink ) {
 						$l    = [
 							'type'     => $link,
-							'id'       => $item[ 'id' ],
-							'extended' => $datum[ 'id' ],
+							'id'       => $item['id'],
+							'extended' => $datum['id'],
 						];
 						$name = '<a href="' . $this->get_url( [], $l ) . '">' . $datum['name'] . '</a>';
 					} else {

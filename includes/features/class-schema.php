@@ -40,7 +40,7 @@ class Schema {
 	 * @since  1.0.0
 	 * @var    string    $statistics    The statistics table name.
 	 */
-	private static $statistics = 'device_detector_statistics';
+	private static $statistics = 'Sessions_statistics';
 
 	/**
 	 * Initialize the class and set its properties.

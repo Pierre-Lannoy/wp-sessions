@@ -18,7 +18,7 @@ use POSessions\System\Assets;
  * @author  Pierre Lannoy <https://pierre.lannoy.fr/>.
  * @since   1.0.0
  */
-class Device_Detector_Public {
+class Sessions_Public {
 
 
 	/**

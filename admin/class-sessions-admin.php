@@ -29,7 +29,7 @@ use POSessions\Plugin\Feature\CSSModifier;
  * @author  Pierre Lannoy <https://pierre.lannoy.fr/>.
  * @since   1.0.0
  */
-class Device_Detector_Admin {
+class Sessions_Admin {
 
 	/**
 	 * The assets manager that's responsible for handling all assets of the plugin.
