@@ -27,5 +27,5 @@
 	" method="POST">
 	<?php do_settings_sections( 'pose_plugin_css_section' ); ?>
 	<?php wp_nonce_field( 'pose-plugin-options' ); ?>
-    <p><?php echo get_submit_button( null, 'primary', 'submit', false ); ?></p>
+	<p><?php echo get_submit_button( null, 'primary', 'submit', false ); ?></p>
 </form>
