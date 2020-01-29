@@ -82,4 +82,24 @@ class Role {
 		return 0;
 	}
 
+	/**
+	 * Get a list of available roles.
+	 *
+	 * @return  array  The list of available roles.
+	 * @since   1.0.0
+	 */
+	public static function get_all() {
+		global $wp_roles;
+		if ( ! isset( $wp_roles ) ) {
+			$wp_roles = new \WP_Roles();
+		}
+		$result = [];
+		foreach ( $wp_roles->get_names() as $role => $name ) {
+			$result[ $role ]              = [];
+			$result[ $role ]['name']      = $name;
+			$result[ $role ]['l10n_name'] = translate_user_role( $name );
+		}
+		return $result;
+	}
+
 }

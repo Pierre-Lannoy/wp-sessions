@@ -56,7 +56,7 @@ class Schema {
 	 * @since    1.0.0
 	 */
 	public static function init() {
-		add_action( 'shutdown', [ 'POSessions\Plugin\Feature\Schema', 'write' ], 10, 0 );
+		//add_action( 'shutdown', [ 'POSessions\Plugin\Feature\Schema', 'write' ], 10, 0 );
 	}
 
 	/**

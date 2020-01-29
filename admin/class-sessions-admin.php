@@ -83,7 +83,7 @@ class Sessions_Admin {
 	 * @since 1.0.0
 	 */
 	public function init_admin_menus() {
-		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::LOCAL_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() ) {
+		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() ) {
 			/* translators: as in the sentence "Sessions Settings" or "WordPress Settings" */
 			$settings = add_submenu_page( 'options-general.php', sprintf( esc_html__( '%s Settings', 'sessions' ), POSE_PRODUCT_NAME ), POSE_PRODUCT_NAME, 'manage_options', 'pose-settings', [ $this, 'get_settings_page' ] );
 			$name     = add_submenu_page(
@@ -96,38 +96,6 @@ class Sessions_Admin {
 				[ $this, 'get_viewer_page' ]
 			);
 		}
-	}
-
-	/**
-	 * Get actions links for myblogs_blog_actions hook.
-	 *
-	 * @param string $actions   The HTML site link markup.
-	 * @param object $user_blog An object containing the site data.
-	 * @return string   The action string.
-	 * @since 1.2.0
-	 */
-	public function blog_action( $actions, $user_blog ) {
-		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::LOCAL_ADMIN === Role::admin_type() ) {
-			$actions .= " | <a href='" . esc_url( admin_url( 'tools.php?page=pose-viewer&site=' . $user_blog->userblog_id ) ) . "'>" . __( 'Devices', 'sessions' ) . '</a>';
-		}
-		return $actions;
-	}
-
-	/**
-	 * Get actions for manage_sites_action_links hook.
-	 *
-	 * @param string[] $actions  An array of action links to be displayed.
-	 * @param int      $blog_id  The site ID.
-	 * @param string   $blogname Site path, formatted depending on whether it is a sub-domain
-	 *                           or subdirectory multisite installation.
-	 * @return array   The actions.
-	 * @since 1.2.0
-	 */
-	public function site_action( $actions, $blog_id, $blogname ) {
-		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::LOCAL_ADMIN === Role::admin_type() ) {
-			$actions['devices'] = "<a href='" . esc_url( admin_url( 'tools.php?page=pose-viewer&site=' . $blog_id ) ) . "' rel='bookmark'>" . __( 'Devices', 'sessions' ) . '</a>';
-		}
-		return $actions;
 	}
 
 	/**
@@ -181,8 +149,8 @@ class Sessions_Admin {
 	 * @since 1.0.0
 	 */
 	public function get_viewer_page() {
-		$analytics = AnalyticsFactory::get_analytics();
-		include POSE_ADMIN_DIR . 'partials/sessions-admin-view-analytics.php';
+		//$analytics = AnalyticsFactory::get_analytics();
+		//include POSE_ADMIN_DIR . 'partials/sessions-admin-view-analytics.php';
 	}
 
 	/**
@@ -212,17 +180,10 @@ class Sessions_Admin {
 							break;
 					}
 					break;
-				case 'core':
+				case 'roles':
 					switch ( $action ) {
 						case 'do-save':
-							$this->save_core_options();
-							break;
-					}
-					break;
-				case 'css':
-					switch ( $action ) {
-						case 'do-save':
-							$this->save_css_options();
+							$this->save_roles_options();
 							break;
 					}
 					break;
@@ -469,6 +430,29 @@ class Sessions_Admin {
 	 */
 	public function plugin_roles_section_callback() {
 		$form = new Form();
+		foreach ( Role::get_all() as $role => $detail ) {
+			add_settings_field(
+				'pose_plugin_roles_' . $role,
+				$detail['l10n_name'],
+				[ $form, 'echo_field_checkbox' ],
+				'pose_plugin_roles_section',
+				'pose_plugin_roles_section',
+				[
+					'text'        => esc_html__( 'Mobile detection', 'sessions' ),
+					'id'          => 'pose_plugin_roles_wp_is_mobile',
+					'checked'     => Option::site_get( 'wp_is_mobile' ),
+					'description' => sprintf( esc_html__( 'If checked, the standard %s function will be improved by Sessions.', 'sessions' ), '<code>wp_is_mobile()</code>' ),
+					'full_width'  => true,
+					'enabled'     => true,
+				]
+			);
+			register_setting( 'pose_plugin_roles_section', 'pose_plugin_roles_wp_is_mobile' );
+		}
+
+
+
+
+/*
 		add_settings_field(
 			'pose_plugin_roles_wp_is_mobile',
 			esc_html__( 'Improvements', 'sessions' ),
@@ -484,7 +468,7 @@ class Sessions_Admin {
 				'enabled'     => true,
 			]
 		);
-		register_setting( 'pose_plugin_roles_section', 'pose_plugin_roles_wp_is_mobile' );
+		register_setting( 'pose_plugin_roles_section', 'pose_plugin_roles_wp_is_mobile' );*/
 	}
 
 }

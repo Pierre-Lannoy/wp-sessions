@@ -18,14 +18,14 @@
 				[
 					'page'   => 'pose-settings',
 					'action' => 'do-save',
-					'tab'    => 'css',
+					'tab'    => 'roles',
 				],
 				admin_url( 'options-general.php' )
 			)
 		);
 		?>
 	" method="POST">
-	<?php do_settings_sections( 'pose_plugin_css_section' ); ?>
+	<?php do_settings_sections( 'pose_plugin_roles_section' ); ?>
 	<?php wp_nonce_field( 'pose-plugin-options' ); ?>
 	<p><?php echo get_submit_button( null, 'primary', 'submit', false ); ?></p>
 </form>
