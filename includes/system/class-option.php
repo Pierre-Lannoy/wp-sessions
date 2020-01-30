@@ -49,7 +49,7 @@ class Option {
 	 * @access private
 	 * @var    array    $site    The site list.
 	 */
-	private static $specific = [];
+	public static $specific = [];
 
 	/**
 	 * The list of private options.

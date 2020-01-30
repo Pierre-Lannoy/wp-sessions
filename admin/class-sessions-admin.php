@@ -21,6 +21,7 @@ use POSessions\System\Blog;
 use POSessions\System\Date;
 use POSessions\System\Timezone;
 use POSessions\System\GeoIP;
+use POSessions\Plugin\Feature\LimiterTypes;
 
 /**
  * The admin-specific functionality of the plugin.
@@ -200,15 +201,19 @@ class Sessions_Admin {
 	private function save_roles_options() {
 		if ( ! empty( $_POST ) ) {
 			if ( array_key_exists( '_wpnonce', $_POST ) && wp_verify_nonce( $_POST['_wpnonce'], 'pose-plugin-options' ) ) {
-				/*Option::site_set( 'css_class', array_key_exists( 'pose_plugin_css_class', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_css_class' ) : false );
-				Option::site_set( 'css_device', array_key_exists( 'pose_plugin_css_device', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_css_device' ) : false );
-				Option::site_set( 'css_client', array_key_exists( 'pose_plugin_css_client', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_css_client' ) : false );
-				Option::site_set( 'css_os', array_key_exists( 'pose_plugin_css_os', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_css_os' ) : false );
-				Option::site_set( 'css_brand', array_key_exists( 'pose_plugin_css_brand', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_css_brand' ) : false );
-				Option::site_set( 'css_bot', array_key_exists( 'pose_plugin_css_bot', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_css_bot' ) : false );
-				Option::site_set( 'css_capability', array_key_exists( 'pose_plugin_css_capability', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_css_capability' ) : false );*/
-				$message = esc_html__( 'Plugin settings have been saved.', 'sessions' );
-				$code    = 0;
+				$settings = Option::roles_get();
+				foreach ( Role::get_all() as $role => $detail ) {
+					foreach ( Option::$specific as $spec ) {
+						if ( array_key_exists( 'pose_plugin_roles_' . $spec . '_' . $role, $_POST ) ) {
+							$settings[ $role ][ $spec ] = filter_input( INPUT_POST, 'pose_plugin_roles_' . $spec . '_' . $role );
+						}
+					}
+				}
+				Option::roles_set( $settings );
+				$message  = esc_html__( 'Plugin settings have been saved.', 'sessions' );
+				$message .= '<br/>' . esc_html__( 'Note these settings will only affect new sessions.', 'sessions' );
+				$message .= ' ' . esc_html__( 'For immediate implementation for all accounts, you must terminate all current sessions.', 'sessions' );
+				$code     = 0;
 				add_settings_error( 'pose_no_error', $code, $message, 'updated' );
 				Logger::info( 'Plugin settings updated.', $code );
 			} else {
@@ -424,51 +429,95 @@ class Sessions_Admin {
 	}
 
 	/**
+	 * Get the available history retentions.
+	 *
+	 * @return array An array containing the history modes.
+	 * @since  1.0.0
+	 */
+	protected function get_session_count_array() {
+		$result   = [];
+		$result[] = [ 'none', esc_html__( 'No limit', 'sessions' ) ];
+		foreach ( LimiterTypes::$selector_names as $key => $name ) {
+			for ( $i = 1; $i <= 3; $i++ ) {
+				if ( '' === $name ) {
+					$result[] = [ $key . '-' . $i, esc_html( sprintf( _n( '%d session per user', '%d sessions per user', $i, 'sessions' ), $i ) ), LimiterTypes::is_selector_available( $key ) ];
+				} else {
+					// phpcs:ignore
+					$result[] = [ $key . '-' . $i, esc_html( sprintf( _n( '%d session per user and per %s', '%d sessions per user and per %s', $i, 'sessions' ), $i, $name ) ), LimiterTypes::is_selector_available( $key ) ];
+				}
+			}
+		}
+		return $result;
+	}
+
+	/**
 	 * Callback for plugin roles modification section.
 	 *
 	 * @since 1.0.0
 	 */
 	public function plugin_roles_section_callback() {
+		$settings  = Option::roles_get();
+		$methods   = [];
+		$methods[] = [ 'override', esc_html__( 'Override other session', 'sessions' ) ];
+		/* translators: please, do not translate the string [HTTP 403 / Forbidden] as it is a standard HTTP header. */
+		$methods[] = [ 'block', esc_html__( 'Block and send a "HTTP 403 / Forbidden" error', 'sessions' ) ];
+		$idle      = [];
+		$idle[]    = [ 0, esc_html__( 'Never terminate an idle session', 'sessions' ) ];
+		foreach ( [ 1, 2, 12, 24, 48, 72 ]  as $h ) {
+			// phpcs:ignore
+			$idle[] = [ $h, esc_html( sprintf( _n( 'Terminate a session when idle for more than %d hour', 'Terminate a session when idle for more than %d hours', $h, 'sessions' ), $h ) ) ];
+		}
 		$form = new Form();
 		foreach ( Role::get_all() as $role => $detail ) {
 			add_settings_field(
-				'pose_plugin_roles_' . $role,
+				'pose_plugin_roles_limit_' . $role,
 				$detail['l10n_name'],
-				[ $form, 'echo_field_checkbox' ],
+				[ $form, 'echo_field_select' ],
 				'pose_plugin_roles_section',
 				'pose_plugin_roles_section',
 				[
-					'text'        => esc_html__( 'Mobile detection', 'sessions' ),
-					'id'          => 'pose_plugin_roles_wp_is_mobile',
-					'checked'     => Option::site_get( 'wp_is_mobile' ),
-					'description' => sprintf( esc_html__( 'If checked, the standard %s function will be improved by Sessions.', 'sessions' ), '<code>wp_is_mobile()</code>' ),
+					'list'        => $this->get_session_count_array(),
+					'id'          => 'pose_plugin_roles_limit_' . $role,
+					'value'       => $settings[ $role ]['limit'],
+					'description' => esc_html__( 'Maximal number of sessions for users.', 'sessions' ),
 					'full_width'  => true,
 					'enabled'     => true,
 				]
 			);
-			register_setting( 'pose_plugin_roles_section', 'pose_plugin_roles_wp_is_mobile' );
+			register_setting( 'pose_plugin_roles_section', 'pose_plugin_roles_limit_' . $role );
+			add_settings_field(
+				'pose_plugin_roles_method_' . $role,
+				'',
+				[ $form, 'echo_field_select' ],
+				'pose_plugin_roles_section',
+				'pose_plugin_roles_section',
+				[
+					'list'        => $methods,
+					'id'          => 'pose_plugin_roles_method_' . $role,
+					'value'       => $settings[ $role ]['method'],
+					'description' => esc_html__( 'Method to be used when the maximal number of sessions is reached.', 'sessions' ),
+					'full_width'  => true,
+					'enabled'     => true,
+				]
+			);
+			register_setting( 'pose_plugin_roles_section', 'pose_plugin_roles_method_' . $role );
+			add_settings_field(
+				'pose_plugin_roles_idle_' . $role,
+				'',
+				[ $form, 'echo_field_select' ],
+				'pose_plugin_roles_section',
+				'pose_plugin_roles_section',
+				[
+					'list'        => $idle,
+					'id'          => 'pose_plugin_roles_idle_' . $role,
+					'value'       => $settings[ $role ]['idle'],
+					'description' => esc_html__( 'Idle sessions supervision.', 'sessions' ),
+					'full_width'  => true,
+					'enabled'     => true,
+				]
+			);
+			register_setting( 'pose_plugin_roles_section', 'pose_plugin_roles_idle_' . $role );
 		}
-
-
-
-
-/*
-		add_settings_field(
-			'pose_plugin_roles_wp_is_mobile',
-			esc_html__( 'Improvements', 'sessions' ),
-			[ $form, 'echo_field_checkbox' ],
-			'pose_plugin_roles_section',
-			'pose_plugin_roles_section',
-			[
-				'text'        => esc_html__( 'Mobile detection', 'sessions' ),
-				'id'          => 'pose_plugin_roles_wp_is_mobile',
-				'checked'     => Option::site_get( 'wp_is_mobile' ),
-				'description' => sprintf( esc_html__( 'If checked, the standard %s function will be improved by Sessions.', 'sessions' ), '<code>wp_is_mobile()</code>' ),
-				'full_width'  => true,
-				'enabled'     => true,
-			]
-		);
-		register_setting( 'pose_plugin_roles_section', 'pose_plugin_roles_wp_is_mobile' );*/
 	}
 
 }
