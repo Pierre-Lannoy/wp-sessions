@@ -246,12 +246,12 @@ class Option {
 			if ( array_key_exists( $role, $settings ) ) {
 				foreach ( self::$specific as $spec ) {
 					if ( ! array_key_exists( $spec, $settings[ $role ] ) ) {
-						$settings[ $role ][ $spec ] = self::$specific[ $spec ];
+						$settings[ $role ][ $spec ] = self::$defaults[ $spec ];
 					}
 				}
 			} else {
 				foreach ( self::$specific as $spec ) {
-					$settings[ $role ][ $spec ] = self::$specific[ $spec ];
+					$settings[ $role ][ $spec ] = self::$defaults[ $spec ];
 				}
 			}
 		}
