@@ -11,6 +11,8 @@
 
 namespace POSessions\System;
 
+use POSessions\System\Role;
+
 /**
  * Define the options functionality.
  *
@@ -47,7 +49,7 @@ class Option {
 	 * @access private
 	 * @var    array    $site    The site list.
 	 */
-	private static $site = [];
+	private static $specific = [];
 
 	/**
 	 * The list of private options.
@@ -74,16 +76,11 @@ class Option {
 		self::$defaults['history']           = 30;
 		self::$defaults['analytics']         = true;
 		self::$network                       = [ 'version', 'use_cdn', 'download_favicons', 'script_in_footer', 'display_nag', 'analytics', 'history' ];
-		// Per site options.
-		self::$defaults['wp_is_mobile']   = true;
-		self::$defaults['css_class']      = true;
-		self::$defaults['css_device']     = false;
-		self::$defaults['css_client']     = false;
-		self::$defaults['css_os']         = false;
-		self::$defaults['css_brand']      = false;
-		self::$defaults['css_bot']        = false;
-		self::$defaults['css_capability'] = false;
-		self::$site                       = [ 'wp_is_mobile', 'css_class', 'css_device', 'css_client', 'css_os', 'css_brand', 'css_bot', 'css_capability' ];
+		// Specific options.
+		self::$defaults['limit']  = 'none';
+		self::$defaults['method'] = 'block';
+		self::$defaults['idle']   = 0;
+		self::$specific           = [ 'limit', 'method', 'idle' ];
 	}
 
 	/**
@@ -235,6 +232,51 @@ class Option {
 		self::network_set( 'display_nag', self::$defaults['display_nag'] );
 		self::network_set( 'analytics', self::$defaults['analytics'] );
 		self::network_set( 'history', self::$defaults['history'] );
+	}
+
+	/**
+	 * Normalize the role settings.
+	 *
+	 * @param array $settings   The settings to normalize;
+	 * @return  array   The normalized settings.
+	 * @since 1.0.0
+	 */
+	public static function roles_normalize( $settings ) {
+		foreach ( Role::get_all() as $role => $detail ) {
+			if ( array_key_exists( $role, $settings ) ) {
+				foreach ( self::$specific as $spec ) {
+					if ( ! array_key_exists( $spec, $settings[ $role ] ) ) {
+						$settings[ $role ][ $spec ] = self::$specific[ $spec ];
+					}
+				}
+			} else {
+				foreach ( self::$specific as $spec ) {
+					$settings[ $role ][ $spec ] = self::$specific[ $spec ];
+				}
+			}
+		}
+		return $settings;
+	}
+
+	/**
+	 * Get the role settings.
+	 *
+	 * @return  array   The value of role settings.
+	 * @since 1.0.0
+	 */
+	public static function roles_get() {
+		return self::roles_normalize( self::network_get( 'roles', [] ) );
+	}
+
+	/**
+	 * Set the role settings.
+	 *
+	 * @param array $settings   The settings to normalize;
+	 * @return boolean  False if value was not updated and true if value was updated.
+	 * @since 1.0.0
+	 */
+	public static function roles_set( $settings ) {
+		return self::network_set( 'roles', self::roles_normalize( $settings ) );
 	}
 
 	/**
