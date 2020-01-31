@@ -77,10 +77,12 @@ class Option {
 		self::$defaults['analytics']         = true;
 		self::$network                       = [ 'version', 'use_cdn', 'download_favicons', 'script_in_footer', 'display_nag', 'analytics', 'history' ];
 		// Specific options.
-		self::$defaults['limit']  = 'none';
-		self::$defaults['method'] = 'block';
-		self::$defaults['idle']   = 0;
-		self::$specific           = [ 'limit', 'method', 'idle' ];
+		self::$defaults['limit']       = 'none';
+		self::$defaults['method']      = 'block';
+		self::$defaults['idle']        = 0;
+		self::$defaults['cookie-ttl']  = 48;
+		self::$defaults['cookie-rttl'] = 336;
+		self::$specific                = [ 'limit', 'method', 'idle', 'cookie-ttl', 'cookie-rttl' ];
 	}
 
 	/**

@@ -467,6 +467,15 @@ class Sessions_Admin {
 			// phpcs:ignore
 			$idle[] = [ $h, esc_html( sprintf( _n( 'Terminate a session when idle for more than %d hour', 'Terminate a session when idle for more than %d hours', $h, 'sessions' ), $h ) ) ];
 		}
+		$ttl = [];
+		foreach ( [ 1, 2, 3, 4 ]  as $h ) {
+			// phpcs:ignore
+			$ttl[] = [ 24 * $h, esc_html( sprintf( _n( '%d day', '%d days', $h, 'sessions' ), $h ) ) ];
+		}
+		foreach ( [ 1, 2, 3, 4 ]  as $h ) {
+			// phpcs:ignore
+			$ttl[] = [ 24 * 7 * $h, esc_html( sprintf( _n( '%d week', '%d weeks', $h, 'sessions' ), $h ) ) ];
+		}
 		$form = new Form();
 		foreach ( Role::get_all() as $role => $detail ) {
 			add_settings_field(
@@ -517,6 +526,39 @@ class Sessions_Admin {
 				]
 			);
 			register_setting( 'pose_plugin_roles_section', 'pose_plugin_roles_idle_' . $role );
+			add_settings_field(
+				'pose_plugin_roles_cookie-ttl_' . $role,
+				'',
+				[ $form, 'echo_field_select' ],
+				'pose_plugin_roles_section',
+				'pose_plugin_roles_section',
+				[
+					'list'        => $ttl,
+					'id'          => 'pose_plugin_roles_cookie-ttl_' . $role,
+					'value'       => $settings[ $role ]['cookie-ttl'],
+					'description' => esc_html__( 'Standard cookie duration.', 'sessions' ),
+					'full_width'  => true,
+					'enabled'     => true,
+				]
+			);
+			register_setting( 'pose_plugin_roles_section', 'pose_plugin_roles_cookie-ttl_' . $role );
+			add_settings_field(
+				'pose_plugin_roles_cookie-rttl_' . $role,
+				'',
+				[ $form, 'echo_field_select' ],
+				'pose_plugin_roles_section',
+				'pose_plugin_roles_section',
+				[
+					'list'        => $ttl,
+					'id'          => 'pose_plugin_roles_cookie-rttl_' . $role,
+					'value'       => $settings[ $role ]['cookie-rttl'],
+					'description' => esc_html__( '"Remember Me" cookie duration.', 'sessions' ),
+					'full_width'  => true,
+					'enabled'     => true,
+				]
+			);
+			register_setting( 'pose_plugin_roles_section', 'pose_plugin_roles_cookie-rttl_' . $role );
+			
 		}
 	}
 
