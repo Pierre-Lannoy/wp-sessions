@@ -103,13 +103,14 @@ class Option {
 				'private' => in_array( $opt, self::$private, true ),
 			];
 		}
-		foreach ( self::$site as $opt ) {
-			$val            = self::site_get( $opt );
-			$result[ $opt ] = [
-				'label'   => $si . $opt,
-				'value'   => is_bool( $val ) ? $val ? 1 : 0 : $val,
-				'private' => in_array( $opt, self::$private, true ),
-			];
+		foreach ( self::roles_get() as $role => $opt ) {
+			foreach ( $opt as $k => $s ) {
+				$result[ $role . $k ] = [
+					'label'   => $nt . $role . ':' . $k,
+					'value'   => $s,
+					'private' => false,
+				];
+			}
 		}
 		return $result;
 	}
