@@ -558,7 +558,6 @@ class Sessions_Admin {
 				]
 			);
 			register_setting( 'pose_plugin_roles_section', 'pose_plugin_roles_cookie-rttl_' . $role );
-			
 		}
 	}
 
