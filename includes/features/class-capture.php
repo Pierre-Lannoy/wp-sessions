@@ -170,13 +170,8 @@ class Capture {
 	 * @since    1.0.0
 	 */
 	public static function password_reset( $user, $new_pass ) {
-		if ( $user instanceof \WP_User ) {
-			$user_id = $user->ID;
-		} else {
-			$user_id = 0;
-		}
 		self::$reset ++;
-		Logger::info( sprintf( 'Password reset for %s.', User::get_user_string( $user_id ) ) );
+		Logger::info( sprintf( 'Password reset for %s.', User::get_user_string( $user instanceof \WP_User ? $user->ID : 0 ) ) );
 	}
 
 	/**
@@ -205,13 +200,8 @@ class Capture {
 	 * @since    1.0.0
 	 */
 	public static function wp_login( $user_login, $user ) {
-		if ( $user instanceof \WP_User ) {
-			$user_id = $user->ID;
-		} else {
-			$user_id = 0;
-		}
 		self::$login_success ++;
-		Logger::info( sprintf( 'Session login for %s.', User::get_user_string( $user_id ) ) );
+		Logger::info( sprintf( 'Session login for %s.', User::get_user_string( $user instanceof \WP_User ? $user->ID : 0 ) ) );
 	}
 
 	/**
