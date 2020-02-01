@@ -238,7 +238,7 @@ class Session {
 	 * Terminate sessions needing to be terminated.
 	 *
 	 * @param   array   $sessions The sessions records.
-	 * @param   mixed   $user_id  The user ID.
+	 * @param   integer   $user_id  The user ID.
 	 * @return  integer   Number of terminated sessions.
 	 * @since   1.0.0
 	 */
