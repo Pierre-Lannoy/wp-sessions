@@ -246,9 +246,9 @@ class Session {
 		$idle = [];
 		$exp  = [];
 		foreach ( $sessions as $token => $session ) {
-			if ( time() > $session['idle'] ) {
+			if ( array_key_exists( 'session_idle', $session ) && time() > $session['session_idle'] ) {
 				$idle[] = $token;
-			} elseif ( time() > $session['expiration'] ) {
+			} elseif ( array_key_exists( 'expiration', $session ) && time() > $session['expiration'] ) {
 				$exp[] = $token;
 			}
 		}

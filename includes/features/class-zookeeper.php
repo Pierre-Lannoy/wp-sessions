@@ -74,13 +74,17 @@ class ZooKeeper {
 		if ( ! $index ) {
 			$index = 0;
 		}
-		$limit  = (int) Option::network_get( 'zk_tsize' );
-		$index += $limit;
-		$cpt    = 0;
-		$sql    = 'SELECT user_id, meta_value FROM ' . $wpdb->usermeta . " WHERE meta_key='session_tokens' LIMIT " . $limit . " OFFSET " . $index . ";";
+		$limit = (int) Option::network_get( 'zk_tsize' );
+		$cpt   = 0;
+		$sql   = 'SELECT user_id, meta_value FROM ' . $wpdb->usermeta . " WHERE meta_key='session_tokens' LIMIT " . $limit . " OFFSET " . $index . ";";
 		// phpcs:ignore
 		$query = $wpdb->get_results( $sql, ARRAY_A );
 		if ( is_array( $query ) && 0 < count( $query ) ) {
+			if ( $limit > count( $query ) ) {
+				$index = 0;
+			} else {
+				$index += $limit;
+			}
 			foreach ( $query as $row ) {
 				$sessions = $row['meta_value'];
 				if ( ! is_array( $sessions ) && is_string( $sessions ) ) {
@@ -90,12 +94,19 @@ class ZooKeeper {
 					$cpt += Session::auto_terminate_session( $sessions, (int) $row['user_id'] );
 				}
 			}
-			Logger::emergency( 'Done: ' . $cpt );
-
-
-
+			switch ( $cpt ) {
+				case 0:
+					Logger::debug( 'No session to auto-terminate.' );
+					break;
+				case 1:
+					Logger::notice( sprintf( '%d session auto-terminated.', $cpt ) );
+					break;
+				default:
+					Logger::notice( sprintf( '%d sessions auto-terminated.', $cpt ) );
+					break;
+			}
 		} else {
-			Logger::emergency( 'Nothing to do' );
+			Logger::debug( 'No session to auto-terminate.' );
 			$index = 0;
 		}
 		Cache::set_global( 'zookeeper/userindex', $index, 'infinite' );
