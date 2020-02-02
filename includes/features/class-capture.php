@@ -181,7 +181,7 @@ class Capture {
 	 */
 	public static function wp_logout() {
 		self::$logout ++;
-		Logger::info( sprintf( 'Session logout for %s.', User::get_user_string( get_current_user_id() ) ) );
+		Logger::info( 'A user has logged out.' );
 	}
 
 	/**
@@ -201,7 +201,7 @@ class Capture {
 	 */
 	public static function wp_login( $user_login, $user ) {
 		self::$login_success ++;
-		Logger::info( sprintf( 'Session login for %s.', User::get_user_string( $user instanceof \WP_User ? $user->ID : 0 ) ) );
+		Logger::info( sprintf( 'Login success for %s.', User::get_user_string( $user instanceof \WP_User ? $user->ID : 0 ) ) );
 	}
 
 	/**
@@ -211,7 +211,7 @@ class Capture {
 	 */
 	public static function jpp_kill_login( $ip ) {
 		self::$login_block ++;
-		Logger::info( sprintf( 'Session login blocked for "%s".', $ip ) );
+		Logger::info( sprintf( 'Login blocked for "%s".', $ip ) );
 	}
 
 }
