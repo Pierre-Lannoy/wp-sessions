@@ -404,7 +404,7 @@ class Sessions_Admin {
 				'text'        => esc_html__( 'Activated', 'sessions' ),
 				'id'          => 'pose_plugin_features_analytics',
 				'checked'     => Option::network_get( 'analytics' ),
-				'description' => esc_html__( 'If checked, Sessions will store statistics about logins and logouts.', 'sessions' ),
+				'description' => esc_html__( 'If checked, Sessions will store statistics about accounts and sessions.', 'sessions' ),
 				'full_width'  => true,
 				'enabled'     => true,
 			]
@@ -457,6 +457,10 @@ class Sessions_Admin {
 	 */
 	public function plugin_roles_section_callback() {
 		$settings  = Option::roles_get();
+		$blocks    = [];
+		$blocks[]  = [ 'none', esc_html__( 'Allow from everywhere', 'sessions' ) ];
+		$blocks[]  = [ 'external', esc_html__( 'Allow only from private IP ranges', 'sessions' ) ];
+		$blocks[]  = [ 'local', esc_html__( 'Allow only from public IP ranges', 'sessions' ) ];
 		$methods   = [];
 		$methods[] = [ 'override', esc_html__( 'Override other session', 'sessions' ) ];
 		/* translators: please, do not translate the string [HTTP 403 / Forbidden] as it is a standard HTTP header. */
@@ -480,8 +484,24 @@ class Sessions_Admin {
 		$form = new Form();
 		foreach ( Role::get_all() as $role => $detail ) {
 			add_settings_field(
-				'pose_plugin_roles_limit_' . $role,
+				'pose_plugin_roles_block_' . $role,
 				$detail['l10n_name'],
+				[ $form, 'echo_field_select' ],
+				'pose_plugin_roles_section',
+				'pose_plugin_roles_section',
+				[
+					'list'        => $blocks,
+					'id'          => 'pose_plugin_roles_block_' . $role,
+					'value'       => $settings[ $role ]['block'],
+					'description' => esc_html__( 'Allowed logins.', 'sessions' ),
+					'full_width'  => true,
+					'enabled'     => true,
+				]
+			);
+			register_setting( 'pose_plugin_roles_section', 'pose_plugin_roles_block_' . $role );
+			add_settings_field(
+				'pose_plugin_roles_limit_' . $role,
+				'',
 				[ $form, 'echo_field_select' ],
 				'pose_plugin_roles_section',
 				'pose_plugin_roles_section',
