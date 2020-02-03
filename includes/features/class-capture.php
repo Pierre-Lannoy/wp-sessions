@@ -42,6 +42,14 @@ class Capture {
 	private static $idle = 0;
 
 	/**
+	 * The number of forced sessions.
+	 *
+	 * @since  1.0.0
+	 * @var    integer    $forced    The number of forced sessions.
+	 */
+	private static $forced = 0;
+
+	/**
 	 * The number of registrations.
 	 *
 	 * @since  1.0.0
@@ -113,6 +121,7 @@ class Capture {
 	public static function init() {
 		add_action( 'sessions_after_idle_terminate', [ self::class, 'sessions_after_idle_terminate' ], 10, 1 );
 		add_action( 'sessions_after_expired_terminate', [ self::class, 'sessions_after_expired_terminate' ], 10, 1 );
+		add_action( 'sessions_force_terminate', [ self::class, 'sessions_force_terminate' ], 10, 1 );
 		add_action( 'delete_user', [ self::class, 'delete_user' ], 10, 2 );
 		add_action( 'user_register', [ self::class, 'user_register' ], 10, 1 );
 		add_action( 'password_reset', [ self::class, 'password_reset' ], 10, 2 );
@@ -131,6 +140,17 @@ class Capture {
 	public static function sessions_after_idle_terminate( $user_id ) {
 		self::$idle ++;
 		Logger::info( sprintf( 'Idle session terminated for %s.', User::get_user_string( $user_id ) ) );
+	}
+
+	/**
+	 * Post actions for force session terminated.
+	 *
+	 * @param   integer   $user_id  The user ID.
+	 * @since    1.0.0
+	 */
+	public static function sessions_force_terminate( $user_id ) {
+		self::$forced ++;
+		Logger::info( sprintf( 'Old session terminated for %s.', User::get_user_string( $user_id ) ) );
 	}
 
 	/**

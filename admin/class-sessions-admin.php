@@ -461,6 +461,7 @@ class Sessions_Admin {
 		$methods[] = [ 'override', esc_html__( 'Override other session', 'sessions' ) ];
 		/* translators: please, do not translate the string [HTTP 403 / Forbidden] as it is a standard HTTP header. */
 		$methods[] = [ 'block', esc_html__( 'Block and send a "HTTP 403 / Forbidden" error', 'sessions' ) ];
+		$methods[] = [ 'default', esc_html__( 'Block and send a WordPress error', 'sessions' ) ];
 		$idle      = [];
 		$idle[]    = [ 0, esc_html__( 'Never terminate an idle session', 'sessions' ) ];
 		foreach ( [ 1, 2, 12, 24, 48, 72 ]  as $h ) {

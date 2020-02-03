@@ -65,6 +65,7 @@ class LimiterTypes {
 	 */
 	public static function is_selector_available( $selector ) {
 		switch ( $selector ) {
+			case 'none':
 			case 'user':
 			case 'ip':
 				$result = true;
