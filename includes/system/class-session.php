@@ -209,7 +209,7 @@ class Session {
 				} else {
 					if ( ! LimiterTypes::is_selector_available( $mode ) ) {
 						Logger::critical( sprintf( 'No matching session policy for %s.', User::get_user_string( $this->user_id ) ), 202 );
-						Logger::warning( sprintf( 'Session policy for %1%s downgraded from "%2$s" to "No limit".', User::get_user_string( $this->user_id ), sprintf( '%d session(s) per user and per %s', $limit, str_replace( '-', ' ', $mode ) ) ), 202 );
+						Logger::warning( sprintf( 'Session policy for %1%s downgraded from "%2$s" to "No limit".', User::get_user_string( $this->user_id ), sprintf( '%d session(s) per user and per %s', User::get_user_string( $this->user_id ), str_replace( '-', ' ', $mode ) ) ), 202 );
 						$mode = 'none';
 					}
 					$result = 'allow';
