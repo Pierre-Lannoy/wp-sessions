@@ -75,10 +75,11 @@ class Option {
 		self::$defaults['version']           = '0.0.0';
 		self::$defaults['history']           = 30;
 		self::$defaults['analytics']         = true;
+		self::$defaults['rolemode']          = 0;
 		self::$defaults['zk_semaphore']      = 180;
 		self::$defaults['zk_cycle']          = 60;
 		self::$defaults['zk_tsize']          = 20;
-		self::$network                       = [ 'version', 'use_cdn', 'download_favicons', 'script_in_footer', 'display_nag', 'analytics', 'history', 'zk_cycle', 'zk_tsize', 'zk_semaphore' ];
+		self::$network                       = [ 'version', 'use_cdn', 'download_favicons', 'script_in_footer', 'display_nag', 'analytics', 'history', 'rolemode', 'zk_cycle', 'zk_tsize', 'zk_semaphore' ];
 		// Specific options.
 		self::$defaults['limit']       = 'none';
 		self::$defaults['method']      = 'block';
@@ -239,6 +240,7 @@ class Option {
 		self::network_set( 'display_nag', self::$defaults['display_nag'] );
 		self::network_set( 'analytics', self::$defaults['analytics'] );
 		self::network_set( 'history', self::$defaults['history'] );
+		self::network_set( 'rolemode', self::$defaults['rolemode'] );
 		self::network_set( 'zk_cycle', self::$defaults['zk_cycle'] );
 		self::network_set( 'zk_tsize', self::$defaults['zk_tsize'] );
 		self::network_set( 'zk_semaphore', self::$defaults['zk_semaphore'] );

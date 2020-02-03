@@ -111,6 +111,26 @@ class Environment {
 	}
 
 	/**
+	 * Verify if the current client IP is private.
+	 *
+	 * @return  boolean True if the IP is private, false otherwise.
+	 * @since 1.0.0
+	 */
+	public static function is_current_ip_private() {
+		return ! filter_var( self::current_ip(), FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE );
+	}
+
+	/**
+	 * Verify if the current client IP is public.
+	 *
+	 * @return  boolean True if the IP is public, false otherwise.
+	 * @since 1.0.0
+	 */
+	public static function is_current_ip_public() {
+		return ! self::is_current_ip_private();
+	}
+
+	/**
 	 * Get the major version number.
 	 *
 	 * @param  string $version Optional. The full version string.

@@ -141,6 +141,29 @@ class Session {
 	}
 
 	/**
+	 * Verify if the ip range is allowed.
+	 *
+	 * @param string  $block The ip block ode.
+	 * @return string 'allow' or 'disallow'.
+	 * @since 1.0.0
+	 */
+	private function verify_ip_range( $block ) {
+		if ( ! in_array( $block, [ 'none', 'external', 'local' ], true ) ) {
+			Logger::warning( 'IP range limitation set to "Allow For All".', 202 );
+			return 'allow';
+		}
+		if ( 'external' === $block && Environment::is_current_ip_private() ) {
+			return 'allow';
+		}
+		if ( 'local' === $block && Environment::is_current_ip_public() ) {
+			return 'allow';
+		}
+		if ( 'external' === $block && Environment::is_current_ip_private() ) {
+			return 'disallow';
+		}
+	}
+
+	/**
 	 * Verify if the maximum allowed is reached.
 	 *
 	 * @param integer  $limit The maximum allowed.
@@ -258,6 +281,9 @@ class Session {
 	 * @since 1.0.0
 	 */
 	public function limit_logins( $user, $username, $password ) {
+		if ( -1 === (int) Option::network_get( 'rolemode' ) ) {
+			return $user;
+		}
 		if ( $user instanceof \WP_User ) {
 			$this->user_id  = $user->ID;
 			$this->user     = $user;
@@ -287,33 +313,59 @@ class Session {
 					}
 				}
 				if ( '' === $mode || 0 === $limit ) {
-					Logger::critical( sprintf( 'No session policy found for %s.', User::get_user_string( $this->user_id ) ), 202 );
+					if ( 1 === (int) Option::network_get( 'rolemode' ) ) {
+						Logger::alert( sprintf( 'No session policy found for %s.', User::get_user_string( $this->user_id ) ), 500 );
+						wp_die( __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'internal_error_message', __( 'Something went wrong, it is not possible to continue.', 'sessions' ) ), 500 );
+					} else {
+						Logger::critical( sprintf( 'No session policy found for %s.', User::get_user_string( $this->user_id ) ), 202 );
+					}
 				} else {
 					if ( ! LimiterTypes::is_selector_available( $mode ) ) {
 						Logger::critical( sprintf( 'No matching session policy for %s.', User::get_user_string( $this->user_id ) ), 202 );
 						Logger::warning( sprintf( 'Session policy for %1%s downgraded from "%2$s" to "No limit".', User::get_user_string( $this->user_id ), sprintf( '%d session(s) per user and per %s', User::get_user_string( $this->user_id ), str_replace( '-', ' ', $mode ) ) ), 202 );
 						$mode = 'none';
 					}
-					$result = 'allow';
-					switch ( $mode ) {
-						case 'user':
-							$result = $this->verify_per_user_limit( $limit );
-							break;
-						case 'ip':
-							$result = $this->verify_per_ip_limit( $limit );
-							break;
-						case 'country':
-							$result = $this->verify_per_country_limit( $limit );
-							break;
-						case 'device-class':
-						case 'device-type':
-						case 'device-client':
-						case 'device-browser':
-						case 'device-os':
-							break;
-						default:
-							$result = 'allow';
-							Logger::debug( sprintf( 'Session allowed for %s.', User::get_user_string( $this->user_id ) ), 200 );
+					$result = $this->verify_ip_range( $settings[ $role ]['block'] );
+					if ( 'allow' === $result ) {
+						switch ( $mode ) {
+							case 'user':
+								$result = $this->verify_per_user_limit( $limit );
+								break;
+							case 'ip':
+								$result = $this->verify_per_ip_limit( $limit );
+								break;
+							case 'country':
+								$result = $this->verify_per_country_limit( $limit );
+								break;
+							case 'device-class':
+							case 'device-type':
+							case 'device-client':
+							case 'device-browser':
+							case 'device-os':
+								break;
+							default:
+
+
+
+
+
+								$result = 'allow';
+								Logger::debug( sprintf( 'Session allowed for %s.', User::get_user_string( $this->user_id ) ), 200 );
+
+
+
+
+
+						}
+					} else {
+						Logger::warning( sprintf( 'New session not allowed for %s. Reason: IP range.', User::get_user_string( $this->user_id ), ), 403 );
+						switch ( $method ) {
+							case 'default':
+								return new \WP_Error( '403', __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_bad_ip_message', __( 'You\'re not allowed to initiate a new session from your current IP address.', 'sessions' ) ) );
+							default:
+								do_action( 'wp_login_failed', $this->user->user_email );
+								wp_die( __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'sessions_bad_ip_message', __( 'You\'re not allowed to initiate a new session from your current IP address.', 'sessions' ) ), 403 );
+						}
 					}
 					if ( 'allow' !== $result ) {
 						switch ( $method ) {
@@ -322,22 +374,28 @@ class Session {
 									unset( $this->sessions[ $result ] );
 									do_action( 'sessions_force_terminate', $this->user_id );
 									self::set_user_sessions( $this->sessions, $this->user_id );
-									Logger::notice( sprintf( 'Session overridden for %s.', User::get_user_string( $this->user_id ) ) );
+									Logger::notice( sprintf( 'Session overridden for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( '-', ' ', $mode ) ) );
 								}
-
 								break;
 							case 'default':
-								Logger::warning( sprintf( 'New session not allowed for %s.', User::get_user_string( $this->user_id ) ), 403 );
-								return new \WP_Error( '403', __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because maximum number of active sessions has been reached.', 'sessions' ) ) );
+								Logger::warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( '-', ' ', $mode ) ), 403 );
+								return new \WP_Error( '403', __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ) );
 							default:
-								Logger::warning( sprintf( 'New session not allowed for %s.', User::get_user_string( $this->user_id ) ), 403 );
+								Logger::warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( '-', ' ', $mode ) ), 403 );
 								do_action( 'wp_login_failed', $this->user->user_email );
-								wp_die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because maximum number of active sessions has been reached.', 'sessions' ) ), 403 );
+								wp_die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ), 403 );
 						}
+					} else {
+						Logger::debug( sprintf( 'Session allowed for %s.', User::get_user_string( $this->user_id ) ), 200 );
 					}
 				}
 			}
-		}
+		}/* elseif ( 1 === (int) Option::network_get( 'rolemode' ) ) {
+			Logger::alert( 'Unable to determine which user is trying to log-in.', 500 );
+			wp_die( __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'internal_error_message', __( 'Something went wrong, it is not possible to continue.', 'sessions' ) ), 500 );
+		} else {
+			Logger::critical( 'Unable to determine which user is trying to log-in.', 202 );
+		}*/
 		return $user;
 	}
 

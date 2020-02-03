@@ -237,6 +237,7 @@ class Sessions_Admin {
 				Option::network_set( 'display_nag', array_key_exists( 'pose_plugin_options_nag', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_options_nag' ) : false );
 				Option::network_set( 'analytics', array_key_exists( 'pose_plugin_features_analytics', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_features_analytics' ) : false );
 				Option::network_set( 'history', array_key_exists( 'pose_plugin_features_history', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_features_history', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'history' ) );
+				Option::network_set( 'rolemode', array_key_exists( 'pose_plugin_features_rolemode', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_features_rolemode', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'rolemode' ) );
 				$message = esc_html__( 'Plugin settings have been saved.', 'sessions' );
 				$code    = 0;
 				add_settings_error( 'pose_no_error', $code, $message, 'updated' );
@@ -393,7 +394,27 @@ class Sessions_Admin {
 	 * @since 1.0.0
 	 */
 	public function plugin_features_section_callback() {
-		$form = new Form();
+		$form   = new Form();
+		$mode   = [];
+		$mode[] = [ -1, esc_html__( 'Disabled (don\'t use this feature)', 'sessions' ) ];
+		$mode[] = [ 0, esc_html__( 'Enabled - permissive mode (useful when adjusting settings)', 'sessions' ) ];
+		$mode[] = [ 1, esc_html__( 'Enabled - strict mode (useful in production, when all settings are ok)', 'sessions' ) ];
+		add_settings_field(
+			'pose_plugin_features_rolemode',
+			esc_html__( 'Settings by roles', 'sessions' ),
+			[ $form, 'echo_field_select' ],
+			'pose_plugin_features_section',
+			'pose_plugin_features_section',
+			[
+				'list'        => $mode,
+				'id'          => 'pose_plugin_features_rolemode',
+				'value'       => Option::network_get( 'rolemode' ),
+				'description' => esc_html__( 'Operation mode of this feature.', 'sessions' ),
+				'full_width'  => true,
+				'enabled'     => true,
+			]
+		);
+		register_setting( 'pose_plugin_features_section', 'pose_plugin_features_rolemode' );
 		add_settings_field(
 			'pose_plugin_features_analytics',
 			esc_html__( 'Analytics', 'sessions' ),
