@@ -16,6 +16,8 @@ use POSessions\System\Option;
 use POSessions\System\Logger;
 use POSessions\System\Hash;
 use POSessions\System\User;
+use POSessions\System\Environment;
+use POSessions\System\GeoIP;
 use POSessions\Plugin\Feature\LimiterTypes;
 
 /**
@@ -154,7 +156,7 @@ class Session {
 			function ( $a, $b ) {
 				if ( $a['login'] === $b['login'] ) {
 					return 0;
-				} return ( $a['login'] > $b['login'] ) ? -1 : 1;
+				} return ( $a['login'] < $b['login'] ) ? -1 : 1;
 			}
 		);
 		if ( $limit < count( $this->sessions ) ) {
@@ -164,6 +166,86 @@ class Session {
 			return $this->verify_per_user_limit( $limit );
 		}
 		return array_key_first( $this->sessions );
+	}
+
+	/**
+	 * Verify if the maximum allowed is reached.
+	 *
+	 * @param integer  $limit The maximum allowed.
+	 * @return string 'allow' or the token of the overridable if maximum is reached.
+	 * @since 1.0.0
+	 */
+	private function verify_per_ip_limit( $limit ) {
+		$ip      = Environment::current_ip();
+		$compare = [];
+		$buffer  = [];
+		foreach ( $this->sessions as $token => $session ) {
+			if ( $ip === $session['ip'] ) {
+				$compare[ $token ] = $session;
+			} else {
+				$buffer[ $token ] = $session;
+			}
+		}
+		if ( $limit > count( $compare ) ) {
+			return 'allow';
+		}
+		uasort(
+			$compare,
+			function ( $a, $b ) {
+				if ( $a['login'] === $b['login'] ) {
+					return 0;
+				} return ( $a['login'] < $b['login'] ) ? -1 : 1;
+			}
+		);
+		if ( $limit < count( $compare ) ) {
+			$compare = array_slice( $compare, 1 );
+			do_action( 'sessions_force_terminate', $this->user_id );
+			$this->sessions = array_merge( $compare, $buffer );
+			self::set_user_sessions( $this->sessions, $this->user_id );
+			return $this->verify_per_user_limit( $limit );
+		}
+		return array_key_first( $compare );
+	}
+
+	/**
+	 * Verify if the maximum allowed is reached.
+	 *
+	 * @param integer  $limit The maximum allowed.
+	 * @return string 'allow' or the token of the overridable if maximum is reached.
+	 * @since 1.0.0
+	 */
+	private function verify_per_country_limit( $limit ) {
+		$ip      = Environment::current_ip();
+		$geo     = new GeoIP();
+		$country = $geo->get_iso3166_alpha2( $ip );
+		$compare = [];
+		$buffer  = [];
+		foreach ( $this->sessions as $token => $session ) {
+			if ( $country === $geo->get_iso3166_alpha2( $session['ip'] ) ) {
+				$compare[ $token ] = $session;
+			} else {
+				$buffer[ $token ] = $session;
+			}
+		}
+		if ( $limit > count( $compare ) ) {
+			return 'allow';
+		}
+		uasort(
+			$compare,
+			function ( $a, $b ) {
+				if ( $a['login'] === $b['login'] ) {
+					return 0;
+				} return ( $a['login'] < $b['login'] ) ? -1 : 1;
+			}
+		);
+		if ( $limit < count( $compare ) ) {
+			$compare = array_slice( $compare, 1 );
+			do_action( 'sessions_force_terminate', $this->user_id );
+			$this->sessions = array_merge( $compare, $buffer );
+			self::set_user_sessions( $this->sessions, $this->user_id );
+			return $this->verify_per_user_limit( $limit );
+		}
+		return array_key_first( $compare );
 	}
 
 	/**
@@ -218,8 +300,10 @@ class Session {
 							$result = $this->verify_per_user_limit( $limit );
 							break;
 						case 'ip':
+							$result = $this->verify_per_ip_limit( $limit );
 							break;
 						case 'country':
+							$result = $this->verify_per_country_limit( $limit );
 							break;
 						case 'device-class':
 						case 'device-type':
