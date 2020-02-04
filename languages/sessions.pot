@@ -3,14 +3,14 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Sessions\n"
-"POT-Creation-Date: 2020-01-22 13:58+0100\n"
+"POT-Creation-Date: 2020-02-04 08:37+0100\n"
 "PO-Revision-Date: 2019-07-08 14:07+0200\n"
 "Last-Translator: Pierre Lannoy <pierre@lannoy.fr>\n"
 "Language-Team: Pierre Lannoy <pierre@lannoy.fr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.4\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: sessions.php\n"
@@ -22,197 +22,287 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
 #. translators: as in the sentence "Sessions Settings" or "WordPress Settings"
-#: admin/class-sessions-admin.php:88
-#: admin/partials/sessions-admin-settings-main.php:34
+#: admin/class-sessions-admin.php:89
+#: admin/partials/sessions-admin-settings-main.php:29
 #, php-format
 msgid "%s Settings"
 msgstr ""
 
 #. translators: as in the sentence "Sessions Viewer"
-#: admin/class-sessions-admin.php:92
+#: admin/class-sessions-admin.php:93
 #, php-format
 msgid "%s Viewer"
 msgstr ""
 
-#: admin/class-sessions-admin.php:111
-#: admin/class-sessions-admin.php:128
-#: admin/partials/sessions-admin-settings-main.php:103
-#: includes/features/class-analytics.php:1121
-msgid "Devices"
-msgstr ""
-
-#: admin/class-sessions-admin.php:139
+#: admin/class-sessions-admin.php:108
 msgid "Plugin Features"
 msgstr ""
 
-#: admin/class-sessions-admin.php:140
+#: admin/class-sessions-admin.php:109
 msgid "Plugin options"
 msgstr ""
 
-#: admin/class-sessions-admin.php:158
+#: admin/class-sessions-admin.php:126
 msgid "Settings"
 msgstr ""
 
-#: admin/class-sessions-admin.php:159
+#: admin/class-sessions-admin.php:127
 msgid "Statistics"
 msgstr ""
 
-#: admin/class-sessions-admin.php:173
+#: admin/class-sessions-admin.php:141
 msgid "Support"
 msgstr ""
 
-#: admin/class-sessions-admin.php:174
+#: admin/class-sessions-admin.php:142
 msgid "GitHub repository"
 msgstr ""
 
-#: admin/class-sessions-admin.php:244
-#: admin/class-sessions-admin.php:272
-#: admin/class-sessions-admin.php:298
+#: admin/class-sessions-admin.php:213 admin/class-sessions-admin.php:241
 msgid "Plugin settings have been saved."
 msgstr ""
 
-#: admin/class-sessions-admin.php:249
-#: admin/class-sessions-admin.php:277
-#: admin/class-sessions-admin.php:303
+#: admin/class-sessions-admin.php:214
+msgid "Note these settings will only affect new sessions."
+msgstr ""
+
+#: admin/class-sessions-admin.php:215
+msgid ""
+"For immediate implementation for all accounts, you must terminate all "
+"current sessions."
+msgstr ""
+
+#: admin/class-sessions-admin.php:220 admin/class-sessions-admin.php:246
 msgid "Plugin settings have not been saved. Please try again."
 msgstr ""
 
-#: admin/class-sessions-admin.php:320
+#: admin/class-sessions-admin.php:263
 msgid "Plugin settings have been reset to defaults."
 msgstr ""
 
-#: admin/class-sessions-admin.php:325
+#: admin/class-sessions-admin.php:268
 msgid "Plugin settings have not been reset to defaults. Please try again."
 msgstr ""
 
-#: admin/class-sessions-admin.php:342
-msgid "Favicons"
-msgstr ""
-
-#: admin/class-sessions-admin.php:347
-msgid "Download and display"
-msgstr ""
-
-#: admin/class-sessions-admin.php:350
-msgid ""
-"If checked, Sessions will download favicons of websites to display "
-"them in reports."
-msgstr ""
-
-#: admin/class-sessions-admin.php:350
-msgid "Note: This feature uses the (free) Google Favicon Service."
-msgstr ""
-
-#: admin/class-sessions-admin.php:358
+#: admin/class-sessions-admin.php:285 admin/class-sessions-admin.php:303
+#: admin/class-sessions-admin.php:322
 #, php-format
 msgid "Your site is currently using %s."
 msgstr ""
 
-#: admin/class-sessions-admin.php:361
+#: admin/class-sessions-admin.php:288
 #, php-format
 msgid ""
 "Your site does not use any logging plugin. To log all events triggered in "
-"Sessions, I recommend you to install the excellent (and free) %s. "
-"But it is not mandatory."
+"Sessions, I recommend you to install the excellent (and free) %s. But it "
+"is not mandatory."
 msgstr ""
 
-#: admin/class-sessions-admin.php:365
+#: admin/class-sessions-admin.php:292
 msgid "Logging"
 msgstr ""
 
-#: admin/class-sessions-admin.php:376
+#: admin/class-sessions-admin.php:306
+#, php-format
+msgid ""
+"Your site does not use any device detection mechanism. To allow device "
+"differentiation in Sessions, I recommend you to install the excellent (and "
+"free) %s. But it is not mandatory."
+msgstr ""
+
+#: admin/class-sessions-admin.php:310
+msgid "Device detection"
+msgstr ""
+
+#: admin/class-sessions-admin.php:325
+#, php-format
+msgid ""
+"Your site does not use any IP geographic information plugin. To allow "
+"country differentiation in Sessions, I recommend you to install the "
+"excellent (and free) %s. But it is not mandatory."
+msgstr ""
+
+#: admin/class-sessions-admin.php:329
+msgid "IP information"
+msgstr ""
+
+#: admin/class-sessions-admin.php:340
 msgid "Resources"
 msgstr ""
 
-#: admin/class-sessions-admin.php:381
+#: admin/class-sessions-admin.php:345
 msgid "Use public CDN"
 msgstr ""
 
-#: admin/class-sessions-admin.php:384
+#: admin/class-sessions-admin.php:348
 msgid ""
-"If checked, Sessions will use a public CDN (jsDelivr) to serve "
-"scripts and stylesheets."
+"If checked, Sessions will use a public CDN (jsDelivr) to serve scripts and "
+"stylesheets."
 msgstr ""
 
-#: admin/class-sessions-admin.php:392
+#: admin/class-sessions-admin.php:356
 msgid "Admin notices"
 msgstr ""
 
-#: admin/class-sessions-admin.php:397
+#: admin/class-sessions-admin.php:361
 msgid "Display"
 msgstr ""
 
-#: admin/class-sessions-admin.php:400
+#: admin/class-sessions-admin.php:364
 msgid ""
-"Allows Sessions to display admin notices throughout the admin "
-"dashboard."
+"Allows Sessions to display admin notices throughout the admin dashboard."
 msgstr ""
 
-#: admin/class-sessions-admin.php:400
+#: admin/class-sessions-admin.php:364
 msgid "Note: Sessions respects DISABLE_NAG_NOTICES flag."
 msgstr ""
 
-#: admin/class-sessions-admin.php:418
+#: admin/class-sessions-admin.php:382
 #, php-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/class-sessions-admin.php:422
+#: admin/class-sessions-admin.php:386
 #, php-format
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/class-sessions-admin.php:436
+#: admin/class-sessions-admin.php:399
+msgid "Disabled (don't use this feature)"
+msgstr ""
+
+#: admin/class-sessions-admin.php:400
+msgid "Enabled - permissive mode (useful when adjusting settings)"
+msgstr ""
+
+#: admin/class-sessions-admin.php:401
+msgid ""
+"Enabled - strict mode (useful in production, when all settings are ok)"
+msgstr ""
+
+#: admin/class-sessions-admin.php:404
+msgid "Settings by roles"
+msgstr ""
+
+#: admin/class-sessions-admin.php:412
+msgid "Operation mode of this feature."
+msgstr ""
+
+#: admin/class-sessions-admin.php:420
 msgid "Analytics"
 msgstr ""
 
-#: admin/class-sessions-admin.php:441
+#: admin/class-sessions-admin.php:425
 msgid "Activated"
 msgstr ""
 
-#: admin/class-sessions-admin.php:444
+#: admin/class-sessions-admin.php:428
 msgid ""
-"If checked, Sessions will store statistics about detected devices."
+"If checked, Sessions will store statistics about accounts and sessions."
 msgstr ""
 
-#: admin/class-sessions-admin.php:452
+#: admin/class-sessions-admin.php:436
 msgid "Historical data"
 msgstr ""
 
-#: admin/class-sessions-admin.php:460
+#: admin/class-sessions-admin.php:444
 msgid "Maximum age of data to keep for statistics."
 msgstr ""
 
-#: admin/class-sessions-admin.php:477
-msgid "Improvements"
+#: admin/class-sessions-admin.php:460
+msgid "No limit"
 msgstr ""
+
+#: admin/class-sessions-admin.php:464
+#, php-format
+msgid "%d session per user"
+msgid_plural "%d sessions per user"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/class-sessions-admin.php:467
+#, php-format
+msgid "%d session per user and per %s"
+msgid_plural "%d sessions per user and per %s"
+msgstr[0] ""
+msgstr[1] ""
 
 #: admin/class-sessions-admin.php:482
-msgid "Mobile detection"
+msgid "Allow from everywhere"
 msgstr ""
 
-#: admin/class-sessions-admin.php:485
-#, php-format
-msgid ""
-"If checked, the standard %s function will be improved by Sessions."
+#: admin/class-sessions-admin.php:483
+msgid "Allow only from private IP ranges"
 msgstr ""
+
+#: admin/class-sessions-admin.php:484
+msgid "Allow only from public IP ranges"
+msgstr ""
+
+#: admin/class-sessions-admin.php:486
+msgid "Override oldest session"
+msgstr ""
+
+#. translators: please, do not translate the string [HTTP 403 / Forbidden] as it is a standard HTTP header.
+#: admin/class-sessions-admin.php:488
+msgid "Block and send a \"HTTP 403 / Forbidden\" error"
+msgstr ""
+
+#: admin/class-sessions-admin.php:489
+msgid "Block and send a WordPress error"
+msgstr ""
+
+#: admin/class-sessions-admin.php:491
+msgid "Never terminate an idle session"
+msgstr ""
+
+#: admin/class-sessions-admin.php:494
+#, php-format
+msgid "Terminate a session when idle for more than %d hour"
+msgid_plural "Terminate a session when idle for more than %d hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/class-sessions-admin.php:499
+#, php-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] ""
+msgstr[1] ""
 
 #: admin/class-sessions-admin.php:503
-msgid "Body classes"
-msgstr ""
-
-#: admin/class-sessions-admin.php:524
 #, php-format
-msgid ""
-"Based on these settings, the classes for this current session would be: %s."
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/class-sessions-admin.php:517
+msgid "Allowed logins."
 msgstr ""
 
-#: admin/class-sessions-admin.php:526
-msgid "Based on these settings, no classes will be added to the body."
+#: admin/class-sessions-admin.php:533
+msgid "Maximal number of sessions for users."
+msgstr ""
+
+#: admin/class-sessions-admin.php:549
+msgid "Method to be used when the maximal number of sessions is reached."
+msgstr ""
+
+#: admin/class-sessions-admin.php:565
+msgid "Idle sessions supervision."
+msgstr ""
+
+#: admin/class-sessions-admin.php:581
+msgid "Standard cookie duration."
+msgstr ""
+
+#: admin/class-sessions-admin.php:597
+msgid "\"Remember Me\" cookie duration."
 msgstr ""
 
 #: admin/partials/sessions-admin-settings-about.php:20
@@ -250,102 +340,22 @@ msgstr ""
 msgid "Changelog"
 msgstr ""
 
-#: admin/partials/sessions-admin-settings-devices.php:15
-#, php-format
-msgid "%1$s (engine version %2$s) allows to detect:"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-devices.php:20
-#: includes/features/class-analytics.php:1094
-#: includes/features/class-analytics.php:1560
-msgid "Classes"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-devices.php:22
-#: includes/features/class-analytics.php:1097
-#: includes/features/class-analytics.php:1588
-msgid "Device Types"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-devices.php:24
-#: includes/features/class-analytics.php:1100
-#: includes/features/class-analytics.php:1616
-msgid "Client Types"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-devices.php:26
-msgid "Details"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-devices.php:27
-#: includes/features/class-analytics.php:1124
-msgid "Operating Systems"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-devices.php:29
-#: includes/features/class-analytics.php:1115
-msgid "Browsers"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-devices.php:31
-msgid "Browser Engines"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-devices.php:33
-msgid "Application Libraries"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-devices.php:35
-#: includes/features/class-analytics.php:1112
-#: includes/features/class-analytics.php:1728
-msgid "Media Players"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-devices.php:37
-#: includes/features/class-analytics.php:1106
-#: includes/features/class-analytics.php:1672
-msgid "Mobile Applications"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-devices.php:39
-msgid "PIMs"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-devices.php:41
-#: includes/features/class-analytics.php:1109
-#: includes/features/class-analytics.php:1700
-msgid "Feed Readers"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-devices.php:43
-msgid "Brands"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-devices.php:45
-#: includes/features/class-analytics.php:1118
-msgid "Bots"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-main.php:28
+#: admin/partials/sessions-admin-settings-main.php:23
 #, php-format
 msgid ""
 "Note: analytics reports are available via the <a href=\"%s\">tools menu</"
 "a>."
 msgstr ""
 
-#: admin/partials/sessions-admin-settings-main.php:50
+#: admin/partials/sessions-admin-settings-main.php:44
+msgid "Settings by Roles"
+msgstr ""
+
+#: admin/partials/sessions-admin-settings-main.php:57
 msgid "Options"
 msgstr ""
 
-#: admin/partials/sessions-admin-settings-main.php:64
-msgid "WordPress core"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-main.php:77
-msgid "CSS"
-msgstr ""
-
-#: admin/partials/sessions-admin-settings-main.php:90
+#: admin/partials/sessions-admin-settings-main.php:70
 msgid "About"
 msgstr ""
 
@@ -398,577 +408,398 @@ msgid "Feed fetcher"
 msgstr ""
 
 #: includes/api/class-device.php:304
-#: includes/features/class-channeltypes.php:47
 msgid "Unknown"
 msgstr ""
 
 #: includes/features/class-analytics.php:397
 #: includes/features/class-analytics.php:399
 #: includes/features/class-analytics.php:590
-#: includes/features/class-analytics.php:668
-#: includes/features/class-analytics.php:813
-#: includes/features/class-classtypes.php:50
-#: includes/features/class-clienttypes.php:53
-#: includes/features/class-devicetypes.php:57
+#: includes/features/class-analytics.php:675
+#: includes/features/class-analytics.php:827
 msgid "Other"
 msgstr ""
 
 #: includes/features/class-analytics.php:431
-#: includes/features/class-analytics.php:689
-#: includes/features/class-analytics.php:872
-#: includes/features/class-analytics.php:1814
+#: includes/features/class-analytics.php:696
+#: includes/features/class-analytics.php:893
+#: includes/features/class-analytics.php:1835
 msgid "No Data"
 msgstr ""
 
 #: includes/features/class-analytics.php:521
-#: includes/features/class-analytics.php:761
-#: includes/features/class-analytics.php:780
-#: includes/features/class-analytics.php:1207
-#: includes/features/class-analytics.php:1219
+#: includes/features/class-analytics.php:768
+#: includes/features/class-analytics.php:787
 #: includes/features/class-analytics.php:1228
+#: includes/features/class-analytics.php:1240
+#: includes/features/class-analytics.php:1249
 msgid "Generic"
 msgstr ""
 
-#: includes/features/class-analytics.php:669
-#: includes/features/class-analytics.php:814
+#: includes/features/class-analytics.php:676
+#: includes/features/class-analytics.php:828
 msgid "TOTAL"
 msgstr ""
 
-#: includes/features/class-analytics.php:930
+#: includes/features/class-analytics.php:951
 msgid "Hits"
 msgstr ""
 
-#: includes/features/class-analytics.php:1080
+#: includes/features/class-analytics.php:1101
 #, php-format
 msgid "%s hits"
 msgstr ""
 
-#: includes/features/class-analytics.php:1103
-#: includes/features/class-analytics.php:1644
+#: includes/features/class-analytics.php:1115
+#: includes/features/class-analytics.php:1581
+msgid "Classes"
+msgstr ""
+
+#: includes/features/class-analytics.php:1118
+#: includes/features/class-analytics.php:1609
+msgid "Device Types"
+msgstr ""
+
+#: includes/features/class-analytics.php:1121
+#: includes/features/class-analytics.php:1637
+msgid "Client Types"
+msgstr ""
+
+#: includes/features/class-analytics.php:1124
+#: includes/features/class-analytics.php:1665
 msgid "Libraries"
 msgstr ""
 
 #: includes/features/class-analytics.php:1127
-msgid "Browser Details"
+#: includes/features/class-analytics.php:1693
+msgid "Mobile Applications"
 msgstr ""
 
 #: includes/features/class-analytics.php:1130
-msgid "Bot Details"
+#: includes/features/class-analytics.php:1721
+msgid "Feed Readers"
 msgstr ""
 
 #: includes/features/class-analytics.php:1133
-msgid "Device Details"
+#: includes/features/class-analytics.php:1749
+msgid "Media Players"
 msgstr ""
 
 #: includes/features/class-analytics.php:1136
-msgid "Operating System Details"
+msgid "Browsers"
 msgstr ""
 
-#: includes/features/class-analytics.php:1141
-#: includes/features/class-analytics.php:1187
-msgid "Main Summary"
+#: includes/features/class-analytics.php:1139
+msgid "Bots"
 msgstr ""
 
 #: includes/features/class-analytics.php:1142
+msgid "Devices"
+msgstr ""
+
+#: includes/features/class-analytics.php:1145
+msgid "Operating Systems"
+msgstr ""
+
+#: includes/features/class-analytics.php:1148
+msgid "Browser Details"
+msgstr ""
+
+#: includes/features/class-analytics.php:1151
+msgid "Bot Details"
+msgstr ""
+
+#: includes/features/class-analytics.php:1154
+msgid "Device Details"
+msgstr ""
+
+#: includes/features/class-analytics.php:1157
+msgid "Operating System Details"
+msgstr ""
+
+#: includes/features/class-analytics.php:1162
+#: includes/features/class-analytics.php:1208
+msgid "Main Summary"
+msgstr ""
+
+#: includes/features/class-analytics.php:1163
 msgid "Return to Sessions main page."
 msgstr ""
 
-#: includes/features/class-analytics.php:1165
-#: includes/features/class-analytics.php:1365
+#: includes/features/class-analytics.php:1186
+#: includes/features/class-analytics.php:1386
 msgid "All Sites"
 msgstr ""
 
-#: includes/features/class-analytics.php:1169
-#: includes/features/class-analytics.php:1171
+#: includes/features/class-analytics.php:1190
+#: includes/features/class-analytics.php:1192
 #, php-format
 msgid "Site ID %s"
 msgstr ""
 
-#: includes/features/class-analytics.php:1253
+#: includes/features/class-analytics.php:1274
 msgid "All Classes"
 msgstr ""
 
-#: includes/features/class-analytics.php:1256
+#: includes/features/class-analytics.php:1277
 msgid "All Device Types"
 msgstr ""
 
-#: includes/features/class-analytics.php:1259
+#: includes/features/class-analytics.php:1280
 msgid "All Client Types"
 msgstr ""
 
-#: includes/features/class-analytics.php:1262
+#: includes/features/class-analytics.php:1283
 msgid "All Libraries"
 msgstr ""
 
-#: includes/features/class-analytics.php:1265
+#: includes/features/class-analytics.php:1286
 msgid "All Mobile Applications"
 msgstr ""
 
-#: includes/features/class-analytics.php:1268
+#: includes/features/class-analytics.php:1289
 msgid "All Feed Readers"
 msgstr ""
 
-#: includes/features/class-analytics.php:1271
+#: includes/features/class-analytics.php:1292
 msgid "All Media Players"
 msgstr ""
 
-#: includes/features/class-analytics.php:1274
+#: includes/features/class-analytics.php:1295
 msgid "All Browsers"
 msgstr ""
 
-#: includes/features/class-analytics.php:1277
+#: includes/features/class-analytics.php:1298
 msgid "All Bots"
 msgstr ""
 
-#: includes/features/class-analytics.php:1280
+#: includes/features/class-analytics.php:1301
 msgid "All Devices"
 msgstr ""
 
-#: includes/features/class-analytics.php:1283
+#: includes/features/class-analytics.php:1304
 msgid "All Operating Systems"
 msgstr ""
 
-#: includes/features/class-analytics.php:1317
+#: includes/features/class-analytics.php:1338
 msgid "Hits variation."
 msgstr ""
 
-#: includes/features/class-analytics.php:1321
+#: includes/features/class-analytics.php:1342
 msgid "Metrics Variations"
 msgstr ""
 
-#: includes/features/class-analytics.php:1386
+#: includes/features/class-analytics.php:1407
 msgid "View the details of all browsers."
 msgstr ""
 
-#: includes/features/class-analytics.php:1388
-#: includes/features/class-analytics.php:1507
+#: includes/features/class-analytics.php:1409
+#: includes/features/class-analytics.php:1528
 msgid "Top Browsers"
 msgstr ""
 
-#: includes/features/class-analytics.php:1409
+#: includes/features/class-analytics.php:1430
 msgid "View the details of all bots."
 msgstr ""
 
-#: includes/features/class-analytics.php:1411
+#: includes/features/class-analytics.php:1432
 msgid "Top Bots"
 msgstr ""
 
-#: includes/features/class-analytics.php:1432
+#: includes/features/class-analytics.php:1453
 msgid "View the details of all devices."
 msgstr ""
 
-#: includes/features/class-analytics.php:1434
+#: includes/features/class-analytics.php:1455
 msgid "Top Devices"
 msgstr ""
 
-#: includes/features/class-analytics.php:1455
+#: includes/features/class-analytics.php:1476
 msgid "View the details of all operating systems."
 msgstr ""
 
-#: includes/features/class-analytics.php:1457
-#: includes/features/class-analytics.php:1482
+#: includes/features/class-analytics.php:1478
+#: includes/features/class-analytics.php:1503
 msgid "Top Operating Systems"
 msgstr ""
 
-#: includes/features/class-analytics.php:1532
+#: includes/features/class-analytics.php:1553
 msgid "Top Versions"
 msgstr ""
 
-#: includes/features/class-analytics.php:1558
+#: includes/features/class-analytics.php:1579
 msgid "View the details of all classes."
 msgstr ""
 
-#: includes/features/class-analytics.php:1586
+#: includes/features/class-analytics.php:1607
 msgid "View the details of all device types."
 msgstr ""
 
-#: includes/features/class-analytics.php:1614
+#: includes/features/class-analytics.php:1635
 msgid "View the details of all client types."
 msgstr ""
 
-#: includes/features/class-analytics.php:1642
+#: includes/features/class-analytics.php:1663
 msgid "View the details of all libraries."
 msgstr ""
 
-#: includes/features/class-analytics.php:1670
+#: includes/features/class-analytics.php:1691
 msgid "View the details of all applications."
 msgstr ""
 
-#: includes/features/class-analytics.php:1698
+#: includes/features/class-analytics.php:1719
 msgid "View the details of all feed-readers."
 msgstr ""
 
-#: includes/features/class-analytics.php:1726
+#: includes/features/class-analytics.php:1747
 msgid "View the details of all media players."
 msgstr ""
 
-#: includes/features/class-analytics.php:1751
+#: includes/features/class-analytics.php:1772
 msgctxt "Noun - Number of hits."
 msgid "Hits Number"
 msgstr ""
 
-#: includes/features/class-analytics.php:1752
+#: includes/features/class-analytics.php:1773
 msgid "Number of hits."
 msgstr ""
 
-#: includes/features/class-analytics.php:1756
+#: includes/features/class-analytics.php:1777
 msgctxt "Noun - Percentage of mobile hits."
 msgid "Mobile"
 msgstr ""
 
-#: includes/features/class-analytics.php:1757
+#: includes/features/class-analytics.php:1778
 msgid "Ratio of hits done by mobiles."
 msgstr ""
 
-#: includes/features/class-analytics.php:1761
+#: includes/features/class-analytics.php:1782
 msgctxt "Noun - Percentage of desktop hits"
 msgid "Desktop"
 msgstr ""
 
-#: includes/features/class-analytics.php:1762
+#: includes/features/class-analytics.php:1783
 msgid "Ratio of hits done by desktops."
 msgstr ""
 
-#: includes/features/class-analytics.php:1766
+#: includes/features/class-analytics.php:1787
 msgctxt "Noun - Percentage of bot hits"
 msgid "Bot"
 msgstr ""
 
-#: includes/features/class-analytics.php:1767
+#: includes/features/class-analytics.php:1788
 msgid "Ratio of hits done by bots."
 msgstr ""
 
-#: includes/features/class-analytics.php:1771
+#: includes/features/class-analytics.php:1792
 msgctxt "Noun - Number of distinct clients."
 msgid "Clients"
 msgstr ""
 
-#: includes/features/class-analytics.php:1772
+#: includes/features/class-analytics.php:1793
 msgid "Number of distinct clients."
 msgstr ""
 
-#: includes/features/class-analytics.php:1776
+#: includes/features/class-analytics.php:1797
 msgctxt "Noun - Number of distinct engines."
 msgid "Engines"
 msgstr ""
 
-#: includes/features/class-analytics.php:1777
+#: includes/features/class-analytics.php:1798
 msgid "Number of distinct engines."
 msgstr ""
 
-#: includes/features/class-analytics.php:1939
+#: includes/features/class-analytics.php:1960
 msgid "Custom Range"
 msgstr ""
 
-#: includes/features/class-analytics.php:1939
+#: includes/features/class-analytics.php:1960
 msgid "Cancel"
 msgstr ""
 
-#: includes/features/class-analytics.php:1939
+#: includes/features/class-analytics.php:1960
 msgid "Apply"
 msgstr ""
 
-#: includes/features/class-analytics.php:1941
+#: includes/features/class-analytics.php:1962
 msgid "Today"
 msgstr ""
 
-#: includes/features/class-analytics.php:1942
+#: includes/features/class-analytics.php:1963
 msgid "Yesterday"
 msgstr ""
 
-#: includes/features/class-analytics.php:1943
+#: includes/features/class-analytics.php:1964
 msgid "This Month"
 msgstr ""
 
-#: includes/features/class-analytics.php:1944
+#: includes/features/class-analytics.php:1965
 msgid "Last Month"
 msgstr ""
 
-#: includes/features/class-channeltypes.php:48
-msgid "Command Line Interface"
+#: includes/features/class-limitertypes.php:50
+msgid "country"
 msgstr ""
 
-#: includes/features/class-channeltypes.php:49
-msgid "Cron Job"
+#: includes/features/class-limitertypes.php:51
+msgid "IP address"
 msgstr ""
 
-#: includes/features/class-channeltypes.php:50
-msgid "Ajax Request"
+#: includes/features/class-limitertypes.php:52
+msgid "device class"
 msgstr ""
 
-#: includes/features/class-channeltypes.php:51
-msgid "XML-RPC Request"
+#: includes/features/class-limitertypes.php:53
+msgid "device type"
 msgstr ""
 
-#: includes/features/class-channeltypes.php:52
-msgid "Rest API Request"
+#: includes/features/class-limitertypes.php:54
+msgid "client type"
 msgstr ""
 
-#: includes/features/class-channeltypes.php:53
-msgid "Atom/RDF/RSS Feed"
+#: includes/features/class-limitertypes.php:55
+msgid "browser"
 msgstr ""
 
-#: includes/features/class-channeltypes.php:54
-msgid "Site Backend"
-msgstr ""
-
-#: includes/features/class-channeltypes.php:55
-msgid "Site Frontend"
-msgstr ""
-
-#: includes/features/class-classtypes.php:47
-#: includes/features/class-cssmodifier.php:58
-#: includes/features/class-detector.php:264
-msgid "Bot"
-msgstr ""
-
-#: includes/features/class-classtypes.php:48
-#: includes/features/class-detector.php:264
-msgid "Desktop"
-msgstr ""
-
-#: includes/features/class-classtypes.php:49
-#: includes/features/class-detector.php:264
-msgid "Mobile"
-msgstr ""
-
-#: includes/features/class-clienttypes.php:47
-#: includes/features/class-detector.php:270
-msgid "Browser"
-msgstr ""
-
-#: includes/features/class-clienttypes.php:48
-msgid "Feed reader"
-msgstr ""
-
-#: includes/features/class-clienttypes.php:49
-msgid "Library"
-msgstr ""
-
-#: includes/features/class-clienttypes.php:50
-msgid "Media player"
-msgstr ""
-
-#: includes/features/class-clienttypes.php:51
-msgid "Mobile application"
-msgstr ""
-
-#: includes/features/class-clienttypes.php:52
-msgid "Personal information manager"
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:48
-msgid "Class"
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:50
-msgid "Device"
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:52
-msgid "Client"
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:54
-msgid "Operating system"
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:56
-msgid "Brand"
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:60
-msgid "Capabilities"
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:74
-msgid "Adds the class of the device."
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:76
-msgid "Adds the type of the device."
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:78
-msgid "Adds the client type, engine and name used on the device."
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:80
-msgid "Adds the operating system running on the device."
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:82
-msgid "Adds the brand and model of the device."
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:84
-msgid "Adds the bot name."
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:86
-msgid "Adds the device capabilities."
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:110
-#: includes/features/class-cssmodifier.php:148
-#, php-format
-msgid "Available classes: %s. If not detected, the class will be %s."
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:119
-#, php-format
-msgid "Available type classes: %s. If not detected, the class will be %s."
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:127
-#, php-format
-msgid "Available engine classes: %s. If not detected, the class will be %s."
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:138
-#, php-format
-msgid "Available name classes: %s. If not detected, the class will be %s."
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:149
-#, php-format
-msgid ""
-"If (and only if) model is detected an extra class is added. It may be be "
-"something like %s or %s."
-msgstr ""
-
-#: includes/features/class-cssmodifier.php:157
-#, php-format
-msgid "Available classes: %s."
-msgstr ""
-
-#: includes/features/class-detector.php:267
-msgid "Smart Display"
-msgstr ""
-
-#: includes/features/class-detector.php:267
-#: includes/features/class-devicetypes.php:53
-msgid "Smartphone"
-msgstr ""
-
-#: includes/features/class-detector.php:267
-#: includes/features/class-devicetypes.php:55
-msgid "Tablet"
-msgstr ""
-
-#: includes/features/class-detector.php:267
-#: includes/features/class-devicetypes.php:56
-msgid "TV"
-msgstr ""
-
-#: includes/features/class-detector.php:267
-msgid "Feature Phone"
-msgstr ""
-
-#: includes/features/class-detector.php:267
-#: includes/features/class-devicetypes.php:51
-msgid "Phablet"
-msgstr ""
-
-#: includes/features/class-detector.php:267
-msgid "Portable Media Player"
-msgstr ""
-
-#: includes/features/class-detector.php:267
-#: includes/features/class-devicetypes.php:47
-msgid "Camera"
-msgstr ""
-
-#: includes/features/class-detector.php:267
-msgid "Car Browser"
-msgstr ""
-
-#: includes/features/class-detector.php:267
-msgid "Console"
-msgstr ""
-
-#: includes/features/class-detector.php:270
-msgid "PIM"
-msgstr ""
-
-#: includes/features/class-detector.php:270
-msgid "Application Library"
-msgstr ""
-
-#: includes/features/class-detector.php:270
-msgid "Media Player"
-msgstr ""
-
-#: includes/features/class-detector.php:270
-msgid "Feed Reader"
-msgstr ""
-
-#: includes/features/class-detector.php:270
-msgid "Mobile Application"
-msgstr ""
-
-#: includes/features/class-devicetypes.php:48
-msgid "Car browser"
-msgstr ""
-
-#: includes/features/class-devicetypes.php:49
-msgid "Game console"
-msgstr ""
-
-#: includes/features/class-devicetypes.php:50
-msgid "Feature phone"
-msgstr ""
-
-#: includes/features/class-devicetypes.php:52
-msgid "Portable media player"
-msgstr ""
-
-#: includes/features/class-devicetypes.php:54
-msgid "Smart display"
+#: includes/features/class-limitertypes.php:56
+msgid "operating system"
 msgstr ""
 
 #: includes/libraries/class-libraries.php:67
-#: includes/libraries/class-libraries.php:78
-#: includes/libraries/class-libraries.php:101
-#: includes/libraries/class-libraries.php:208
-#: includes/libraries/class-libraries.php:216
-#: includes/libraries/class-libraries.php:223
-#: includes/libraries/class-libraries.php:230
+#: includes/libraries/class-libraries.php:79
+#: includes/libraries/class-libraries.php:175
+#: includes/libraries/class-libraries.php:183
+#: includes/libraries/class-libraries.php:190
+#: includes/libraries/class-libraries.php:197
 #, php-format
 msgid "%s & contributors"
 msgstr ""
 
-#: includes/libraries/class-libraries.php:112
-#, php-format
-msgid "%s, %s & contributors"
-msgstr ""
-
-#: includes/libraries/class-libraries.php:149
+#: includes/libraries/class-libraries.php:116
 msgid "MIT license"
 msgstr ""
 
-#: includes/libraries/class-libraries.php:152
+#: includes/libraries/class-libraries.php:119
 msgid "Apache license, version 2.0"
 msgstr ""
 
-#: includes/libraries/class-libraries.php:155
+#: includes/libraries/class-libraries.php:122
 msgid "GPL-2.0 license"
 msgstr ""
 
-#: includes/libraries/class-libraries.php:158
+#: includes/libraries/class-libraries.php:125
 msgid "GPL-3.0 license"
 msgstr ""
 
-#: includes/libraries/class-libraries.php:161
+#: includes/libraries/class-libraries.php:128
 msgid "LGPL-3.0 license"
 msgstr ""
 
-#: includes/libraries/class-libraries.php:164
+#: includes/libraries/class-libraries.php:131
 msgid "unknown license"
 msgstr ""
 
 #. translators: as in the sentence "Product W version X by author Y (license Z)"
-#: includes/libraries/class-libraries.php:240
+#: includes/libraries/class-libraries.php:207
 #, php-format
 msgid "<a href=\"%1$s\">%2$s %3$s</a>%4$s by %5$s (%6$s)"
 msgstr ""
@@ -1104,20 +935,50 @@ msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/system/class-environment.php:203
+#: includes/system/class-environment.php:248
 msgid "log"
 msgstr ""
 
-#: includes/system/class-environment.php:208
+#: includes/system/class-environment.php:253
 msgid "display"
 msgstr ""
 
-#: includes/system/class-environment.php:214
+#: includes/system/class-environment.php:259
 msgid "Debug enabled"
 msgstr ""
 
-#: includes/system/class-environment.php:214
+#: includes/system/class-environment.php:259
 msgid "Debug disabled"
+msgstr ""
+
+#: includes/system/class-session.php:330
+#: includes/system/class-session.php:362
+#: includes/system/class-session.php:376
+#: includes/system/class-session.php:391
+msgid "<strong>ERROR</strong>: "
+msgstr ""
+
+#: includes/system/class-session.php:330
+#: includes/system/class-session.php:362
+msgid "Something went wrong, it is not possible to continue."
+msgstr ""
+
+#: includes/system/class-session.php:373
+#: includes/system/class-session.php:395
+msgid "<strong>FORBIDDEN</strong>: "
+msgstr ""
+
+#: includes/system/class-session.php:373
+#: includes/system/class-session.php:376
+msgid ""
+"You're not allowed to initiate a new session from your current IP address."
+msgstr ""
+
+#: includes/system/class-session.php:391
+#: includes/system/class-session.php:395
+msgid ""
+"You're not allowed to initiate a new session because your maximum number "
+"of active sessions has been reached."
 msgstr ""
 
 #: includes/system/class-sitehealth.php:122
