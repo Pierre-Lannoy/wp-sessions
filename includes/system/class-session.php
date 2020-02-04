@@ -19,6 +19,8 @@ use POSessions\System\User;
 use POSessions\System\Environment;
 use POSessions\System\GeoIP;
 use POSessions\System\UserAgent;
+use POSessions\Plugin\Feature\Schema;
+use POSessions\Plugin\Feature\Capture;
 use POSessions\Plugin\Feature\LimiterTypes;
 
 /**
@@ -151,6 +153,9 @@ class Session {
 	private function verify_ip_range( $block ) {
 		if ( ! in_array( $block, [ 'none', 'external', 'local' ], true ) ) {
 			Logger::warning( 'IP range limitation set to "Allow For All".', 202 );
+			return 'allow';
+		}
+		if ( 'none' === $block ) {
 			return 'allow';
 		}
 		if ( 'external' === $block && Environment::is_current_ip_private() ) {
@@ -397,6 +402,18 @@ class Session {
 	/**
 	 * Enforce sessions limitation if needed.
 	 *
+	 * @param string  $message  The error message.
+	 * @param integer $error    The error code.
+	 * @since 1.0.0
+	 */
+	private function die( $message, $error ) {
+		Capture::login_block( $this->user_id );
+		wp_die( $message, $error );
+	}
+
+	/**
+	 * Enforce sessions limitation if needed.
+	 *
 	 * @param mixed   $user     WP_User if the user is authenticated, WP_Error or null otherwise.
 	 * @param string  $username Username or email address.
 	 * @param string  $password User password.
@@ -438,7 +455,7 @@ class Session {
 				if ( '' === $mode || 0 === $limit ) {
 					if ( 1 === (int) Option::network_get( 'rolemode' ) ) {
 						Logger::alert( sprintf( 'No session policy found for %s.', User::get_user_string( $this->user_id ) ), 500 );
-						wp_die( __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'internal_error_message', __( 'Something went wrong, it is not possible to continue.', 'sessions' ) ), 500 );
+						$this->die( __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'internal_error_message', __( 'Something went wrong, it is not possible to continue.', 'sessions' ) ), 500 );
 					} else {
 						Logger::critical( sprintf( 'No session policy found for %s.', User::get_user_string( $this->user_id ) ), 202 );
 					}
@@ -470,7 +487,7 @@ class Session {
 							default:
 								if ( 1 === (int) Option::network_get( 'rolemode' ) ) {
 									Logger::alert( 'Unknown session policy.', 501 );
-									wp_die( __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'internal_error_message', __( 'Something went wrong, it is not possible to continue.', 'sessions' ) ), 501 );
+									$this->die( __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'internal_error_message', __( 'Something went wrong, it is not possible to continue.', 'sessions' ) ), 501 );
 								} else {
 									Logger::critical( 'Unknown session policy.', 202 );
 									$result = 'allow';
@@ -479,13 +496,7 @@ class Session {
 						}
 					} else {
 						Logger::warning( sprintf( 'New session not allowed for %s. Reason: IP range.', User::get_user_string( $this->user_id ), ), 403 );
-						switch ( $method ) {
-							case 'default':
-								return new \WP_Error( '403', __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_bad_ip_message', __( 'You\'re not allowed to initiate a new session from your current IP address.', 'sessions' ) ) );
-							default:
-								do_action( 'wp_login_failed', $this->user->user_email );
-								wp_die( __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'sessions_bad_ip_message', __( 'You\'re not allowed to initiate a new session from your current IP address.', 'sessions' ) ), 403 );
-						}
+						$this->die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_bad_ip_message', __( 'You\'re not allowed to initiate a new session from your current IP address.', 'sessions' ) ), 403 );
 					}
 					if ( 'allow' !== $result ) {
 						switch ( $method ) {
@@ -499,11 +510,11 @@ class Session {
 								break;
 							case 'default':
 								Logger::warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( 'device-', ' ', $mode ) ), 403 );
+								Capture::login_block( $this->user_id, true );
 								return new \WP_Error( '403', __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ) );
 							default:
 								Logger::warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( 'device-', ' ', $mode ) ), 403 );
-								do_action( 'wp_login_failed', $this->user->user_email );
-								wp_die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ), 403 );
+								$this->die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ), 403 );
 						}
 					} else {
 						Logger::debug( sprintf( 'New session allowed for %s.', User::get_user_string( $this->user_id ) ), 200 );
