@@ -483,7 +483,7 @@ class Sessions_Admin {
 		$blocks[]  = [ 'external', esc_html__( 'Allow only from private IP ranges', 'sessions' ) ];
 		$blocks[]  = [ 'local', esc_html__( 'Allow only from public IP ranges', 'sessions' ) ];
 		$methods   = [];
-		$methods[] = [ 'override', esc_html__( 'Override other session', 'sessions' ) ];
+		$methods[] = [ 'override', esc_html__( 'Override oldest session', 'sessions' ) ];
 		/* translators: please, do not translate the string [HTTP 403 / Forbidden] as it is a standard HTTP header. */
 		$methods[] = [ 'block', esc_html__( 'Block and send a "HTTP 403 / Forbidden" error', 'sessions' ) ];
 		$methods[] = [ 'default', esc_html__( 'Block and send a WordPress error', 'sessions' ) ];
