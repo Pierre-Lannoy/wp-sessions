@@ -13,6 +13,7 @@ namespace POSessions\Plugin\Feature;
 
 use POSessions\System\Logger;
 use POSessions\System\User;
+use POSessions\Plugin\Feature\Schema;
 
 /**
  * Define the captures functionality.
@@ -132,6 +133,47 @@ class Capture {
 	}
 
 	/**
+	 * Get the statistics.
+	 *
+	 * @return array The current statistics.
+	 * @since    1.0.0
+	 */
+	public static function get_stats() {
+		$result = [];
+		if ( 0 < self::$expired ) {
+			$result['expired'] = self::$expired;
+		}
+		if ( 0 < self::$idle ) {
+			$result['idle'] = self::$idle;
+		}
+		if ( 0 < self::$forced ) {
+			$result['forced'] = self::$forced;
+		}
+		if ( 0 < self::$registration ) {
+			$result['registration'] = self::$registration;
+		}
+		if ( 0 < self::$delete ) {
+			$result['delete'] = self::$delete;
+		}
+		if ( 0 < self::$reset ) {
+			$result['reset'] = self::$reset;
+		}
+		if ( 0 < self::$logout ) {
+			$result['logout'] = self::$logout;
+		}
+		if ( 0 < self::$login_success ) {
+			$result['login_success'] = self::$login_success;
+		}
+		if ( 0 < self::$login_fail ) {
+			$result['login_fail'] = self::$login_fail;
+		}
+		if ( 0 < self::$login_block ) {
+			$result['login_block'] = self::$login_block;
+		}
+		return $result;
+	}
+
+	/**
 	 * Post actions for idle session terminated.
 	 *
 	 * @param   integer   $user_id  The user ID.
@@ -227,11 +269,26 @@ class Capture {
 	/**
 	 * "jpp_kill_login" event.
 	 *
-	 * @since    1.6.0
+	 * @since    1.0.0
 	 */
 	public static function jpp_kill_login( $ip ) {
 		self::$login_block ++;
 		Logger::info( sprintf( 'Login blocked for "%s".', $ip ) );
+	}
+
+	/**
+	 * "login_block" pseudo event.
+	 *
+	 * @param   integer   $user_id  The user ID.
+	 * @param   boolean   $dec      Optional. Decrements login_failed.
+	 * @since    1.0.0
+	 */
+	public static function login_block( $user_id, $dec = false ) {
+		self::$login_block ++;
+		if ( $dec ) {
+			self::$login_fail --;
+		}
+		Logger::info( sprintf( 'Login blocked for %s.', User::get_user_string( $user_id ) ) );
 	}
 
 }
