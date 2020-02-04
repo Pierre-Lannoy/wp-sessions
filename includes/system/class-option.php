@@ -76,8 +76,8 @@ class Option {
 		self::$defaults['history']           = 30;
 		self::$defaults['analytics']         = true;
 		self::$defaults['rolemode']          = 0;
-		self::$defaults['zk_semaphore']      = 180;
-		self::$defaults['zk_cycle']          = 60;
+		self::$defaults['zk_semaphore']      = 300;
+		self::$defaults['zk_cycle']          = 90;
 		self::$defaults['zk_tsize']          = 20;
 		self::$network                       = [ 'version', 'use_cdn', 'download_favicons', 'script_in_footer', 'display_nag', 'analytics', 'history', 'rolemode', 'zk_cycle', 'zk_tsize', 'zk_semaphore' ];
 		// Specific options.
