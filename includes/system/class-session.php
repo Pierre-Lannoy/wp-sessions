@@ -272,6 +272,18 @@ class Session {
 	}
 
 	/**
+	 * Verify if the maximum allowed is reached.
+	 *
+	 * @param string   $selector The selector ('device-class', 'device-type', 'device-client',...).
+	 * @param integer  $limit    The maximum allowed.
+	 * @return string 'allow' or the token of the overridable if maximum is reached.
+	 * @since 1.0.0
+	 */
+	private function verify_per_device_limit( $selector, $limit ) {
+		return 'allow';
+	}
+
+	/**
 	 * Enforce sessions limitation if needed.
 	 *
 	 * @param mixed   $user     WP_User if the user is authenticated, WP_Error or null otherwise.
@@ -342,20 +354,17 @@ class Session {
 							case 'device-client':
 							case 'device-browser':
 							case 'device-os':
+								$result = $this->verify_per_device_limit( $mode, $limit );
 								break;
 							default:
-
-
-
-
-
-								$result = 'allow';
-								Logger::debug( sprintf( 'Session allowed for %s.', User::get_user_string( $this->user_id ) ), 200 );
-
-
-
-
-
+								if ( 1 === (int) Option::network_get( 'rolemode' ) ) {
+									Logger::alert( 'Unknown session policy.', 501 );
+									wp_die( __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'internal_error_message', __( 'Something went wrong, it is not possible to continue.', 'sessions' ) ), 501 );
+								} else {
+									Logger::critical( 'Unknown session policy.', 202 );
+									$result = 'allow';
+									Logger::debug( sprintf( 'New session allowed for %s.', User::get_user_string( $this->user_id ) ), 200 );
+								}
 						}
 					} else {
 						Logger::warning( sprintf( 'New session not allowed for %s. Reason: IP range.', User::get_user_string( $this->user_id ), ), 403 );
@@ -386,7 +395,7 @@ class Session {
 								wp_die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ), 403 );
 						}
 					} else {
-						Logger::debug( sprintf( 'Session allowed for %s.', User::get_user_string( $this->user_id ) ), 200 );
+						Logger::debug( sprintf( 'New session allowed for %s.', User::get_user_string( $this->user_id ) ), 200 );
 					}
 				}
 			}
