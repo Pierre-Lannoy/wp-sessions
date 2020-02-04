@@ -18,6 +18,7 @@ use POSessions\System\Hash;
 use POSessions\System\User;
 use POSessions\System\Environment;
 use POSessions\System\GeoIP;
+use POSessions\System\UserAgent;
 use POSessions\Plugin\Feature\LimiterTypes;
 
 /**
@@ -274,13 +275,123 @@ class Session {
 	/**
 	 * Verify if the maximum allowed is reached.
 	 *
+	 * @param string   $ua The user agent.
+	 * @param string   $selector The selector ('device-class', 'device-type', 'device-client',...).
+	 * @return string The requested ID.
+	 * @since 1.0.0
+	 */
+	private function get_device_id( $ua, $selector ) {
+		$device = UserAgent::get( $ua );
+		switch ( $selector ) {
+			case 'device-class':
+				if ( $device->class_is_bot ) {
+					return 'bot';
+				}
+				if ( $device->class_is_mobile ) {
+					return 'mobile';
+				}
+				if ( $device->class_is_desktop ) {
+					return 'desktop';
+				}
+				return 'other';
+			case 'device-type':
+				if ( $device->device_is_smartphone ) {
+					return 'smartphone';
+				}
+				if ( $device->device_is_featurephone ) {
+					return 'featurephone';
+				}
+				if ( $device->device_is_tablet ) {
+					return 'tablet';
+				}
+				if ( $device->device_is_phablet ) {
+					return 'phablet';
+				}
+				if ( $device->device_is_console ) {
+					return 'console';
+				}
+				if ( $device->device_is_portable_media_player ) {
+					return 'portable-media-player';
+				}
+				if ( $device->device_is_car_browser ) {
+					return 'car-browser';
+				}
+				if ( $device->device_is_tv ) {
+					return 'tv';
+				}
+				if ( $device->device_is_smart_display ) {
+					return 'smart-display';
+				}
+				if ( $device->device_is_camera ) {
+					return 'camera';
+				}
+				return 'other';
+			case 'device-client':
+				if ( $device->client_is_browser ) {
+					return 'browser';
+				}
+				if ( $device->client_is_feed_reader ) {
+					return 'feed-reader';
+				}
+				if ( $device->client_is_mobile_app ) {
+					return 'mobile-app';
+				}
+				if ( $device->client_is_pim ) {
+					return 'pim';
+				}
+				if ( $device->client_is_library ) {
+					return 'library';
+				}
+				if ( $device->client_is_media_player ) {
+					return 'media-payer';
+				}
+				return 'other';
+			case 'device-browser':
+				return $device->client_short_name;
+			case 'device-os':
+				return $device->os_short_name;
+		}
+		return '';
+	}
+
+	/**
+	 * Verify if the maximum allowed is reached.
+	 *
 	 * @param string   $selector The selector ('device-class', 'device-type', 'device-client',...).
 	 * @param integer  $limit    The maximum allowed.
 	 * @return string 'allow' or the token of the overridable if maximum is reached.
 	 * @since 1.0.0
 	 */
 	private function verify_per_device_limit( $selector, $limit ) {
-		return 'allow';
+		$device  = $this->get_device_id( '', $selector );
+		$compare = [];
+		$buffer  = [];
+		foreach ( $this->sessions as $token => $session ) {
+			if ( $device === $this->get_device_id( $session['ua'], $selector ) ) {
+				$compare[ $token ] = $session;
+			} else {
+				$buffer[ $token ] = $session;
+			}
+		}
+		if ( $limit > count( $compare ) ) {
+			return 'allow';
+		}
+		uasort(
+			$compare,
+			function ( $a, $b ) {
+				if ( $a['login'] === $b['login'] ) {
+					return 0;
+				} return ( $a['login'] < $b['login'] ) ? -1 : 1;
+			}
+		);
+		if ( $limit < count( $compare ) ) {
+			$compare = array_slice( $compare, 1 );
+			do_action( 'sessions_force_terminate', $this->user_id );
+			$this->sessions = array_merge( $compare, $buffer );
+			self::set_user_sessions( $this->sessions, $this->user_id );
+			return $this->verify_per_user_limit( $limit );
+		}
+		return array_key_first( $compare );
 	}
 
 	/**
@@ -383,14 +494,14 @@ class Session {
 									unset( $this->sessions[ $result ] );
 									do_action( 'sessions_force_terminate', $this->user_id );
 									self::set_user_sessions( $this->sessions, $this->user_id );
-									Logger::notice( sprintf( 'Session overridden for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( '-', ' ', $mode ) ) );
+									Logger::notice( sprintf( 'Session overridden for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( 'device-', ' ', $mode ) ) );
 								}
 								break;
 							case 'default':
-								Logger::warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( '-', ' ', $mode ) ), 403 );
+								Logger::warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( 'device-', ' ', $mode ) ), 403 );
 								return new \WP_Error( '403', __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ) );
 							default:
-								Logger::warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( '-', ' ', $mode ) ), 403 );
+								Logger::warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( 'device-', ' ', $mode ) ), 403 );
 								do_action( 'wp_login_failed', $this->user->user_email );
 								wp_die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ), 403 );
 						}
@@ -399,12 +510,7 @@ class Session {
 					}
 				}
 			}
-		}/* elseif ( 1 === (int) Option::network_get( 'rolemode' ) ) {
-			Logger::alert( 'Unable to determine which user is trying to log-in.', 500 );
-			wp_die( __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'internal_error_message', __( 'Something went wrong, it is not possible to continue.', 'sessions' ) ), 500 );
-		} else {
-			Logger::critical( 'Unable to determine which user is trying to log-in.', 202 );
-		}*/
+		}
 		return $user;
 	}
 
