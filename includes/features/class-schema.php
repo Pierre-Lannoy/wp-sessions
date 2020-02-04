@@ -18,10 +18,7 @@ use POSessions\System\Favicon;
 use POSessions\System\Logger;
 use POSessions\System\Cache;
 use POSessions\System\Timezone;
-use POSessions\Plugin\Feature\Detector;
-use POSessions\Plugin\Feature\ClassTypes;
-use POSessions\Plugin\Feature\DeviceTypes;
-use POSessions\Plugin\Feature\ClientTypes;
+use POSessions\Plugin\Feature\Capture;
 
 /**
  * Define the schema functionality.
@@ -40,7 +37,7 @@ class Schema {
 	 * @since  1.0.0
 	 * @var    string    $statistics    The statistics table name.
 	 */
-	private static $statistics = 'Sessions_statistics';
+	private static $statistics = 'sessions_statistics';
 
 	/**
 	 * Initialize the class and set its properties.
@@ -56,7 +53,7 @@ class Schema {
 	 * @since    1.0.0
 	 */
 	public static function init() {
-		//add_action( 'shutdown', [ 'POSessions\Plugin\Feature\Schema', 'write' ], 10, 0 );
+		add_action( 'shutdown', [ 'POSessions\Plugin\Feature\Schema', 'write' ], PHP_INT_MAX - 1, 0 );
 	}
 
 	/**
@@ -66,103 +63,35 @@ class Schema {
 	 */
 	public static function write() {
 		if ( Option::network_get( 'analytics' ) ) {
-			self::write_current_to_database();
+			self::write_current_to_database( Capture::get_stats() );
 		}
 		self::purge();
 	}
 
 	/**
-	 * Get the current channel tag.
-	 *
-	 * @return  string The current channel tag.
-	 * @since 1.0.0
-	 */
-	private static function current_channel_tag() {
-		return self::channel_tag( Environment::exec_mode() );
-	}
-
-	/**
-	 * Get the channel tag.
-	 *
-	 * @param   integer $id Optional. The channel id (execution mode).
-	 * @return  string The channel tag.
-	 * @since 1.0.0
-	 */
-	public static function channel_tag( $id = 0 ) {
-		if ( $id >= count( ChannelTypes::$channels ) ) {
-			$id = 0;
-		}
-		return ChannelTypes::$channels[ $id ];
-	}
-
-	/**
 	 * Effectively write a buffer element in the database.
 	 *
+	 * @param array $record The buffer to write.
 	 * @since    1.0.0
 	 */
-	private static function write_current_to_database() {
-		if ( ! Option::site_get( 'analytics') || wp_doing_ajax() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+	private static function write_current_to_database( $record ) {
+		if ( ! Option::site_get( 'analytics' ) || 0 === count( $record ) ) {
 			return;
 		}
-		$device              = Detector::new();
-		$record              = [];
 		$datetime            = new \DateTime( 'now', Timezone::network_get() );
 		$record['timestamp'] = $datetime->format( 'Y-m-d' );
-		$record['site']      = get_current_blog_id();
-		$record['channel']   = strtolower( self::current_channel_tag() );
-		$record['class']     = Detector::get_element( 'class', $device );
-		$record['device']    = Detector::get_element( 'device', $device );
-		$record['client']    = Detector::get_element( 'client', $device );
-		if ( $device->class_is_bot && '' !== $device->bot_producer_name ) {
-			$record['brand'] = substr( $device->bot_producer_name, 0, 40 );
-		}
-		if ( $device->class_is_bot && '' !== $device->bot_producer_url ) {
-			$url_parts = wp_parse_url( $device->bot_producer_url );
-			if ( array_key_exists( 'host', $url_parts ) && isset( $url_parts['host'] ) ) {
-				$record['url'] = substr( $url_parts['host'], 0, 2083 );
-			}
-		}
-		if ( $device->class_is_bot && '' !== $device->bot_name ) {
-			$record['name'] = substr( $device->bot_name, 0, 40 );
-		}
-		if ( ! $device->class_is_bot && '' !== $device->brand_short_name ) {
-			$record['brand_id'] = substr( $device->brand_short_name, 0, 2 );
-		}
-		if ( ! $device->class_is_bot && '' !== $device->brand_name ) {
-			$record['brand'] = substr( $device->brand_name, 0, 40 );
-		}
-		if ( ! $device->class_is_bot && '' !== $device->model_name ) {
-			$record['model'] = substr( $device->model_name, 0, 40 );
-		}
-		if ( ! $device->class_is_bot && '' !== $device->client_short_name && 'UN' !== $device->client_short_name ) {
-			$record['client_id'] = substr( $device->client_short_name, 0, 2 );
-		}
-		if ( ! $device->class_is_bot && '' !== $device->client_name ) {
-			$record['name'] = substr( $device->client_name, 0, 40 );
-		}
-		if ( ! $device->class_is_bot && '' !== $device->client_version ) {
-			$record['client_version'] = substr( $device->client_version, 0, 20 );
-		}
-		if ( ! $device->class_is_bot && 'UNK' !== $device->client_engine ) {
-			$record['engine'] = substr( $device->client_engine, 0, 10 );
-		}
-		if ( ! $device->class_is_bot && 'UNK' !== $device->os_short_name ) {
-			$record['os_id'] = substr( $device->os_short_name, 0, 3 );
-		}
-		if ( ! $device->class_is_bot && 'UNK' !== $device->os_name ) {
-			$record['os'] = substr( $device->os_name, 0, 25 );
-		}
-		if ( ! $device->class_is_bot && 'UNK' !== $device->os_version ) {
-			$record['os_version'] = substr( $device->os_version, 0, 20 );
-		}
-		$field_insert = [];
-		$value_insert = [];
-		$value_update = [];
+		$field_insert        = [];
+		$value_insert        = [];
+		$value_update        = [];
 		foreach ( $record as $k => $v ) {
 			$field_insert[] = '`' . $k . '`';
-			$value_insert[] = "'" . $v . "'";
+			if ( 'timestamp' === $k ) {
+				$value_insert[] = "'" . $v . "'";
+			} else {
+				$value_insert[] = (int) $v;
+				$value_update[] = '`' . $k . '`=' . $k . ' + ' . (int) $v;
+			}
 		}
-		$value_update[] = '`hit`=hit + 1';
 		if ( count( $field_insert ) > 0 ) {
 			global $wpdb;
 			$sql  = 'INSERT INTO `' . $wpdb->base_prefix . self::$statistics . '` ';
@@ -171,9 +100,6 @@ class Schema {
 			$sql .= 'ON DUPLICATE KEY UPDATE ' . implode( ',', $value_update ) . ';';
 			// phpcs:ignore
 			$wpdb->query( $sql );
-		}
-		if ( array_key_exists( 'url', $record ) && '' !== $record['url'] ) {
-			Favicon::get_raw( $record['url'], true );
 		}
 	}
 
@@ -244,24 +170,23 @@ class Schema {
 		$charset_collate = 'DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci';
 		$sql             = 'CREATE TABLE IF NOT EXISTS ' . $wpdb->base_prefix . self::$statistics;
 		$sql            .= " (`timestamp` date NOT NULL DEFAULT '0000-00-00',";
-		$sql            .= " `site` int(11) UNSIGNED NOT NULL DEFAULT '0',";
-		$sql            .= " `channel` enum('cli','cron','ajax','xmlrpc','api','feed','wback','wfront','unknown') NOT NULL DEFAULT 'unknown',";
-		$sql            .= " `hit` int(11) UNSIGNED NOT NULL DEFAULT '1',";
-		$sql            .= " `class` enum('" . implode( "','", ClassTypes::$classes ) . "') NOT NULL DEFAULT 'other',";
-		$sql            .= " `device` enum('" . implode( "','", DeviceTypes::$devices ) . "') NOT NULL DEFAULT 'other',";
-		$sql            .= " `client` enum('" . implode( "','", ClientTypes::$clients ) . "') NOT NULL DEFAULT 'other',";
-		$sql            .= " `brand_id` varchar(2) NOT NULL DEFAULT '-',";
-		$sql            .= " `brand` varchar(40) NOT NULL DEFAULT '-',";  // May be device brand or bot producer.
-		$sql            .= " `model` varchar(40) NOT NULL DEFAULT '-',";
-		$sql            .= " `client_id` varchar(2) NOT NULL DEFAULT '-',";
-		$sql            .= " `name` varchar(40) NOT NULL DEFAULT '-',";  // May be client name or bot name.
-		$sql            .= " `client_version` varchar(20) NOT NULL DEFAULT '-',";
-		$sql            .= " `engine` varchar(20) NOT NULL DEFAULT '-',";
-		$sql            .= " `os_id` varchar(3) NOT NULL DEFAULT '-',";
-		$sql            .= " `os` varchar(25) NOT NULL DEFAULT '-',";
-		$sql            .= " `os_version` varchar(20) NOT NULL DEFAULT '-',";
-		$sql            .= " `url` varchar(2083) NOT NULL DEFAULT '-',";
-		$sql            .= ' UNIQUE KEY u_stat (timestamp, site, channel, class, device, client, brand_id, model, name, client_version, os_id, os_version)';
+		$sql            .= " `cnt` int(11) UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `u_total` bigint UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `u_active` bigint UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `u_suspended` bigint UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `u_banned` bigint UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `u_sessions` bigint UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `expired` int(11) UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `idle` int(11) UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `forced` int(11) UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `registration` int(11) UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `delete` int(11) UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `reset` int(11) UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `logout` int(11) UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `login_success` int(11) UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `login_fail` int(11) UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `login_block` int(11) UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= ' UNIQUE KEY u_stat (timestamp)';
 		$sql            .= ") $charset_collate;";
 		// phpcs:ignore
 		$wpdb->query( $sql );

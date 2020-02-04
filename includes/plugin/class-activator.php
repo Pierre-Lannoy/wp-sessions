@@ -28,8 +28,8 @@ class Activator {
 	 * @since 1.0.0
 	 */
 	public static function activate() {
-		//$schema = new Schema();
-		//$schema->initialize();
+		$schema = new Schema();
+		$schema->initialize();
 	}
 
 }
