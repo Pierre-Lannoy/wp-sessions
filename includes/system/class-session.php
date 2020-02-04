@@ -164,9 +164,7 @@ class Session {
 		if ( 'local' === $block && Environment::is_current_ip_public() ) {
 			return 'allow';
 		}
-		if ( 'external' === $block && Environment::is_current_ip_private() ) {
-			return 'disallow';
-		}
+		return 'disallow';
 	}
 
 	/**
