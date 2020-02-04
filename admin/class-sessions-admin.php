@@ -396,7 +396,7 @@ class Sessions_Admin {
 	public function plugin_features_section_callback() {
 		$form   = new Form();
 		$mode   = [];
-		$mode[] = [ -1, esc_html__( 'Disabled (don\'t use this feature)', 'sessions' ) ];
+		$mode[] = [ -1, esc_html__( 'Disabled (don\'t use the limitation by roles feature)', 'sessions' ) ];
 		$mode[] = [ 0, esc_html__( 'Enabled - permissive mode (useful when adjusting settings)', 'sessions' ) ];
 		$mode[] = [ 1, esc_html__( 'Enabled - strict mode (useful in production, when all settings are ok)', 'sessions' ) ];
 		add_settings_field(
