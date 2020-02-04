@@ -175,7 +175,10 @@ class Session {
 	 * @since 1.0.0
 	 */
 	private function verify_per_user_limit( $limit ) {
-		if ( $limit > count( $this->sessions ) ) {
+		if ( is_array( $this->sessions ) && $limit > count( $this->sessions ) ) {
+			return 'allow';
+		}
+		if ( ! is_array( $this->sessions ) ) {
 			return 'allow';
 		}
 		uasort(
@@ -203,6 +206,9 @@ class Session {
 	 * @since 1.0.0
 	 */
 	private function verify_per_ip_limit( $limit ) {
+		if ( ! is_array( $this->sessions ) ) {
+			return 'allow';
+		}
 		$ip      = Environment::current_ip();
 		$compare = [];
 		$buffer  = [];
@@ -242,6 +248,9 @@ class Session {
 	 * @since 1.0.0
 	 */
 	private function verify_per_country_limit( $limit ) {
+		if ( ! is_array( $this->sessions ) ) {
+			return 'allow';
+		}
 		$ip      = Environment::current_ip();
 		$geo     = new GeoIP();
 		$country = $geo->get_iso3166_alpha2( $ip );
@@ -366,6 +375,9 @@ class Session {
 	 * @since 1.0.0
 	 */
 	private function verify_per_device_limit( $selector, $limit ) {
+		if ( ! is_array( $this->sessions ) ) {
+			return 'allow';
+		}
 		$device  = $this->get_device_id( '', $selector );
 		$compare = [];
 		$buffer  = [];
@@ -503,10 +515,12 @@ class Session {
 						switch ( $method ) {
 							case 'override':
 								if ( '' !== $result ) {
-									unset( $this->sessions[ $result ] );
-									do_action( 'sessions_force_terminate', $this->user_id );
-									self::set_user_sessions( $this->sessions, $this->user_id );
-									Logger::notice( sprintf( 'Session overridden for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( 'device-', ' ', $mode ) ) );
+									if ( array_key_exists( $result, $this->sessions) ) {
+										unset( $this->sessions[ $result ] );
+										do_action( 'sessions_force_terminate', $this->user_id );
+										self::set_user_sessions( $this->sessions, $this->user_id );
+										Logger::notice( sprintf( 'Session overridden for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( 'device-', ' ', $mode ) ) );
+									}
 								}
 								break;
 							case 'default':
