@@ -466,6 +466,9 @@ class Session {
 					$result = $this->verify_ip_range( $settings[ $role ]['block'] );
 					if ( 'allow' === $result ) {
 						switch ( $mode ) {
+							case 'none':
+								$result = 'allow';
+								break;
 							case 'user':
 								$result = $this->verify_per_user_limit( $limit );
 								break;
