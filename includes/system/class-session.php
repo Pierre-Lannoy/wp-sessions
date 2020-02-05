@@ -565,9 +565,10 @@ class Session {
 			return false;
 		}
 		if ( 0 === $settings[ $role ]['idle'] ) {
+			unset( $this->sessions[ $this->token ]['session_idle'] );
 			return false;
 		}
-		$this->sessions[ $this->token ]['session_idle'] = time() + $settings[ $role ]['idle'] * HOUR_IN_SECONDS;
+		$this->sessions[ $this->token ]['session_idle'] = time() + (int) $settings[ $role ]['idle'] * HOUR_IN_SECONDS;
 		self::set_user_sessions( $this->sessions, $this->user_id );
 		return true;
 	}
