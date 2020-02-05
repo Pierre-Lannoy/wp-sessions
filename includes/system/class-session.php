@@ -564,7 +564,7 @@ class Session {
 		if ( ! array_key_exists( $role, $settings ) ) {
 			return false;
 		}
-		if ( 0 === $settings[ $role ]['idle'] ) {
+		if ( 0 === (int) $settings[ $role ]['idle'] ) {
 			if ( array_key_exists( 'session_idle', $this->sessions[ $this->token ]) ) {
 				unset( $this->sessions[ $this->token ]['session_idle'] );
 				self::set_user_sessions( $this->sessions, $this->user_id );
