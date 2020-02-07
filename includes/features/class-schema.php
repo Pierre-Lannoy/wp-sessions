@@ -11,6 +11,7 @@
 
 namespace POSessions\Plugin\Feature;
 
+use Decalog\Plugin\Feature\Log;
 use POSessions\System\Option;
 use POSessions\System\Database;
 use POSessions\System\Environment;
@@ -59,13 +60,16 @@ class Schema {
 	/**
 	 * Write all buffers to database.
 	 *
+	 * @param boolean   $purge Optional. Purge od dates too.
 	 * @since    1.0.0
 	 */
-	public static function write() {
+	public static function write( $purge = true ) {
 		if ( Option::network_get( 'analytics' ) ) {
 			self::write_current_to_database( Capture::get_stats() );
 		}
-		self::purge();
+		if ( $purge ) {
+			self::purge();
+		}
 	}
 
 	/**
@@ -76,6 +80,10 @@ class Schema {
 	 */
 	private static function write_current_to_database( $record ) {
 		if ( ! Option::site_get( 'analytics' ) || 0 === count( $record ) ) {
+			return;
+		}
+		$record = self::maybe_add_stats( $record );
+		if ( 0 === count( $record ) ) {
 			return;
 		}
 		$datetime            = new \DateTime( 'now', Timezone::network_get() );
@@ -92,7 +100,7 @@ class Schema {
 				$value_update[] = '`' . $k . '`=' . $k . ' + ' . (int) $v;
 			}
 		}
-		if ( count( $field_insert ) > 0 ) {
+		if ( count( $field_insert ) > 1 ) {
 			global $wpdb;
 			$sql  = 'INSERT INTO `' . $wpdb->base_prefix . self::$statistics . '` ';
 			$sql .= '(' . implode( ',', $field_insert ) . ') ';
@@ -101,6 +109,53 @@ class Schema {
 			// phpcs:ignore
 			$wpdb->query( $sql );
 		}
+	}
+
+	/**
+	 * Adds ùisc stats to a buffer, if needed.
+	 *
+	 * @param array $record The buffer to write.
+	 * @return  array   The completed buffer if needed.
+	 * @since    1.0.0
+	 */
+	private static function maybe_add_stats( $record ) {
+		$check = Cache::get_global( 'data/statcheck' );
+		if ( isset( $check ) && $check && (int) $check + 2 * HOUR_IN_SECONDS > time() ) {
+			return $record;
+		}
+		$record['cnt']        = 1;
+		$record['u_ham']      = 0;
+		$record['u_total']    = 0;
+		$record['u_spam']     = 0;
+		$record['u_active']   = 0;
+		$record['u_sessions'] = 0;
+		global $wpdb;
+		$sql = 'SELECT COUNT(*) as u_cnt, user_status FROM ' . $wpdb->users . ' GROUP BY user_status';
+		// phpcs:ignore
+		$query = $wpdb->get_results( $sql, ARRAY_A );
+		if ( is_array( $query ) && 0 < count( $query ) ) {
+			$record['u_total'] = 0;
+			foreach ( $query as $row ) {
+				if ( 0 === (int) $row['user_status'] ) {
+					$record['u_ham']    = $row['u_cnt'];
+					$record['u_total'] += $row['u_cnt'];
+				}
+				if ( 1 === (int) $row['user_status'] ) {
+					$record['u_spam']   = $row['u_cnt'];
+					$record['u_total'] += $row['u_cnt'];
+				}
+			}
+		}
+		$sql = "SELECT COUNT(*) AS users, SUM( CAST( SUBSTRING(`meta_value`,3,POSITION('{' IN `meta_value`) - 4) AS UNSIGNED)) AS sessions FROM " . $wpdb->usermeta . " WHERE `meta_key`='session_tokens' and `meta_value`<>'' and `meta_value`<>'a:0:{}'";
+		// phpcs:ignore
+		$query = $wpdb->get_results( $sql, ARRAY_A );
+		if ( is_array( $query ) && 0 < count( $query ) ) {
+			$record['u_active']   = $query[0]['users'];
+			$record['u_sessions'] = $query[0]['sessions'];
+		}
+		Logger::debug( 'Misc stats added.' );
+		Cache::set_global( 'data/statcheck', time() );
+		return $record;
 	}
 
 	/**
@@ -172,6 +227,8 @@ class Schema {
 		$sql            .= " (`timestamp` date NOT NULL DEFAULT '0000-00-00',";
 		$sql            .= " `cnt` int(11) UNSIGNED NOT NULL DEFAULT '0',";
 		$sql            .= " `u_total` bigint UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `u_ham` bigint UNSIGNED NOT NULL DEFAULT '0',";
+		$sql            .= " `u_spam` bigint UNSIGNED NOT NULL DEFAULT '0',";
 		$sql            .= " `u_active` bigint UNSIGNED NOT NULL DEFAULT '0',";
 		$sql            .= " `u_suspended` bigint UNSIGNED NOT NULL DEFAULT '0',";
 		$sql            .= " `u_banned` bigint UNSIGNED NOT NULL DEFAULT '0',";
