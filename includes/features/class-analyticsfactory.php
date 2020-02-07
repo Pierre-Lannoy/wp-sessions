@@ -29,14 +29,6 @@ use POSessions\System\Timezone;
 class AnalyticsFactory {
 
 	/**
-	 * Allowed types.
-	 *
-	 * @since  1.0.0
-	 * @var    array    $allowed_types    Maintain the allowed types.
-	 */
-	private static $allowed_types = [ 'browser', 'browsers', 'bot', 'bots', 'device', 'devices', 'os', 'oses', 'classes', 'types', 'clients', 'libraries', 'applications', 'feeds', 'medias' ];
-
-	/**
 	 * Ajax callback.
 	 *
 	 * @since    1.0.0
@@ -61,29 +53,10 @@ class AnalyticsFactory {
 		if ( ! ( $type = filter_input( INPUT_GET, 'type' ) ) ) {
 			$type = filter_input( INPUT_POST, 'type' );
 		}
-		if ( empty( $type ) || ! in_array( $type, self::$allowed_types ) ) {
+		if ( empty( $type ) ) {
 			$type = 'summary';
 		}
 		// Filters.
-		if ( ! ( $id = filter_input( INPUT_GET, 'id' ) ) ) {
-			$id = filter_input( INPUT_POST, 'id' );
-		}
-		if ( empty( $id ) ) {
-			$id = '';
-		}
-		if ( ! ( $extended = filter_input( INPUT_GET, 'extended' ) ) ) {
-			$extended = filter_input( INPUT_POST, 'extended' );
-		}
-		if ( empty( $extended ) ) {
-			$extended = '-';
-		}
-		$extended = str_replace( '\'\'', '"', rawurldecode( $extended ) );
-		if ( ! ( $site = filter_input( INPUT_GET, 'site' ) ) ) {
-			$site = filter_input( INPUT_POST, 'site' );
-		}
-		if ( empty( $site ) || ! Blog::is_blog_exists( (int) $site ) ) {
-			$site = 'all';
-		}
 		if ( ! ( $start = filter_input( INPUT_GET, 'start' ) ) ) {
 			$start = filter_input( INPUT_POST, 'start' );
 		}
@@ -106,7 +79,7 @@ class AnalyticsFactory {
 			$start = $edatetime->format( 'Y-m-d' );
 			$end   = $sdatetime->format( 'Y-m-d' );
 		}
-		return new Analytics( $type, $id, $site, $start, $end, $extended, $reload );
+		return new Analytics( $type, $start, $end, $reload );
 	}
 
 }

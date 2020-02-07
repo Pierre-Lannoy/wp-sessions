@@ -35,7 +35,7 @@ $extended_list = [ 'browsers', 'bots', 'devices', 'oses' ];
         <div class="pose-row">
 	        <?php echo $analytics->get_kpi_bar() ?>
         </div>
-		<?php if ( 'summary' === $analytics->type ) { ?>
+		<?php if ( 'asummary' === $analytics->type ) { ?>
             <div class="pose-row">
                 <div class="pose-box pose-box-50-50-line">
 					<?php echo $analytics->get_top_browser_box() ?>
@@ -64,50 +64,8 @@ $extended_list = [ 'browsers', 'bots', 'devices', 'oses' ];
                 </div>
             </div>
 		<?php } ?>
-		<?php if ( 'browser' === $analytics->type ) { ?>
-            <div class="pose-row">
-                <div class="pose-box pose-box-50-50-line">
-					<?php echo $analytics->get_simpletop_version_box() ?>
-					<?php echo $analytics->get_simpletop_os_box() ?>
-                </div>
-            </div>
-		<?php } ?>
-		<?php if ( 'os' === $analytics->type ) { ?>
-            <div class="pose-row">
-                <div class="pose-box pose-box-50-50-line">
-					<?php echo $analytics->get_simpletop_version_box() ?>
-					<?php echo $analytics->get_simpletop_browser_box() ?>
-                </div>
-            </div>
-		<?php } ?>
-		<?php if ( 'device' === $analytics->type ) { ?>
-            <div class="pose-row">
-                <div class="pose-box pose-box-50-50-line">
-					<?php echo $analytics->get_simpletop_os_box() ?>
-					<?php echo $analytics->get_simpletop_browser_box() ?>
-                </div>
-            </div>
-		<?php } ?>
-		<?php if ( 'browser' === $analytics->type || 'os' === $analytics->type || 'device' === $analytics->type || 'bot' === $analytics->type ) { ?>
-			<?php echo $analytics->get_main_chart() ?>
-		<?php } ?>
 
 
 
-
-
-
-
-
-		<?php if ( in_array( (string) $analytics->type, array_merge( $simple_list, $extended_list ), true ) ) { ?>
-            <div class="pose-row">
-				<?php echo $analytics->get_list() ?>
-            </div>
-		<?php } ?>
-		<?php if ( 'summary' === $analytics->type && Role::SUPER_ADMIN === Role::admin_type() && 'all' === $analytics->site) { ?>
-            <div class="pose-row last-row">
-	            <?php echo $analytics->get_sites_list() ?>
-            </div>
-		<?php } ?>
 	</div>
 </div>

@@ -89,9 +89,8 @@ class Sessions_Admin {
 			$settings = add_submenu_page( 'options-general.php', sprintf( esc_html__( '%s Settings', 'sessions' ), POSE_PRODUCT_NAME ), POSE_PRODUCT_NAME, 'manage_options', 'pose-settings', [ $this, 'get_settings_page' ] );
 			$name     = add_submenu_page(
 				'tools.php',
-				/* translators: as in the sentence "Sessions Viewer" */
-				sprintf( esc_html__( '%s Viewer', 'sessions' ), POSE_PRODUCT_NAME ),
-				POSE_PRODUCT_NAME,
+				esc_html__( 'Sessions Analytics', 'sessions' ),
+				esc_html__( 'Sessions Analytics', 'sessions' ),
 				'manage_options',
 				'pose-viewer',
 				[ $this, 'get_viewer_page' ]
@@ -150,8 +149,8 @@ class Sessions_Admin {
 	 * @since 1.0.0
 	 */
 	public function get_viewer_page() {
-		//$analytics = AnalyticsFactory::get_analytics();
-		//include POSE_ADMIN_DIR . 'partials/sessions-admin-view-analytics.php';
+		$analytics = AnalyticsFactory::get_analytics();
+		include POSE_ADMIN_DIR . 'partials/sessions-admin-view-analytics.php';
 	}
 
 	/**

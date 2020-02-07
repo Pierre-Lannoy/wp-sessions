@@ -330,7 +330,7 @@ class Schema {
 			$group = ' GROUP BY ' . $group;
 		}
 		global $wpdb;
-		$sql = 'SELECT sum(hit) as sum_hit, class FROM ' . $wpdb->base_prefix . self::$statistics . ' WHERE (' . implode( ' AND ', $filter ) . ')' . $group;
+		$sql = 'SELECT * FROM ' . $wpdb->base_prefix . self::$statistics . ' WHERE (' . implode( ' AND ', $filter ) . ')' . $group;
 		// phpcs:ignore
 		$result = $wpdb->get_results( $sql, ARRAY_A );
 		if ( is_array( $result ) ) {
