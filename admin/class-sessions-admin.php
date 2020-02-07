@@ -489,7 +489,7 @@ class Sessions_Admin {
 		$methods[] = [ 'default', esc_html__( 'Block and send a WordPress error', 'sessions' ) ];
 		$idle      = [];
 		$idle[]    = [ 0, esc_html__( 'Never terminate an idle session', 'sessions' ) ];
-		foreach ( [ 1, 2, 12, 24, 48, 72 ]  as $h ) {
+		foreach ( [ 1, 2, 3, 4, 5, 6, 12, 24 ]  as $h ) {
 			// phpcs:ignore
 			$idle[] = [ $h, esc_html( sprintf( _n( 'Terminate a session when idle for more than %d hour', 'Terminate a session when idle for more than %d hours', $h, 'sessions' ), $h ) ) ];
 		}
