@@ -614,33 +614,41 @@ class Analytics {
 	 * @since    1.0.0
 	 */
 	private function query_kpi( $queried ) {
-
-
-/*
-
-		$result .= '<div class="pose-kpi-large">' . $this->get_large_kpi( 'login' ) . '</div>';
-		$result .= '<div class="pose-kpi-large">' . $this->get_large_kpi( 'session' ) . '</div>';
-		$result .= '<div class="pose-kpi-large">' . $this->get_large_kpi( 'cleaned' ) . '</div>';
-		$result .= '<div class="pose-kpi-large">' . $this->get_large_kpi( 'user' ) . '</div>';
-		$result .= '<div class="pose-kpi-large">' . $this->get_large_kpi( 'turnover' ) . '</div>';
-		$result .= '<div class="pose-kpi-large">' . $this->get_large_kpi( 'spam' ) . '</div>';
-		*/
-
 		$result = [];
 		$data   = Schema::get_grouped_kpi( $this->filter, '', ! $this->is_today );
 		$pdata  = Schema::get_grouped_kpi( $this->previous );
-
-
-
-		if ( 'hit' === $queried || 'client' === $queried || 'engine' === $queried ) {
-			$current  = (int) count( $data );
-			$previous = (int) count( $pdata );
-			if ( 0 < count( $data ) && 'hit' === $queried ) {
-				$current = (int) $data[0]['sum_hit'];
+		// COUNTS
+		if ( 'session' === $queried || 'cleaned' === $queried || 'user' === $queried ) {
+			$current  = 0.0;
+			$previous = 0.0;
+			switch ( $queried ) {
+				case 'session':
+					foreach ( $data as $row ) {
+						$current = $current + (float) $row['u_sessions'];
+					}
+					foreach ( $pdata as $row ) {
+						$previous = $previous + (float) $row['u_sessions'];
+					}
+					break;
+				case 'cleaned':
+					foreach ( $data as $row ) {
+						$current = $current + (float) $row['expired'] + (float) $row['idle'] + (float) $row['forced'];
+					}
+					foreach ( $pdata as $row ) {
+						$previous = $previous + (float) $row['expired'] + (float) $row['idle'] + (float) $row['forced'];
+					}
+					break;
+				case 'user':
+					foreach ( $data as $row ) {
+						$current = $current + (float) $row['u_active'];
+					}
+					foreach ( $pdata as $row ) {
+						$previous = $previous + (float) $row['u_active'];
+					}
+					break;
 			}
-			if ( 0 < count( $pdata ) && 'hit' === $queried ) {
-				$previous = (int) $pdata[0]['sum_hit'];
-			}
+			$current                          = (int) round( $current / count( $data ), 0 );
+			$previous                         = (int) round( $previous / count( $pdata ), 0 );
 			$result[ 'kpi-main-' . $queried ] = Conversion::number_shorten( (int) $current, 1, false, '&nbsp;' );
 			if ( 0 !== $current && 0 !== $previous ) {
 				$percent = round( 100 * ( $current - $previous ) / $previous, 1 );
