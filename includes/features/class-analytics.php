@@ -584,15 +584,29 @@ class Analytics {
 	 */
 	public function get_main_chart() {
 		if ( 1 < $this->duration ) {
-			$help_calls = esc_html__( 'Hits variation.', 'sessions' );
-			$detail     = '<span class="pose-chart-button not-ready left" id="pose-chart-button-calls" data-position="left" data-tooltip="' . $help_calls . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'hash', 'none', '#73879C' ) . '" /></span>';
-			$result     = '<div class="pose-row">';
-			$result    .= '<div class="pose-box pose-box-full-line">';
-			$result    .= '<div class="pose-module-title-bar"><span class="pose-module-title">' . esc_html__( 'Metrics Variations', 'sessions' ) . '<span class="pose-module-more">' . $detail . '</span></span></div>';
-			$result    .= '<div class="pose-module-content" id="pose-main-chart">' . $this->get_graph_placeholder( 274 ) . '</div>';
-			$result    .= '</div>';
-			$result    .= '</div>';
-			$result    .= $this->get_refresh_script(
+			$help_ratio  = esc_html__( 'Hit ratio variation.', 'opcache-manager' );
+			$help_hit    = esc_html__( 'Hit and miss distribution.', 'opcache-manager' );
+			$help_memory = esc_html__( 'Memory distribution.', 'opcache-manager' );
+			$help_file   = esc_html__( 'Files variation.', 'opcache-manager' );
+			$help_key    = esc_html__( 'Keys distribution.', 'opcache-manager' );
+			$help_string = esc_html__( 'Strings variation.', 'opcache-manager' );
+			$help_buffer = esc_html__( 'Buffer distribution.', 'opcache-manager' );
+			$help_uptime = esc_html__( 'Availability variation.', 'opcache-manager' );
+			$detail      = '<span class="pose-chart-button not-ready left" id="pose-chart-button-ratio" data-position="left" data-tooltip="' . $help_ratio . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'award', 'none', '#73879C' ) . '" /></span>';
+			$detail     .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-hit" data-position="left" data-tooltip="' . $help_hit . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'hash', 'none', '#73879C' ) . '" /></span>';
+			$detail     .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-memory" data-position="left" data-tooltip="' . $help_memory . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'cpu', 'none', '#73879C' ) . '" /></span>';
+			$detail     .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-file" data-position="left" data-tooltip="' . $help_file . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'file-text', 'none', '#73879C' ) . '" /></span>';
+			$detail     .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-key" data-position="left" data-tooltip="' . $help_key . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'key', 'none', '#73879C' ) . '" /></span>';
+			$detail     .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-string" data-position="left" data-tooltip="' . $help_string . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'tag', 'none', '#73879C' ) . '" /></span>';
+			$detail     .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-buffer" data-position="left" data-tooltip="' . $help_buffer . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'database', 'none', '#73879C' ) . '" /></span>';
+			$detail     .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-uptime" data-position="left" data-tooltip="' . $help_uptime . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'activity', 'none', '#73879C' ) . '" /></span>';
+			$result      = '<div class="pose-row">';
+			$result     .= '<div class="pose-box pose-box-full-line">';
+			$result     .= '<div class="pose-module-title-bar"><span class="pose-module-title">' . esc_html__( 'Metrics Variations', 'opcache-manager' ) . '<span class="pose-module-more">' . $detail . '</span></span></div>';
+			$result     .= '<div class="pose-module-content" id="pose-main-chart">' . $this->get_graph_placeholder( 274 ) . '</div>';
+			$result     .= '</div>';
+			$result     .= '</div>';
+			$result     .= $this->get_refresh_script(
 				[
 					'query'   => 'main-chart',
 					'queried' => 0,
