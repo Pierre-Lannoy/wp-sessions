@@ -343,42 +343,6 @@ class Schema {
 	}
 
 	/**
-	 * Get the standard KPIs.
-	 *
-	 * @param   array   $filter      The filter of the query.
-	 * @param   array   $distinct    Optional. The distinct fields to query.
-	 * @param   boolean $cache       Optional. Has the query to be cached.
-	 * @return  array   The distinct KPIs.
-	 * @since    1.0.0
-	 */
-	public static function get_distinct_kpi( $filter, $distinct = [], $cache = true ) {
-		// phpcs:ignore
-		$id = Cache::id( __FUNCTION__ . serialize( $filter ) . serialize( $distinct ) );
-		if ( $cache ) {
-			$result = Cache::get_global( $id );
-			if ( $result ) {
-				return $result;
-			}
-		}
-		if ( 0 < count( $distinct ) ) {
-			$select = ' DISTINCT ' . implode( ', ', $distinct );
-		} else {
-			$select = '*';
-		}
-		global $wpdb;
-		$sql = 'SELECT ' . $select . ' FROM ' . $wpdb->base_prefix . self::$statistics . ' WHERE (' . implode( ' AND ', $filter ) . ')';
-		// phpcs:ignore
-		$result = $wpdb->get_results( $sql, ARRAY_A );
-		if ( is_array( $result ) ) {
-			if ( $cache ) {
-				Cache::set_global( $id, $result, 'infinite' );
-			}
-			return $result;
-		}
-		return [];
-	}
-
-	/**
 	 * Get a time series.
 	 *
 	 * @param   array   $filter      The filter of the query.
@@ -430,7 +394,7 @@ class Schema {
 			$where_extra = ' AND ' . $extra_field . ( $not ? ' NOT' : '' ) . " IN ( '" . implode( $extras, "', '" ) . "' )";
 		}
 		global $wpdb;
-		$sql = 'SELECT `timestamp`, sum(hit) as sum_hit, site, channel, class, device, client, brand_id, brand, model, client_id, name, client_version, engine, os_id, os, os_version, url FROM ' . $wpdb->base_prefix . self::$statistics . ' WHERE (' . implode( ' AND ', $filter ) . ')' . $where_extra . ' ' . $group . ' ' . $order . ( $limit > 0 ? ' LIMIT ' . $limit : '') .';';
+		$sql = 'SELECT * FROM ' . $wpdb->base_prefix . self::$statistics . ' WHERE (' . implode( ' AND ', $filter ) . ')' . $where_extra . ' ' . $group . ' ' . $order . ( $limit > 0 ? ' LIMIT ' . $limit : '') .';';
 		// phpcs:ignore
 		$result = $wpdb->get_results( $sql, ARRAY_A );
 		if ( is_array( $result ) ) {

@@ -35,13 +35,17 @@ $extended_list = [ 'browsers', 'bots', 'devices', 'oses' ];
         <div class="pose-row">
 	        <?php echo $analytics->get_kpi_bar() ?>
         </div>
-		<?php if ( 'asummary' === $analytics->type ) { ?>
-            <div class="pose-row">
-                <div class="pose-box pose-box-50-50-line">
-					<?php echo $analytics->get_top_browser_box() ?>
-					<?php echo $analytics->get_top_bot_box() ?>
-                </div>
+
+        <div class="pose-row">
+            <div class="pose-box pose-box-50-50-line">
+				<?php echo $analytics->get_login_pie() ?>
+				<?php echo $analytics->get_clean_pie() ?>
             </div>
+        </div>
+
+
+		<?php if ( 'asummary' === $analytics->type ) { ?>
+
             <div class="pose-row">
                 <div class="pose-box pose-box-33-33-33-line">
 					<?php echo $analytics->get_classes_box() ?>

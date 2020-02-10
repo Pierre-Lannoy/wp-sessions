@@ -168,39 +168,11 @@ class Analytics {
 		switch ( $query ) {
 			case 'kpi':
 				return $this->query_kpi( $queried );
-			/*case 'top-browsers':
-				return $this->query_top( 'browsers', (int) $queried );
-			case 'top-bots':
-				return $this->query_top( 'bots', (int) $queried );
-			case 'top-devices':
-				return $this->query_top( 'devices', (int) $queried );
-			case 'top-oses':
-				return $this->query_top( 'oses', (int) $queried );
-			case 'top-versions':
-				return $this->query_top( 'versions', (int) $queried );
-			case 'classes':
-			case 'types':
-			case 'clients':
-			case 'libraries':
-			case 'applications':
-			case 'feeds':
-			case 'medias':
+			case 'login':
+			case 'clean':
 				return $this->query_pie( $query, (int) $queried );
-			case 'classes-list':
-			case 'types-list':
-			case 'clients-list':
-			case 'libraries-list':
-			case 'applications-list':
-			case 'feeds-list':
-			case 'medias-list':
-				return $this->query_list( $query );
-			case 'browsers-list':
-			case 'bots-list':
-			case 'devices-list':
-			case 'oses-list':
-				return $this->query_extended_list( $query );
 			case 'main-chart':
-				return $this->query_chart();*/
+				return $this->query_chart();
 		}
 		return [];
 	}
@@ -214,84 +186,54 @@ class Analytics {
 	 * @since    1.0.0
 	 */
 	private function query_pie( $type, $limit ) {
-		$uuid = UUID::generate_unique_id( 5 );
+		$uuid  = UUID::generate_unique_id( 5 );
+		$data  = Schema::get_grouped_list( $this->filter, '', ! $this->is_today );
+		$names = [
+			'login_success' => esc_html__( 'Successful', 'sessions' ),
+			'login_fail'    => esc_html__( 'Failed', 'sessions' ),
+			'login_block'   => esc_html__( 'Blocked', 'sessions' ),
+			'expired'       => esc_html__( 'Expired', 'sessions' ),
+			'idle'          => esc_html__( 'Idle', 'sessions' ),
+			'forced'        => esc_html__( 'Overridden', 'sessions' ),
+		];
 		switch ( $type ) {
-			case 'classes':
-				$data     = Schema::get_grouped_list( $this->filter, 'class', ! $this->is_today, '', [], false, 'ORDER BY sum_hit DESC' );
-				$selector = 'class';
-				$names    = ClassTypes::$class_names;
-				$size     = 120;
+			case 'login':
+				$selectors = [ 'login_success', 'login_fail', 'login_block' ];
 				break;
-			case 'types':
-				$data     = Schema::get_grouped_list( $this->filter, 'device', ! $this->is_today, '', [], false, 'ORDER BY sum_hit DESC' );
-				$selector = 'device';
-				$names    = DeviceTypes::$device_names;
-				$size     = 120;
-				break;
-			case 'clients':
-				$data     = Schema::get_grouped_list( $this->filter, 'client', ! $this->is_today, '', [], false, 'ORDER BY sum_hit DESC' );
-				$selector = 'client';
-				$names    = ClientTypes::$client_names;
-				$size     = 120;
-				break;
-			case 'libraries':
-				$data     = Schema::get_grouped_list( $this->filter, 'name', ! $this->is_today, 'client', [ 'library' ], false, 'ORDER BY sum_hit DESC' );
-				$selector = 'name';
-				$names    = [];
-				$size     = 100;
-				break;
-			case 'applications':
-				$data     = Schema::get_grouped_list( $this->filter, 'name', ! $this->is_today, 'client', [ 'mobile-app' ], false, 'ORDER BY sum_hit DESC' );
-				$selector = 'name';
-				$names    = [];
-				$size     = 100;
-				break;
-			case 'feeds':
-				$data     = Schema::get_grouped_list( $this->filter, 'name', ! $this->is_today, 'client', [ 'feed-reader' ], false, 'ORDER BY sum_hit DESC' );
-				$selector = 'name';
-				$names    = [];
-				$size     = 100;
-				break;
-			case 'medias':
-				$data     = Schema::get_grouped_list( $this->filter, 'name', ! $this->is_today, 'client', [ 'media-player' ], false, 'ORDER BY sum_hit DESC' );
-				$selector = 'name';
-				$names    = [];
-				$size     = 100;
+			case 'clean':
+				$selectors = [ 'expired', 'idle', 'forced' ];
 				break;
 		}
 		if ( 0 < count( $data ) ) {
-			$total = 0;
-			$other = 0;
-			foreach ( $data as $key => $row ) {
-				$total = $total + $row['sum_hit'];
-				if ( $limit <= $key || 'other' === $row[ $selector ] ) {
-					$other = $other + $row['sum_hit'];
+			$total  = 0;
+			$other  = 0;
+			$values = [];
+			foreach ( $selectors as $selector ) {
+				$values[ $selector ] = 0;
+			}
+			foreach ( $data as $row ) {
+				foreach ( $selectors as $selector ) {
+					$total               = $total + $row[ $selector ];
+					$values[ $selector ] = $values[ $selector ] + $row[ $selector ];
 				}
 			}
 			$cpt    = 0;
 			$labels = [];
 			$series = [];
-			while ( $cpt < $limit && array_key_exists( $cpt, $data ) ) {
-				if ( 'other' !== $data[ $cpt ][ $selector ] ) {
-					if ( 0 < $total ) {
-						$percent = round( 100 * $data[ $cpt ]['sum_hit'] / $total, 1 );
-					} else {
-						$percent = 100;
-					}
-					if ( 0.1 > $percent ) {
-						$percent = 0.1;
-					}
-					if ( 0 < count( $names ) ) {
-						$meta = $names[ $data[ $cpt ][ $selector ] ];
-					} else {
-						$meta = $data[ $cpt ][ $selector ];
-					}
-					$labels[] = $meta;
-					$series[] = [
-						'meta'  => $meta,
-						'value' => (float) $percent,
-					];
+			while ( $cpt < $limit ) {
+				if ( 0 < $total ) {
+					$percent = round( 100 * $values[ $selectors[ $cpt ] ] / $total, 1 );
+				} else {
+					$percent = 100;
 				}
+				if ( 0.1 > $percent ) {
+					$percent = 0.1;
+				}
+				$labels[] = $names[ $selectors[ $cpt ] ];
+				$series[] = [
+					'meta'  => $names[ $selectors[ $cpt ] ],
+					'value' => (float) $percent,
+				];
 				++$cpt;
 			}
 			if ( 0 < $other ) {
@@ -311,7 +253,7 @@ class Analytics {
 			}
 			$result  = '<div class="pose-pie-box">';
 			$result .= '<div class="pose-pie-graph">';
-			$result .= '<div class="pose-pie-graph-handler-' . $size . '" id="pose-pie-' . $type . '"></div>';
+			$result .= '<div class="pose-pie-graph-handler-120" id="pose-pie-' . $type . '"></div>';
 			$result .= '</div>';
 			$result .= '<div class="pose-pie-legend">';
 			foreach ( $labels as $key => $label ) {
@@ -330,14 +272,14 @@ class Analytics {
 				]
 			) . ';';
 			$result .= ' var tooltip' . $uuid . ' = Chartist.plugins.tooltip({percentage: true, appendToBody: true});';
-			$result .= ' var option' . $uuid . ' = {width: ' . $size . ', height: ' . $size . ', showLabel: false, donut: true, donutWidth: "40%", startAngle: 270, plugins: [tooltip' . $uuid . ']};';
+			$result .= ' var option' . $uuid . ' = {width: 120, height: 120, showLabel: false, donut: true, donutWidth: "40%", startAngle: 270, plugins: [tooltip' . $uuid . ']};';
 			$result .= ' new Chartist.Pie("#pose-pie-' . $type . '", data' . $uuid . ', option' . $uuid . ');';
 			$result .= '});';
 			$result .= '</script>';
 		} else {
 			$result  = '<div class="pose-pie-box">';
 			$result .= '<div class="pose-pie-graph" style="margin:0 !important;">';
-			$result .= '<div class="pose-pie-graph-nodata-handler-' . $size . '" id="pose-pie-' . $type . '"><span style="position: relative; top: 37px;">-&nbsp;' . esc_html__( 'No Data', 'sessions' ) . '&nbsp;-</span></div>';
+			$result .= '<div class="pose-pie-graph-nodata-handler-120" id="pose-pie-' . $type . '"><span style="position: relative; top: 37px;">-&nbsp;' . esc_html__( 'No Data', 'sessions' ) . '&nbsp;-</span></div>';
 			$result .= '</div>';
 			$result .= '';
 			$result .= '</div>';
@@ -615,53 +557,6 @@ class Analytics {
 	}
 
 	/**
-	 * Get the box_title.
-	 *
-	 * @param string $id The box or page id.
-	 * @return string  The box title.
-	 * @since 1.0.0
-	 */
-	public function get_box_title( $id ) {
-		$result = '';
-		switch ( $id ) {
-			case 'classes-list':
-				$result = esc_html__( 'All Classes', 'sessions' );
-				break;
-			case 'types-list':
-				$result = esc_html__( 'All Device Types', 'sessions' );
-				break;
-			case 'clients-list':
-				$result = esc_html__( 'All Client Types', 'sessions' );
-				break;
-			case 'libraries-list':
-				$result = esc_html__( 'All Libraries', 'sessions' );
-				break;
-			case 'applications-list':
-				$result = esc_html__( 'All Mobile Applications', 'sessions' );
-				break;
-			case 'feeds-list':
-				$result = esc_html__( 'All Feed Readers', 'sessions' );
-				break;
-			case 'medias-list':
-				$result = esc_html__( 'All Media Players', 'sessions' );
-				break;
-			case 'browsers-list':
-				$result = esc_html__( 'All Browsers', 'sessions' );
-				break;
-			case 'bots-list':
-				$result = esc_html__( 'All Bots', 'sessions' );
-				break;
-			case 'devices-list':
-				$result = esc_html__( 'All Devices', 'sessions' );
-				break;
-			case 'oses-list':
-				$result = esc_html__( 'All Operating Systems', 'sessions' );
-				break;
-		}
-		return $result;
-	}
-
-	/**
 	 * Get the KPI bar.
 	 *
 	 * @return string  The bar ready to print.
@@ -765,6 +660,46 @@ class Analytics {
 	}
 
 	/**
+	 * Get the logins pie.
+	 *
+	 * @return string  The pie box ready to print.
+	 * @since    1.0.0
+	 */
+	public function get_login_pie() {
+		$result  = '<div class="pose-50-module-left">';
+		$result .= '<div class="pose-module-title-bar"><span class="pose-module-title">' . esc_html__( 'Logins', 'sessions' ) . '</span></div>';
+		$result .= '<div class="pose-module-content" id="pose-login">' . $this->get_graph_placeholder( 90 ) . '</div>';
+		$result .= '</div>';
+		$result .= $this->get_refresh_script(
+			[
+				'query'   => 'login',
+				'queried' => 3,
+			]
+		);
+		return $result;
+	}
+
+	/**
+	 * Get the clean pie.
+	 *
+	 * @return string  The pie box ready to print.
+	 * @since    1.0.0
+	 */
+	public function get_clean_pie() {
+		$result  = '<div class="pose-50-module-right">';
+		$result .= '<div class="pose-module-title-bar"><span class="pose-module-title">' . esc_html__( 'Cleaned Sessions', 'sessions' ) . '</span></div>';
+		$result .= '<div class="pose-module-content" id="pose-clean">' . $this->get_graph_placeholder( 90 ) . '</div>';
+		$result .= '</div>';
+		$result .= $this->get_refresh_script(
+			[
+				'query'   => 'clean',
+				'queried' => 3,
+			]
+		);
+		return $result;
+	}
+
+	/**
 	 * Get a placeholder for graph.
 	 *
 	 * @param   integer $height The height of the placeholder.
@@ -847,8 +782,8 @@ class Analytics {
 	 * @since    1.0.0
 	 */
 	private function get_url( $exclude = [], $replace = [], $escape = true ) {
-		$params         = [];
-		$params['type'] = $this->type;
+		$params          = [];
+		$params['type']  = $this->type;
 		$params['start'] = $this->start;
 		$params['end']   = $this->end;
 		foreach ( $exclude as $arg ) {
