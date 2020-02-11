@@ -1,13 +1,14 @@
 /**
-* Chartist.js plugin to display a data label on top of the points in a line chart.
-*
-*/
+ * Chartist.js plugin to display a data label on top of the points in a line chart.
+ *
+ */
 /* global Chartist */
 (function (window, document, Chartist) {
   'use strict';
 
   var defaultOptions = {
     percentage: undefined,
+    justvalue: undefined,
     currency: undefined,
     currencyFormatCallback: undefined,
     tooltipOffset: {
@@ -27,7 +28,7 @@
     return function tooltip(chart) {
       var tooltipSelector = options.pointClass;
       if (chart.constructor.name == Chartist.Line.prototype.constructor.name) {
-          tooltipSelector = 'ct-area';
+        tooltipSelector = 'ct-area';
       } else if (chart.constructor.name == Chartist.Bar.prototype.constructor.name) {
         tooltipSelector = 'ct-bar';
       } else if (chart.constructor.name ==  Chartist.Pie.prototype.constructor.name) {
@@ -58,7 +59,7 @@
       function on(event, selector, callback) {
         $chart.addEventListener(event, function (e) {
           if (!selector || hasClass(e.target, selector))
-          callback(e);
+            callback(e);
         });
       }
 
@@ -113,12 +114,22 @@
             }
             if (options.percentage) {
               if (value.toString() === '200') {
-                  value = '';
+                value = '';
               } else {
-                  if (value.indexOf(',',0) > 0) {
-                    value = value.substring(value.indexOf(',',0)+1);
-                  }
-                  value = value.replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1,') + "%";
+                if (value.indexOf(',',0) > 0) {
+                  value = value.substring(value.indexOf(',',0)+1);
+                }
+                value = value.replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1,') + "%";
+              }
+            }
+            if (options.justvalue) {
+              if (value.toString() === '200') {
+                value = '';
+              } else {
+                if (value.indexOf(',',0) > 0) {
+                  value = value.substring(value.indexOf(',',0)+1);
+                }
+                value = value.replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1,');
               }
             }
             value = '<span class="chartist-tooltip-value">' + value + '</span>';
@@ -143,7 +154,7 @@
 
       on('mousemove', null, function (event) {
         if (false === options.anchorToPoint)
-        setPosition(event);
+          setPosition(event);
       });
 
       function setPosition(event) {
@@ -200,4 +211,3 @@
   }
 
 } (window, document, Chartist));
-

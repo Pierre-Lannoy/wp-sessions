@@ -189,7 +189,9 @@
     height: 300px;
 }
 
-.pose-multichart-item {
+.pose-multichart-item,
+.pose-multichart-large-item,
+.pose-multichart-small-item{
     position: absolute;
     height: 200px;
     visibility:hidden;
@@ -198,11 +200,15 @@
     left: 2.4%;
 }
 
-.pose-multichart-item svg {
+.pose-multichart-item svg,
+.pose-multichart-large-item svg,
+.pose-multichart-small-item svg{
     overflow: visible;
 }
 
-.pose-multichart-item.active {
+.pose-multichart-item.active,
+.pose-multichart-large-item.active,
+.pose-multichart-small-item.active{
     visibility:visible;
     opacity:1;
     transition:visibility 0.6s linear,opacity 0.6s linear;

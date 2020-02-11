@@ -23,16 +23,8 @@ use POSessions\System\Http;
 use POSessions\System\Favicon;
 use POSessions\System\Timezone;
 use POSessions\System\UUID;
-use POSessions\Plugin\Feature\ClassTypes;
-use POSessions\Plugin\Feature\DeviceTypes;
-use POSessions\Plugin\Feature\ClientTypes;
-use POSessions\Plugin\Feature\ChannelTypes;
-use UDD\Parser\Client\Browser;
-use UDD\Parser\OperatingSystem;
-use UDD\Parser\Device\DeviceParserAbstract;
 use Feather;
-use Flagiconcss;
-use Morpheus;
+use POSessions\System\Environment;
 
 
 /**
@@ -204,7 +196,15 @@ class Analytics {
 				$selectors = [ 'expired', 'idle', 'forced' ];
 				break;
 		}
+		$val = 0;
 		if ( 0 < count( $data ) ) {
+			foreach ( $data as $row ) {
+				foreach ( $selectors as $selector ) {
+					$val += (int) $row[ $selector ];
+				}
+			}
+		}
+		if ( 0 < count( $data ) && 0 !== $val ) {
 			$total  = 0;
 			$other  = 0;
 			$values = [];
@@ -279,7 +279,7 @@ class Analytics {
 		} else {
 			$result  = '<div class="pose-pie-box">';
 			$result .= '<div class="pose-pie-graph" style="margin:0 !important;">';
-			$result .= '<div class="pose-pie-graph-nodata-handler-120" id="pose-pie-' . $type . '"><span style="position: relative; top: 37px;">-&nbsp;' . esc_html__( 'No Data', 'sessions' ) . '&nbsp;-</span></div>';
+			$result .= '<div class="pose-pie-graph-nodata-handler-120" id="pose-pie-' . $type . '"><span style="position: relative; top: 47px;">-&nbsp;' . esc_html__( 'No Data', 'sessions' ) . '&nbsp;-</span></div>';
 			$result .= '</div>';
 			$result .= '';
 			$result .= '</div>';
@@ -295,58 +295,174 @@ class Analytics {
 	 * @since    1.0.0
 	 */
 	private function query_chart() {
-		$uuid       = UUID::generate_unique_id( 5 );
-		$data_total = Schema::get_time_series( $this->filter, ! $this->is_today );
-		$call_max   = 0;
-		$hits       = [];
-		$start      = '';
-		if ( 0 < count( $data_total ) ) {
-			foreach ( $data_total as $timestamp => $row ) {
-				if ( '' === $start ) {
-					$start = $timestamp;
+		$uuid             = UUID::generate_unique_id( 5 );
+		$query            = Schema::get_time_series( $this->filter, ! $this->is_today, '', [], false );
+		$item             = [];
+		$item['user']     = [ 'u_ham', 'u_spam' ];
+		$item['session']  = [ 'u_active', 'expired', 'forced', 'idle' ];
+		$item['turnover'] = [ 'registration', 'delete' ];
+		$item['log']      = [ 'logout', 'login_success', 'login_fail', 'login_block' ];
+		$item['password'] = [ 'reset' ];
+		$data             = [];
+		$series           = [];
+		$labels           = [];
+		$boundaries       = [];
+		$json             = [];
+		foreach ( $item as $selector => $array ) {
+			$boundaries[ $selector ] = [
+				'max'    => 0,
+				'factor' => 1,
+				'order'  => $item[ $selector ],
+			];
+		}
+		// Data normalization.
+		if ( 0 !== count( $query ) ) {
+			foreach ( $query as  $row ) {
+				$datetime = new \DateTime( $row['timestamp'], new \DateTimeZone( 'UTC' ) );
+				$datetime->setTimezone( $this->timezone );
+				$record = [];
+				foreach ( $row as $k => $v ) {
+					if ( 0 === strpos( $k, 'u_' ) ) {
+						if ( 0 < $row['cnt'] ) {
+							$record[ $k ] = (int) round( $v / $row['cnt'], 0 );
+						} else {
+							$record[ $k ] = 0;
+						}
+					} elseif ( 'cnt' !== $k && 'timestamp' !== $k ) {
+						$record[ $k ] = (int) $v;
+					}
 				}
-				$ts  = 'new Date(' . (string) strtotime( $timestamp ) . '000)';
-				$val = $row['sum_hit'];
-				if ( $val > $call_max ) {
-					$call_max = $val;
-				}
-				$hits[] = [
-					'x' => $ts,
-					'y' => $val,
-				];
+				$data[ strtotime( $datetime->format( 'Y-m-d' ) . ' 12:00:00' ) ] = $record;
 			}
-			$before = [
-				'x' => 'new Date(' . (string) ( strtotime( $start ) - 86400 ) . '000)',
+			// Boundaries computation.
+			foreach ( $data as $datum ) {
+				foreach ( array_merge( $item['user'], $item['session'], $item['turnover'], $item['log'], $item['password'] ) as $field ) {
+					foreach ( $item as $selector => $array ) {
+						if ( in_array( $field, $array, true ) ) {
+							if ( $boundaries[ $selector ]['max'] < $datum[ $field ] ) {
+								$boundaries[ $selector ]['max'] = $datum[ $field ];
+								if ( 1100 < $datum[ $field ] ) {
+									$boundaries[ $selector ]['factor'] = 1000;
+								}
+								if ( 1100000 < $datum[ $field ] ) {
+									$boundaries[ $selector ]['factor'] = 1000000;
+								}
+								$boundaries[ $selector ]['order'] = array_diff( $boundaries[ $selector ]['order'], [ $field ] );
+								array_unshift( $boundaries[ $selector ]['order'], $field );
+							}
+							continue 2;
+						}
+					}
+				}
+			}
+			// Series computation.
+			foreach ( $data as $timestamp => $datum ) {
+				// Series.
+				$ts = 'new Date(' . (string) $timestamp . '000)';
+				foreach ( array_merge( $item['user'], $item['session'], $item['turnover'], $item['log'], $item['password'] ) as $key ) {
+					foreach ( $item as $selector => $array ) {
+						if ( in_array( $key, $array, true ) ) {
+							$series[ $key ][] = [
+								'x' => $ts,
+								'y' => round( $datum[ $key ] / $boundaries[ $selector ]['factor'], ( 1 === $boundaries[ $selector ]['factor'] ? 0 : 2 ) ),
+							];
+							continue 2;
+						}
+					}
+				}
+				// Labels.
+				$labels[] = 'moment(' . $timestamp . '000).format("ll")';
+			}
+			// Result encoding.
+			$shift    = 86400;
+			$datetime = new \DateTime( $this->start . ' 00:00:00', $this->timezone );
+			$offset   = $this->timezone->getOffset( $datetime );
+			$datetime = $datetime->getTimestamp() + $offset;
+			array_unshift( $labels, 'moment(' . (string) ( $datetime - $shift ) . '000).format("ll")' );
+			$before   = [
+				'x' => 'new Date(' . (string) ( $datetime - $shift ) . '000)',
 				'y' => 'null',
 			];
-			$after  = [
-				'x' => 'new Date(' . (string) ( strtotime( $timestamp ) + 86400 ) . '000)',
+			$datetime = new \DateTime( $this->end . ' 23:59:59', $this->timezone );
+			$offset   = $this->timezone->getOffset( $datetime );
+			$datetime = $datetime->getTimestamp() + $offset;
+			$after    = [
+				'x' => 'new Date(' . (string) ( $datetime + $shift ) . '000)',
 				'y' => 'null',
 			];
-			// Hits.
-			$short       = Conversion::number_shorten( $call_max, 2, true );
-			$call_max    = 0.5 + floor( $call_max / $short['divisor'] );
-			$call_abbr   = $short['abbreviation'];
-			$series_hits = [];
-			foreach ( $hits as $item ) {
-				$item['y']     = $item['y'] / $short['divisor'];
-				$series_hits[] = $item;
+			foreach ( array_merge( $item['user'], $item['session'], $item['turnover'], $item['log'], $item['password'] ) as $key ) {
+				array_unshift( $series[ $key ], $before );
+				$series[ $key ][] = $after;
 			}
-			array_unshift( $series_hits, $before );
-			$series_hits[] = $after;
-			$json_call     = wp_json_encode(
-				[
-					'series' => [
-						[
-							'name' => esc_html__( 'Hits', 'sessions' ),
-							'data' => $series_hits,
-						],
-					],
-				]
-			);
-			$json_call     = str_replace( '"x":"new', '"x":new', $json_call );
-			$json_call     = str_replace( ')","y"', '),"y"', $json_call );
-			$json_call     = str_replace( '"null"', 'null', $json_call );
+			// Users.
+			foreach ( $item as $selector => $array ) {
+				$serie = [];
+				foreach ( $boundaries[ $selector ]['order'] as $field ) {
+					switch ( $field ) {
+						case 'u_ham':
+							if ( Environment::is_wordpress_multisite() ) {
+								$name = esc_html__( 'Legit Users', 'sessions' );
+							} else {
+								$name = esc_html__( 'Users', 'sessions' );
+							}
+							break;
+						case 'u_spam':
+							$name = esc_html__( 'Spam Users', 'sessions' );
+							break;
+						case 'u_active':
+							$name = esc_html__( 'Active Sessions', 'sessions' );
+							break;
+						case 'forced':
+							$name = esc_html__( 'Overridden Sessions', 'sessions' );
+							break;
+						case 'expired':
+							$name = esc_html__( 'Expired Sessions', 'sessions' );
+							break;
+						case 'idle':
+							$name = esc_html__( 'Idle Sessions', 'sessions' );
+							break;
+						case 'registration':
+							$name = esc_html__( 'Created Accounts', 'sessions' );
+							break;
+						case 'delete':
+							$name = esc_html__( 'Deleted Accounts', 'sessions' );
+							break;
+						case 'logout':
+							$name = esc_html__( 'Logouts', 'sessions' );
+							break;
+						case 'login_success':
+							$name = esc_html__( 'Successful Logins', 'sessions' );
+							break;
+						case 'login_fail':
+							$name = esc_html__( 'Failed Logins', 'sessions' );
+							break;
+						case 'login_block':
+							$name = esc_html__( 'Blocked Logins', 'sessions' );
+							break;
+						case 'reset':
+							$name = esc_html__( 'Password Resets', 'sessions' );
+							break;
+						default:
+							$name = esc_html__( 'Unknown', 'sessions' );
+					}
+					$serie[] = [
+						'name' => $name,
+						'data' => $series[ $field ],
+					];
+				}
+				if ( 'turnover' === $selector || 'log' === $selector ) {
+					$json[ $selector ] = wp_json_encode( [ 'labels' => $labels, 'series' => $serie ] );
+				} else {
+					$json[ $selector ] = wp_json_encode( [ 'series' => $serie ] );
+				}
+				$json[ $selector ] = str_replace( '"x":"new', '"x":new', $json[ $selector ] );
+				$json[ $selector ] = str_replace( ')","y"', '),"y"', $json[ $selector ] );
+				$json[ $selector ] = str_replace( '"null"', 'null', $json[ $selector ] );
+				$json[ $selector ] = str_replace( '"labels":["moment', '"labels":[moment', $json[ $selector ] );
+				$json[ $selector ] = str_replace( '","moment', ',moment', $json[ $selector ] );
+				$json[ $selector ] = str_replace( '"],"series":', '],"series":', $json[ $selector ] );
+				$json[ $selector ] = str_replace( '\\"', '"', $json[ $selector ] );
+			}
 
 			// Rendering.
 			if ( 4 < $this->duration ) {
@@ -359,29 +475,120 @@ class Analytics {
 				$divisor = $this->duration + 1;
 			}
 			$result  = '<div class="pose-multichart-handler">';
-			$result .= '<div class="pose-multichart-item active" id="pose-chart-calls">';
+			$result .= '<div class="pose-multichart-item active" id="pose-chart-user">';
 			$result .= '</div>';
 			$result .= '<script>';
 			$result .= 'jQuery(function ($) {';
-			$result .= ' var call_data' . $uuid . ' = ' . $json_call . ';';
-			$result .= ' var call_tooltip' . $uuid . ' = Chartist.plugins.tooltip({percentage: false, appendToBody: true});';
-			$result .= ' var call_option' . $uuid . ' = {';
+			$result .= ' var user_data' . $uuid . ' = ' . $json['user'] . ';';
+			$result .= ' var user_tooltip' . $uuid . ' = Chartist.plugins.tooltip({percentage: false, appendToBody: true});';
+			$result .= ' var user_option' . $uuid . ' = {';
 			$result .= '  height: 300,';
 			$result .= '  fullWidth: true,';
 			$result .= '  showArea: true,';
 			$result .= '  showLine: true,';
 			$result .= '  showPoint: false,';
-			$result .= '  plugins: [call_tooltip' . $uuid . '],';
-			$result .= '  axisX: {scaleMinSpace: 100, type: Chartist.FixedScaleAxis, divisor:' . $divisor . ', labelInterpolationFnc: function (value) {return moment(value).format("YYYY-MM-DD");}},';
-			$result .= '  axisY: {type: Chartist.AutoScaleAxis, low: 0, high: ' . $call_max . ', labelInterpolationFnc: function (value) {return value.toString() + " ' . $call_abbr . '";}},';
+			$result .= '  plugins: [user_tooltip' . $uuid . '],';
+			$result .= '  axisX: {labelOffset: {x: 3,y: 0},scaleMinSpace: 100, type: Chartist.FixedScaleAxis, divisor:' . $divisor . ', labelInterpolationFnc: function (value) {return moment(value).format("YYYY-MM-DD");}},';
+			$result .= '  axisY: {type: Chartist.AutoScaleAxis, labelInterpolationFnc: function (value) {return value.toString() + " ' . Conversion::number_shorten( $boundaries['user']['factor'], 0, true )['abbreviation'] . '";}},';
 			$result .= ' };';
-			$result .= ' new Chartist.Line("#pose-chart-calls", call_data' . $uuid . ', call_option' . $uuid . ');';
+			$result .= ' new Chartist.Line("#pose-chart-user", user_data' . $uuid . ', user_option' . $uuid . ');';
 			$result .= '});';
 			$result .= '</script>';
+			$result .= '<div class="pose-multichart-small-item" id="pose-chart-turnover">';
+			$result .= '<style>';
+			$result .= '.pose-multichart-small-item .ct-bar {stroke-width: 6px !important;stroke-opacity: 0.8 !important;}';
+			$result .= '</style>';
 			$result .= '</div>';
+			$result .= '<script>';
+			$result .= 'jQuery(function ($) {';
+			$result .= ' var turnover_data' . $uuid . ' = ' . $json['turnover'] . ';';
+			$result .= ' var turnover_tooltip' . $uuid . ' = Chartist.plugins.tooltip({justvalue: true, appendToBody: true});';
+			$result .= ' var turnover_option' . $uuid . ' = {';
+			$result .= '  height: 300,';
+			$result .= '  seriesBarDistance: 8,';
+			$result .= '  plugins: [turnover_tooltip' . $uuid . '],';
+			$result .= '  axisX: {showGrid: false, labelOffset: {x: 18,y: 0}},';
+			$result .= '  axisY: {showGrid: true, labelInterpolationFnc: function (value) {return value.toString() + " ' . Conversion::number_shorten( $boundaries['turnover']['factor'], 0, true )['abbreviation'] . '";}},';
+			$result .= ' };';
+			$result .= ' new Chartist.Bar("#pose-chart-turnover", turnover_data' . $uuid . ', turnover_option' . $uuid . ');';
+			$result .= '});';
+			$result .= '</script>';
+			$result .= '<div class="pose-multichart-handler">';
+			$result .= '<div class="pose-multichart-item" id="pose-chart-session">';
+			$result .= '</div>';
+			$result .= '<script>';
+			$result .= 'jQuery(function ($) {';
+			$result .= ' var session_data' . $uuid . ' = ' . $json['session'] . ';';
+			$result .= ' var session_tooltip' . $uuid . ' = Chartist.plugins.tooltip({percentage: false, appendToBody: true});';
+			$result .= ' var session_option' . $uuid . ' = {';
+			$result .= '  height: 300,';
+			$result .= '  fullWidth: true,';
+			$result .= '  showArea: true,';
+			$result .= '  showLine: true,';
+			$result .= '  showPoint: false,';
+			$result .= '  plugins: [session_tooltip' . $uuid . '],';
+			$result .= '  axisX: {labelOffset: {x: 3,y: 0},scaleMinSpace: 100, type: Chartist.FixedScaleAxis, divisor:' . $divisor . ', labelInterpolationFnc: function (value) {return moment(value).format("YYYY-MM-DD");}},';
+			$result .= '  axisY: {type: Chartist.AutoScaleAxis, labelInterpolationFnc: function (value) {return value.toString() + " ' . Conversion::number_shorten( $boundaries['session']['factor'], 0, true )['abbreviation'] . '";}},';
+			$result .= ' };';
+			$result .= ' new Chartist.Line("#pose-chart-session", session_data' . $uuid . ', session_option' . $uuid . ');';
+			$result .= '});';
+			$result .= '</script>';
+			$result .= '<div class="pose-multichart-large-item large-bar" id="pose-chart-log">';
+			$result .= '<style>';
+			$result .= '.pose-multichart-large-item .ct-bar {stroke-width: 20px !important;stroke-opacity: 0.8 !important;}';
+			$result .= '</style>';
+			$result .= '</div>';
+			$result .= '<script>';
+			$result .= 'jQuery(function ($) {';
+			$result .= ' var log_data' . $uuid . ' = ' . $json['log'] . ';';
+			$result .= ' var log_tooltip' . $uuid . ' = Chartist.plugins.tooltip({justvalue: true, appendToBody: true});';
+			$result .= ' var log_option' . $uuid . ' = {';
+			$result .= '  height: 300,';
+			$result .= '  stackBars: true,';
+			$result .= '  stackMode: "accumulate",';
+			$result .= '  seriesBarDistance: 1,';
+			$result .= '  plugins: [log_tooltip' . $uuid . '],';
+			$result .= '  axisX: {showGrid: false, labelOffset: {x: 18,y: 0}},';
+			$result .= '  axisY: {showGrid: true, labelInterpolationFnc: function (value) {return value.toString() + " ' . Conversion::number_shorten( $boundaries['log']['factor'], 0, true )['abbreviation'] . '";}},';
+			$result .= ' };';
+			$result .= ' new Chartist.Bar("#pose-chart-log", log_data' . $uuid . ', log_option' . $uuid . ');';
+			$result .= '});';
+			$result .= '</script>';
+			$result .= '<div class="pose-multichart-handler">';
+			$result .= '<div class="pose-multichart-item" id="pose-chart-password">';
+			$result .= '</div>';
+			$result .= '<script>';
+			$result .= 'jQuery(function ($) {';
+			$result .= ' var password_data' . $uuid . ' = ' . $json['password'] . ';';
+			$result .= ' var password_tooltip' . $uuid . ' = Chartist.plugins.tooltip({percentage: false, appendToBody: true});';
+			$result .= ' var password_option' . $uuid . ' = {';
+			$result .= '  height: 300,';
+			$result .= '  fullWidth: true,';
+			$result .= '  showArea: true,';
+			$result .= '  showLine: true,';
+			$result .= '  showPoint: false,';
+			$result .= '  plugins: [password_tooltip' . $uuid . '],';
+			$result .= '  axisX: {labelOffset: {x: 3,y: 0},scaleMinSpace: 100, type: Chartist.FixedScaleAxis, divisor:' . $divisor . ', labelInterpolationFnc: function (value) {return moment(value).format("YYYY-MM-DD");}},';
+			$result .= '  axisY: {type: Chartist.AutoScaleAxis, labelInterpolationFnc: function (value) {return value.toString() + " ' . Conversion::number_shorten( $boundaries['password']['factor'], 0, true )['abbreviation'] . '";}},';
+			$result .= ' };';
+			$result .= ' new Chartist.Line("#pose-chart-password", password_data' . $uuid . ', password_option' . $uuid . ');';
+			$result .= '});';
+			$result .= '</script>';
 		} else {
 			$result  = '<div class="pose-multichart-handler">';
-			$result .= '<div class="pose-multichart-item active" id="pose-chart-calls">';
+			$result .= '<div class="pose-multichart-item active" id="pose-chart-user">';
+			$result .= $this->get_graph_placeholder_nodata( 274 );
+			$result .= '</div>';
+			$result .= '<div class="pose-multichart-item" id="pose-chart-turnover">';
+			$result .= $this->get_graph_placeholder_nodata( 274 );
+			$result .= '</div>';
+			$result .= '<div class="pose-multichart-item" id="pose-chart-session">';
+			$result .= $this->get_graph_placeholder_nodata( 274 );
+			$result .= '</div>';
+			$result .= '<div class="pose-multichart-item" id="pose-chart-log">';
+			$result .= $this->get_graph_placeholder_nodata( 274 );
+			$result .= '</div>';
+			$result .= '<div class="pose-multichart-item" id="pose-chart-password">';
 			$result .= $this->get_graph_placeholder_nodata( 274 );
 			$result .= '</div>';
 		}
@@ -584,29 +791,23 @@ class Analytics {
 	 */
 	public function get_main_chart() {
 		if ( 1 < $this->duration ) {
-			$help_ratio  = esc_html__( 'Hit ratio variation.', 'opcache-manager' );
-			$help_hit    = esc_html__( 'Hit and miss distribution.', 'opcache-manager' );
-			$help_memory = esc_html__( 'Memory distribution.', 'opcache-manager' );
-			$help_file   = esc_html__( 'Files variation.', 'opcache-manager' );
-			$help_key    = esc_html__( 'Keys distribution.', 'opcache-manager' );
-			$help_string = esc_html__( 'Strings variation.', 'opcache-manager' );
-			$help_buffer = esc_html__( 'Buffer distribution.', 'opcache-manager' );
-			$help_uptime = esc_html__( 'Availability variation.', 'opcache-manager' );
-			$detail      = '<span class="pose-chart-button not-ready left" id="pose-chart-button-ratio" data-position="left" data-tooltip="' . $help_ratio . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'award', 'none', '#73879C' ) . '" /></span>';
-			$detail     .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-hit" data-position="left" data-tooltip="' . $help_hit . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'hash', 'none', '#73879C' ) . '" /></span>';
-			$detail     .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-memory" data-position="left" data-tooltip="' . $help_memory . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'cpu', 'none', '#73879C' ) . '" /></span>';
-			$detail     .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-file" data-position="left" data-tooltip="' . $help_file . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'file-text', 'none', '#73879C' ) . '" /></span>';
-			$detail     .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-key" data-position="left" data-tooltip="' . $help_key . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'key', 'none', '#73879C' ) . '" /></span>';
-			$detail     .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-string" data-position="left" data-tooltip="' . $help_string . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'tag', 'none', '#73879C' ) . '" /></span>';
-			$detail     .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-buffer" data-position="left" data-tooltip="' . $help_buffer . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'database', 'none', '#73879C' ) . '" /></span>';
-			$detail     .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-uptime" data-position="left" data-tooltip="' . $help_uptime . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'activity', 'none', '#73879C' ) . '" /></span>';
-			$result      = '<div class="pose-row">';
-			$result     .= '<div class="pose-box pose-box-full-line">';
-			$result     .= '<div class="pose-module-title-bar"><span class="pose-module-title">' . esc_html__( 'Metrics Variations', 'opcache-manager' ) . '<span class="pose-module-more">' . $detail . '</span></span></div>';
-			$result     .= '<div class="pose-module-content" id="pose-main-chart">' . $this->get_graph_placeholder( 274 ) . '</div>';
-			$result     .= '</div>';
-			$result     .= '</div>';
-			$result     .= $this->get_refresh_script(
+			$help_user     = esc_html__( 'Users variation.', 'sessions' );
+			$help_session  = esc_html__( 'Sessions variation.', 'sessions' );
+			$help_turnover = esc_html__( 'Moves distribution.', 'sessions' );
+			$help_log      = esc_html__( 'Login / logout breakdown.', 'sessions' );
+			$help_password = esc_html__( 'Password resets.', 'sessions' );
+			$detail        = '<span class="pose-chart-button not-ready left" id="pose-chart-button-user" data-position="left" data-tooltip="' . $help_user . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'users', 'none', '#73879C' ) . '" /></span>';
+			$detail       .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-turnover" data-position="left" data-tooltip="' . $help_turnover . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'refresh-cw', 'none', '#73879C' ) . '" /></span>';
+			$detail       .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-session" data-position="left" data-tooltip="' . $help_session . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'activity', 'none', '#73879C' ) . '" /></span>';
+			$detail       .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-log" data-position="left" data-tooltip="' . $help_log . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'move', 'none', '#73879C' ) . '" /></span>';
+			$detail       .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-password" data-position="left" data-tooltip="' . $help_password . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'key', 'none', '#73879C' ) . '" /></span>';
+			$result        = '<div class="pose-row">';
+			$result       .= '<div class="pose-box pose-box-full-line">';
+			$result       .= '<div class="pose-module-title-bar"><span class="pose-module-title">' . esc_html__( 'Metrics Variations', 'opcache-manager' ) . '<span class="pose-module-more">' . $detail . '</span></span></div>';
+			$result       .= '<div class="pose-module-content" id="pose-main-chart">' . $this->get_graph_placeholder( 274 ) . '</div>';
+			$result       .= '</div>';
+			$result       .= '</div>';
+			$result       .= $this->get_refresh_script(
 				[
 					'query'   => 'main-chart',
 					'queried' => 0,
@@ -778,7 +979,7 @@ class Analytics {
 		$result .= ' $.each(val, function(index, value) {$("#" + index).html(value);});';
 		if ( array_key_exists( 'query', $args ) && 'main-chart' === $args['query'] ) {
 			$result .= '$(".pose-chart-button").removeClass("not-ready");';
-			$result .= '$("#pose-chart-button-calls").addClass("active");';
+			$result .= '$("#pose-chart-button-user").addClass("active");';
 		}
 		$result .= ' });';
 		$result .= '});';
