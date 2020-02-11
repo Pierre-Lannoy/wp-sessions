@@ -58,7 +58,6 @@ class ZooKeeper {
 		Cache::set_global( 'zookeeper/semaphore', time() );
 		Logger::debug( '[ZooKeeper] Starting background tasks execution.' );
 		self::terminate_sessions();
-		Schema::write( false );
 		Logger::debug( '[ZooKeeper] Ending background tasks execution.' );
 		Cache::delete_global( 'zookeeper/semaphore' );
 		Cache::set_global( 'zookeeper/lastexec', time() );

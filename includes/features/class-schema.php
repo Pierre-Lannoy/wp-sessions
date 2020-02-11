@@ -120,7 +120,7 @@ class Schema {
 	 */
 	private static function maybe_add_stats( $record ) {
 		$check = Cache::get_global( 'data/statcheck' );
-		if ( isset( $check ) && $check && (int) $check + 2 * HOUR_IN_SECONDS > time() ) {
+		if ( isset( $check ) && $check && (int) $check + 6 * HOUR_IN_SECONDS > time() ) {
 			return $record;
 		}
 		$record['cnt']        = 1;
