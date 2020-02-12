@@ -36,6 +36,7 @@ spl_autoload_register(
 				$filepath = POSE_ADMIN_DIR;
 			}
 			$file = $filepath . $filename;
+			error_log( $file);
 			if ( file_exists( $file ) ) {
 				include_once $file;
 			}
