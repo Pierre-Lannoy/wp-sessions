@@ -10,6 +10,7 @@
  */
 
 namespace POSessions\Plugin\Feature;
+use POSessions\System\Session;
 
 /**
  * Define the user admin functionality.
@@ -33,12 +34,16 @@ class UserAdministration {
 	}
 
 	/**
-	 * Initialize the meta class and set its properties.
+	 * Echo the 'Sessions Management' section of the user profile.
 	 *
+	 * @param \WP_User  $user   The user.
 	 * @since    1.0.0
 	 */
-	public static function user_profile( $user_id ) {
-		include POSE_ADMIN_DIR . 'partials/sessions-admin-user-profile.php';
+	public static function user_profile( $user ) {
+		$session = new Session( $user );
+		if ( $session->is_needed() ) {
+			include POSE_ADMIN_DIR . 'partials/sessions-admin-user-profile.php';
+		}
 	}
 
 
