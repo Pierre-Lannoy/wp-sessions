@@ -78,10 +78,21 @@ class Session {
 	/**
 	 * Create an instance.
 	 *
+	 * @param mixed $user  Optional, the user or user ID.
 	 * @since 1.0.0
 	 */
-	public function __construct() {
-		$this->user_id  = get_current_user_id();
+	public function __construct( $user = null ) {
+		if ( ! isset( $user ) ) {
+			$this->user_id = get_current_user_id();
+		} else {
+			if ( $user instanceof \WP_User ) {
+				$this->user_id = $user->ID;
+			} elseif ( is_int( $user ) ) {
+				$this->user_id = $user;
+			} else {
+				$this->user_id = 0;
+			}
+		}
 		$this->sessions = self::get_user_sessions( $this->user_id );
 		if ( $this->is_needed() ) {
 			$this->user = get_user_by( 'id', $this->user_id );
@@ -574,6 +585,79 @@ class Session {
 		$this->sessions[ $this->token ]['session_idle'] = time() + (int) $settings[ $role ]['idle'] * HOUR_IN_SECONDS;
 		self::set_user_sessions( $this->sessions, $this->user_id );
 		return true;
+	}
+
+	/**
+	 * Get the limits as printable text.
+	 *
+	 * @return string  The limits, ready to printe.
+	 * @since 1.0.0
+	 */
+	public function get_limits_as_text() {
+		$result = '';
+		$role   = '';
+		foreach ( Role::get_all() as $key => $detail ) {
+			if ( in_array( $key, $this->user->roles, true ) ) {
+				$role = $key;
+				break;
+			}
+		}
+		$settings = Option::roles_get();
+		if ( array_key_exists( $role, $settings ) ) {
+			if ( 'external' === $settings[ $role ]['block'] ) {
+				$result .= esc_html__( 'Login allowed only from private IP ranges.', 'sessions' );
+			} elseif ( 'local' === $settings[ $role ]['block'] ) {
+				$result .= esc_html__( 'Login allowed only from public IP ranges.', 'sessions' );
+			}
+			$method = $settings[ $role ]['method'];
+			$mode   = '';
+			$limit  = 0;
+			if ( 'none' === $settings[ $role ]['limit'] ) {
+				$mode = 'none';
+			} else {
+				foreach ( LimiterTypes::$selector_names as $key => $name ) {
+					if ( 0 === strpos( $settings[ $role ]['limit'], $key ) ) {
+						$mode  = $key;
+						$limit = (int) substr( $settings[ $role ]['limit'], strlen( $key ) + 1 );
+						break;
+					}
+				}
+			}
+			$r = '';
+			switch ( $mode ) {
+				case 'user':
+					$r = esc_html( sprintf( _n( '%d concurrent session.', '%d concurrent sessions.', $limit, 'sessions' ), $limit ) );
+					break;
+				case 'ip':
+				case 'country':
+				case 'device-class':
+				case 'device-type':
+				case 'device-client':
+				case 'device-browser':
+				case 'device-os':
+					$r = esc_html( sprintf( _n( '%d concurrent session per %s.', '%d concurrent sessions per %s.', $limit, 'sessions' ), $limit, LimiterTypes::$selector_names[ $mode ] ) );
+					break;
+			}
+			if ( '' !== $r ) {
+				if ( '' !== $result ) {
+					$result .= ' ';
+				}
+				$result .= $r;
+			}
+			if ( 0 !== (int) $settings[ $role ]['idle'] ) {
+				$r = esc_html( sprintf( _n( 'Sessions expire after %d hour of inactivity.', 'Sessions expire after %d hours of inactivity.', $settings[ $role ]['idle'], 'sessions' ), $settings[ $role ]['idle'] ) );
+				if ( '' !== $r ) {
+					if ( '' !== $result ) {
+						$result .= ' ';
+					}
+					$result .= $r;
+				}
+			}
+		}
+		if ( '' === $result ) {
+			$result = esc_html__( 'No restrictions.', 'sessions' );
+		}
+		return $result;
 	}
 
 	/**
