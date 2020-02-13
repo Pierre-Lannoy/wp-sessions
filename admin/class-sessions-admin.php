@@ -86,15 +86,11 @@ class Sessions_Admin {
 	public function init_admin_menus() {
 		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() ) {
 			/* translators: as in the sentence "Sessions Settings" or "WordPress Settings" */
-			$settings = add_submenu_page( 'options-general.php', sprintf( esc_html__( '%s Settings', 'sessions' ), POSE_PRODUCT_NAME ), POSE_PRODUCT_NAME, 'manage_options', 'pose-settings', [ $this, 'get_settings_page' ] );
-			$name     = add_submenu_page(
-				'tools.php',
-				esc_html__( 'Sessions Analytics', 'sessions' ),
-				esc_html__( 'Sessions Analytics', 'sessions' ),
-				'manage_options',
-				'pose-viewer',
-				[ $this, 'get_viewer_page' ]
-			);
+			add_submenu_page( 'options-general.php', sprintf( esc_html__( '%s Settings', 'sessions' ), POSE_PRODUCT_NAME ), POSE_PRODUCT_NAME, 'manage_options', 'pose-settings', [ $this, 'get_settings_page' ] );
+			add_menu_page( esc_html__( 'Dashboard', 'sessions' ), esc_html__( 'Analytics', 'sessions' ), 'manage_options', 'po-analytics', [ $this, 'get_viewer_page' ], 'dashicons-chart-bar', 98 );
+			add_submenu_page( 'po-analytics', esc_html__( 'Dashboard', 'sessions' ), __( 'Dashboard', 'sessions' ), 'manage_options', 'po-analytics', [ $this, 'get_viewer_page' ], 0 );
+			add_submenu_page( 'po-analytics', esc_html__( 'Sessions', 'sessions' ), esc_html__( 'Sessions', 'sessions' ), 'manage_options', 'pose-viewer', [ $this, 'get_viewer_page' ], 1 );
+
 		}
 	}
 
@@ -123,7 +119,7 @@ class Sessions_Admin {
 	 */
 	public function add_actions_links( $actions, $plugin_file, $plugin_data, $context ) {
 		$actions[] = sprintf( '<a href="%s">%s</a>', esc_url( admin_url( 'options-general.php?page=pose-settings' ) ), esc_html__( 'Settings', 'sessions' ) );
-		$actions[] = sprintf( '<a href="%s">%s</a>', esc_url( admin_url( 'tools.php?page=pose-viewer' ) ), esc_html__( 'Statistics', 'sessions' ) );
+		$actions[] = sprintf( '<a href="%s">%s</a>', esc_url( admin_url( 'admin.php?page=pose-viewer' ) ), esc_html__( 'Statistics', 'sessions' ) );
 		return $actions;
 	}
 
@@ -281,10 +277,10 @@ class Sessions_Admin {
 		$form = new Form();
 		if ( defined( 'DECALOG_VERSION' ) ) {
 			$help  = '<img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'thumbs-up', 'none', '#00C800' ) . '" />&nbsp;';
-			$help .= sprintf( esc_html__('Your site is currently using %s.', 'sessions' ), '<em>DecaLog v' . DECALOG_VERSION .'</em>' );
+			$help .= sprintf( esc_html__( 'Your site is currently using %s.', 'sessions' ), '<em>DecaLog v' . DECALOG_VERSION . '</em>' );
 		} else {
 			$help  = '<img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'alert-triangle', 'none', '#FF8C00' ) . '" />&nbsp;';
-			$help .= sprintf( esc_html__('Your site does not use any logging plugin. To log all events triggered in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory.', 'sessions' ), '<a href="https://wordpress.org/plugins/decalog/">DecaLog</a>' );
+			$help .= sprintf( esc_html__( 'Your site does not use any logging plugin. To log all events triggered in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory.', 'sessions' ), '<a href="https://wordpress.org/plugins/decalog/">DecaLog</a>' );
 		}
 		add_settings_field(
 			'pose_plugin_options_logger',
@@ -293,16 +289,16 @@ class Sessions_Admin {
 			'pose_plugin_options_section',
 			'pose_plugin_options_section',
 			[
-				'text' => $help
+				'text' => $help,
 			]
 		);
 		register_setting( 'pose_plugin_options_section', 'pose_plugin_options_logger' );
 		if ( class_exists( 'PODeviceDetector\API\Device' ) ) {
 			$help  = '<img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'thumbs-up', 'none', '#00C800' ) . '" />&nbsp;';
-			$help .= sprintf( esc_html__('Your site is currently using %s.', 'sessions' ), '<em>Device Detector v' . PODD_VERSION .'</em>' );
+			$help .= sprintf( esc_html__( 'Your site is currently using %s.', 'sessions' ), '<em>Device Detector v' . PODD_VERSION . '</em>' );
 		} else {
 			$help  = '<img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'alert-triangle', 'none', '#FF8C00' ) . '" />&nbsp;';
-			$help .= sprintf( esc_html__('Your site does not use any device detection mechanism. To allow device differentiation in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory.', 'sessions' ), '<a href="https://wordpress.org/plugins/device-detector/">Device Detector</a>' );
+			$help .= sprintf( esc_html__( 'Your site does not use any device detection mechanism. To allow device differentiation in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory.', 'sessions' ), '<a href="https://wordpress.org/plugins/device-detector/">Device Detector</a>' );
 		}
 		add_settings_field(
 			'pose_plugin_options_podd',
@@ -311,17 +307,17 @@ class Sessions_Admin {
 			'pose_plugin_options_section',
 			'pose_plugin_options_section',
 			[
-				'text' => $help
+				'text' => $help,
 			]
 		);
 		register_setting( 'pose_plugin_options_section', 'pose_plugin_options_podd' );
 		$geo_ip = new GeoIP();
 		if ( $geo_ip->is_installed() ) {
 			$help  = '<img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'thumbs-up', 'none', '#00C800' ) . '" />&nbsp;';
-			$help .= sprintf( esc_html__('Your site is currently using %s.', 'sessions' ), '<em>' . $geo_ip->get_full_name() .'</em>' );
+			$help .= sprintf( esc_html__( 'Your site is currently using %s.', 'sessions' ), '<em>' . $geo_ip->get_full_name() . '</em>' );
 		} else {
 			$help  = '<img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'alert-triangle', 'none', '#FF8C00' ) . '" />&nbsp;';
-			$help .= sprintf( esc_html__('Your site does not use any IP geographic information plugin. To allow country differentiation in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory.', 'sessions' ), '<a href="https://wordpress.org/plugins/geoip-detect/">GeoIP Detection</a>' );
+			$help .= sprintf( esc_html__( 'Your site does not use any IP geographic information plugin. To allow country differentiation in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory.', 'sessions' ), '<a href="https://wordpress.org/plugins/geoip-detect/">GeoIP Detection</a>' );
 		}
 		add_settings_field(
 			'pose_plugin_options_geoip',
@@ -330,7 +326,7 @@ class Sessions_Admin {
 			'pose_plugin_options_section',
 			'pose_plugin_options_section',
 			[
-				'text' => $help
+				'text' => $help,
 			]
 		);
 		register_setting( 'pose_plugin_options_section', 'pose_plugin_options_geoip' );

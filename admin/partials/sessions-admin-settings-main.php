@@ -17,10 +17,10 @@ $url        = esc_url(
 		[
 			'page' => 'pose-viewer',
 		],
-		admin_url( 'tools.php' )
+		admin_url( 'admin.php' )
 	)
 );
-$note = sprintf( __( 'Note: analytics reports are available via the <a href="%s">tools menu</a>.', 'sessions' ), $url );
+$note = sprintf( __( 'Note: analytics reports are available via the <a href="%s">analytics menu</a>.', 'sessions' ), $url );
 
 ?>
 

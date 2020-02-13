@@ -451,7 +451,12 @@ class Analytics {
 					];
 				}
 				if ( 'turnover' === $selector || 'log' === $selector ) {
-					$json[ $selector ] = wp_json_encode( [ 'labels' => $labels, 'series' => $serie ] );
+					$json[ $selector ] = wp_json_encode(
+						[
+							'labels' => $labels,
+							'series' => $serie,
+						]
+					);
 				} else {
 					$json[ $selector ] = wp_json_encode( [ 'series' => $serie ] );
 				}
@@ -1007,7 +1012,7 @@ class Analytics {
 		foreach ( $replace as $key => $arg ) {
 			$params[ $key ] = $arg;
 		}
-		$url = admin_url( 'tools.php?page=pose-viewer' );
+		$url = admin_url( 'admin.php?page=pose-viewer' );
 		foreach ( $params as $key => $arg ) {
 			if ( '' !== $arg ) {
 				$url .= '&' . $key . '=' . rawurlencode( $arg );

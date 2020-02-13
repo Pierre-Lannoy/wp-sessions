@@ -590,7 +590,7 @@ class Session {
 	/**
 	 * Get the limits as printable text.
 	 *
-	 * @return string  The limits, ready to printe.
+	 * @return string  The limits, ready to print.
 	 * @since 1.0.0
 	 */
 	public function get_limits_as_text() {
