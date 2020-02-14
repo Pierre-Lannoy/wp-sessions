@@ -79,9 +79,6 @@ class Schema {
 	 * @since    1.0.0
 	 */
 	private static function write_current_to_database( $record ) {
-		if ( ! Option::site_get( 'analytics' ) || 0 === count( $record ) ) {
-			return;
-		}
 		$record = self::maybe_add_stats( $record );
 		if ( 0 === count( $record ) ) {
 			return;
