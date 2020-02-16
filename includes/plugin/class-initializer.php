@@ -46,4 +46,13 @@ class Initializer {
 		\POSessions\Plugin\Feature\ZooKeeper::init();
 	}
 
+	/**
+	 * Initialize the plugin.
+	 *
+	 * @since 1.0.0
+	 */
+	public function late_initialize() {
+		require_once POSE_PLUGIN_DIR . 'perfopsone/init.php';
+	}
+
 }

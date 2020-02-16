@@ -90,7 +90,6 @@ class Sessions_Admin {
 			add_menu_page( esc_html__( 'Dashboard', 'sessions' ), esc_html__( 'Analytics', 'sessions' ), 'manage_options', 'po-analytics', [ $this, 'get_viewer_page' ], 'dashicons-chart-bar', 98 );
 			add_submenu_page( 'po-analytics', esc_html__( 'Dashboard', 'sessions' ), __( 'Dashboard', 'sessions' ), 'manage_options', 'po-analytics', [ $this, 'get_viewer_page' ], 0 );
 			add_submenu_page( 'po-analytics', esc_html__( 'Sessions', 'sessions' ), esc_html__( 'Sessions', 'sessions' ), 'manage_options', 'pose-viewer', [ $this, 'get_viewer_page' ], 1 );
-
 		}
 	}
 
