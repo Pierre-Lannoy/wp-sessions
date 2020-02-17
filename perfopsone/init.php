@@ -1,6 +1,6 @@
 <?php
 /**
- * Initialization of globals.
+ * Initialization of PerfOpsOne globals.
  *
  * @package PerfOpsOne
  * @author  Pierre Lannoy <https://pierre.lannoy.fr/>.

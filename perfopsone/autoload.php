@@ -16,8 +16,7 @@ spl_autoload_register(
 				$classname = substr( $classname, strpos( $classname, '\\' ) + 1, 1000 );
 			}
 			$filename = 'class-' . str_replace( '_', '-', strtolower( $classname ) ) . '.php';
-
-			$file = $filepath . $filename;
+			$file     = $filepath . $filename;
 			if ( file_exists( $file ) ) {
 				include_once $file;
 			}
