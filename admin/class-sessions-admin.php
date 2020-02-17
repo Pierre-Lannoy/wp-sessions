@@ -22,6 +22,7 @@ use POSessions\System\Date;
 use POSessions\System\Timezone;
 use POSessions\System\GeoIP;
 use POSessions\Plugin\Feature\LimiterTypes;
+use PerfOpsOne\AdminMenus;
 
 /**
  * The admin-specific functionality of the plugin.
@@ -79,18 +80,71 @@ class Sessions_Admin {
 	}
 
 	/**
+	 * Init PerfOps admin menus.
+	 *
+	 * @param array $perfops    The already declared menus.
+	 * @return array    The completed menus array.
+	 * @since 1.0.0
+	 */
+	public function init_perfops_admin_menus( $perfops ) {
+		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() ) {
+			$perfops['analytics'][] = [
+				'name'          => esc_html_x( 'Sessions', 'Common name - not the name of the plugin.', 'sessions' ),
+				/* translators: as in the sentence "View sessions and accounts activity on your network." or "View sessions and accounts activity on your website." */
+				'description'   => sprintf( esc_html__( 'View sessions and accounts activity on your %s.', 'sessions' ), Environment::is_wordpress_multisite() ? esc_html__( 'network', 'sessions' ) : esc_html__( 'website', 'sessions' ) ),
+				'icon_callback' => [ \POSessions\Plugin\Core::class, 'get_base64_logo' ],
+				'slug'          => 'pose-viewer',
+				'page_title'    => esc_html__( 'Sessions Analytics', 'sessions' ),
+				'menu_title'    => esc_html_x( 'Sessions', 'Common name - not the name of the plugin.', 'sessions' ),
+				'capability'    => 'manage_options',
+				'callback'      => [ $this, 'get_viewer_page' ],
+				'position'      => 50,
+				'plugin'        => POSE_SLUG,
+				'activated'     => Option::network_get( 'analytics' ),
+				'remedy'        => esc_url( admin_url( 'admin.php?page=pose-settings&tab=misc' ) ),
+			];
+			$perfops['tools'][]     = [
+				'name'          => esc_html_x( 'Sessions', 'Common name - not the name of the plugin.', 'sessions' ),
+				/* translators: as in the sentence "Manage active sessions on your network." or "Manage active sessions on your website." */
+				'description'   => sprintf( esc_html__( 'Manage active sessions on your %s.', 'sessions' ), Environment::is_wordpress_multisite() ? esc_html__( 'network', 'sessions' ) : esc_html__( 'website', 'sessions' ) ),
+				'icon_callback' => [ \POSessions\Plugin\Core::class, 'get_base64_logo' ],
+				'slug'          => 'pose-manager',
+				'page_title'    => esc_html__( 'Sessions Management', 'sessions' ),
+				'menu_title'    => esc_html_x( 'Sessions', 'Common name - not the name of the plugin.', 'sessions' ),
+				'capability'    => 'manage_options',
+				'callback'      => [ $this, 'get_manager_page' ],
+				'position'      => 50,
+				'plugin'        => POSE_SLUG,
+				'activated'     => true,
+				'remedy'        => '',
+			];
+			$perfops['settings'][]  = [
+				'name'          => POSE_PRODUCT_NAME,
+				'description'   => '',
+				'icon_callback' => [ \POSessions\Plugin\Core::class, 'get_base64_logo' ],
+				'slug'          => 'pose-settings',
+				/* translators: as in the sentence "Sessions Settings" or "WordPress Settings" */
+				'page_title'    => sprintf( esc_html__( '%s Settings', 'sessions' ), POSE_PRODUCT_NAME ),
+				'menu_title'    => POSE_PRODUCT_NAME,
+				'capability'    => 'manage_options',
+				'callback'      => [ $this, 'get_settings_page' ],
+				'position'      => 50,
+				'plugin'        => POSE_SLUG,
+				'activated'     => true,
+				'remedy'        => '',
+			];
+		}
+		return $perfops;
+	}
+
+	/**
 	 * Set the items in the settings menu.
 	 *
 	 * @since 1.0.0
 	 */
 	public function init_admin_menus() {
-		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() ) {
-			/* translators: as in the sentence "Sessions Settings" or "WordPress Settings" */
-			add_submenu_page( 'options-general.php', sprintf( esc_html__( '%s Settings', 'sessions' ), POSE_PRODUCT_NAME ), POSE_PRODUCT_NAME, 'manage_options', 'pose-settings', [ $this, 'get_settings_page' ] );
-			add_menu_page( esc_html__( 'Dashboard', 'sessions' ), esc_html__( 'Analytics', 'sessions' ), 'manage_options', 'po-analytics', [ $this, 'get_viewer_page' ], 'dashicons-chart-bar', 98 );
-			add_submenu_page( 'po-analytics', esc_html__( 'Dashboard', 'sessions' ), __( 'Dashboard', 'sessions' ), 'manage_options', 'po-analytics', [ $this, 'get_viewer_page' ], 0 );
-			add_submenu_page( 'po-analytics', esc_html__( 'Sessions', 'sessions' ), esc_html__( 'Sessions', 'sessions' ), 'manage_options', 'pose-viewer', [ $this, 'get_viewer_page' ], 1 );
-		}
+		add_filter( 'init_perfops_admin_menus', [ $this, 'init_perfops_admin_menus' ] );
+		AdminMenus::initialize();
 	}
 
 	/**
@@ -117,7 +171,7 @@ class Sessions_Admin {
 	 * @since 1.0.0
 	 */
 	public function add_actions_links( $actions, $plugin_file, $plugin_data, $context ) {
-		$actions[] = sprintf( '<a href="%s">%s</a>', esc_url( admin_url( 'options-general.php?page=pose-settings' ) ), esc_html__( 'Settings', 'sessions' ) );
+		$actions[] = sprintf( '<a href="%s">%s</a>', esc_url( admin_url( 'admin.php?page=pose-settings' ) ), esc_html__( 'Settings', 'sessions' ) );
 		$actions[] = sprintf( '<a href="%s">%s</a>', esc_url( admin_url( 'admin.php?page=pose-viewer' ) ), esc_html__( 'Statistics', 'sessions' ) );
 		return $actions;
 	}
@@ -144,6 +198,16 @@ class Sessions_Admin {
 	 * @since 1.0.0
 	 */
 	public function get_viewer_page() {
+		$analytics = AnalyticsFactory::get_analytics();
+		include POSE_ADMIN_DIR . 'partials/sessions-admin-view-analytics.php';
+	}
+
+	/**
+	 * Get the content of the manager page.
+	 *
+	 * @since 1.0.0
+	 */
+	public function get_manager_page() {
 		$analytics = AnalyticsFactory::get_analytics();
 		include POSE_ADMIN_DIR . 'partials/sessions-admin-view-analytics.php';
 	}

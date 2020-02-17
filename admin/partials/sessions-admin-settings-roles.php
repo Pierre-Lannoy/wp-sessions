@@ -20,7 +20,7 @@
 					'action' => 'do-save',
 					'tab'    => 'roles',
 				],
-				admin_url( 'options-general.php' )
+				admin_url( 'admin.php' )
 			)
 		);
 		?>

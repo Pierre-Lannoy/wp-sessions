@@ -47,7 +47,7 @@ class Updater {
 				$message  = sprintf( esc_html__( '%1$s has been correctly updated from version %2$s to version %3$s.', 'sessions' ), POSE_PRODUCT_NAME, $old, POSE_VERSION );
 				Logger::notice( $message );
 				// phpcs:ignore
-				$message .= ' ' . sprintf( __( 'See <a href="%s">what\'s new</a>.', 'sessions' ), admin_url( 'options-general.php?page=pose-settings&tab=about' ) );
+				$message .= ' ' . sprintf( __( 'See <a href="%s">what\'s new</a>.', 'sessions' ), admin_url( 'admin.php?page=pose-settings&tab=about' ) );
 			}
 			Nag::add( 'update', 'info', $message );
 			Option::network_set( 'version', POSE_VERSION );

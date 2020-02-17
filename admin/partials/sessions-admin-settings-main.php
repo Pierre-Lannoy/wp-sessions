@@ -37,7 +37,7 @@ $note = sprintf( __( 'Note: analytics reports are available via the <a href="%s"
 					'page' => 'pose-settings',
 					'tab'  => 'roles',
 				),
-				admin_url( 'options-general.php' )
+				admin_url( 'admin.php' )
 			)
 		);
 		?>
@@ -50,7 +50,7 @@ $note = sprintf( __( 'Note: analytics reports are available via the <a href="%s"
 					'page' => 'pose-settings',
 					'tab'  => 'misc',
 				),
-				admin_url( 'options-general.php' )
+				admin_url( 'admin.php' )
 			)
 		);
 		?>
@@ -63,7 +63,7 @@ $note = sprintf( __( 'Note: analytics reports are available via the <a href="%s"
 					'page' => 'pose-settings',
 					'tab'  => 'about',
 				),
-				admin_url( 'options-general.php' )
+				admin_url( 'admin.php' )
 			)
 		);
 		?>
