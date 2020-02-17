@@ -70,8 +70,59 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 		 * @since 1.0.0
 		 */
 		public static function get_analytics_page() {
+			if ( array_key_exists( 'analytics', self::$menus ) ) {
+				$items = [];
+				foreach ( self::$menus['analytics'] as $item ) {
+					$i          = [];
+					$i['icon']  = call_user_func( $item['icon_callback'] );
+					$i['title'] = $item['name'];
+					$i['id']    = 'analytics-' . $item['slug'];
+					if ( $item['activated'] ) {
+						$i['text'] = $item['description'];
+						$i['url']  = esc_url( admin_url( 'admin.php?page=' . $item['slug'] ) );
+					} else {
+						$i['text'] = esc_html__( 'This analytics feature is currently disabled. Click here to activate it.', 'sessions' );
+						$i['url']  = $item['remedy'];
+					}
+					$items[] = $i;
+				}
 
 
+				foreach ( self::$menus['analytics'] as $item ) {
+					$i          = [];
+					$i['icon']  = call_user_func( $item['icon_callback'] );
+					$i['title'] = $item['name'];
+					$i['id']    = 'analytics-' . $item['slug'];
+					if ( !$item['activated'] ) {
+						$i['text'] = $item['description'];
+						$i['url']  = esc_url( admin_url( 'admin.php?page=' . $item['slug'] ) );
+					} else {
+						$i['text'] = esc_html__( 'This analytics feature is currently disabled. Click here to activate it.', 'sessions' );
+						$i['url']  = $item['remedy'];
+					}
+					$items[] = $i;
+				}
+				foreach ( self::$menus['analytics'] as $item ) {
+					$i          = [];
+					$i['icon']  = call_user_func( $item['icon_callback'] );
+					$i['title'] = $item['name'];
+					$i['id']    = 'analytics-' . $item['slug'];
+					if ( $item['activated'] ) {
+						$i['text'] = $item['description'];
+						$i['url']  = esc_url( admin_url( 'admin.php?page=' . $item['slug'] ) );
+					} else {
+						$i['text'] = esc_html__( 'This analytics feature is currently disabled. Click here to activate it.', 'sessions' );
+						$i['url']  = $item['remedy'];
+					}
+					$items[] = $i;
+				}
+
+
+
+
+
+				self::display_as_bubble( $items );
+			}
 		}
 
 		/**
@@ -82,6 +133,74 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 		public static function get_tools_page() {
 
 
+		}
+
+		/**
+		 * Get the tools main page.
+		 *
+		 * @since 1.0.0
+		 */
+		public static function get_insights_page() {
+
+
+		}
+
+		/**
+		 * Get the tools main page.
+		 *
+		 * @since 1.0.0
+		 */
+		public static function get_settings_page() {
+
+
+		}
+
+		/**
+		 * Displays items as bubbles.
+		 *
+		 * @param array $items  The items to display.
+		 * @since 1.0.0
+		 */
+		private static function display_as_bubble( $items ) {
+			uasort(
+				$items,
+				function ( $a, $b ) {
+					if ( $a['title'] === $b['title'] ) {
+						return 0;
+					} return ( $a['title'] < $b['title'] ) ? -1 : 1;
+				}
+			);
+			$disp  = '';
+			$disp .= '<div style="width:100%;text-align:center;padding:0px;margin-top:10px;margin-left:-10px;" class="perfopsone-admin-inside">';
+			$disp .= ' <div style="display:flex;flex-direction:row;flex-wrap:wrap;">';
+			$disp .= '  <style>';
+			$disp .= '   .perfopsone-admin-inside .po-container {flex:auto;padding:10px;}';
+			$disp .= '   .perfopsone-admin-inside .po-actionable:hover {border-radius:6px;cursor:pointer; -moz-transition: all .2s ease-in; -o-transition: all .2s ease-in; -webkit-transition: all .2s ease-in; transition: all .2s ease-in; background: #f5f5f5;border:1px solid #e0e0e0;filter: grayscale(0%) opacity(100%);}';
+			$disp .= '   .perfopsone-admin-inside .po-actionable {width:300px;height:120px;border-radius:6px;cursor:pointer; -moz-transition: all .4s ease-in; -o-transition: all .4s ease-in; -webkit-transition: all .4s ease-in; transition: all .4s ease-in; background: transparent;border:1px solid transparent;filter: grayscale(80%) opacity(66%);}';
+			$disp .= '   .perfopsone-admin-inside .po-actionable a {font-style:normal;text-decoration:none;color:#73879C;}';
+			$disp .= '   .perfopsone-admin-inside .po-icon {display:block;width:120px;float:left;padding-top:10px;}';
+			$disp .= '   .perfopsone-admin-inside .po-text {display:grid;text-align:left;padding-top:16px;}';
+			$disp .= '   .perfopsone-admin-inside .po-title {font-size:1.8em;font-weight: 600;}';
+			$disp .= '   .perfopsone-admin-inside .po-description {font-size:1em;padding-top:10px;}';
+			$disp .= '  </style>';
+			foreach ( $items as $item ) {
+				$disp .= '<div class="po-container">';
+				$disp .= ' <div class="po-actionable">';
+				$disp .= '  <a href="' . $item['url'] . '"/>';
+				$disp .= '   <div id="' . $item['id'] . '">';
+				$disp .= '    <span class="po-icon"><img style="width:100px" src="' . $item['icon'] . '"/></span>';
+				$disp .= '    <span class="po-text">';
+				$disp .= '     <span class="po-title">' . $item['title'] . '</span>';
+				$disp .= '     <span class="po-description">' . $item['text'] . '</span>';
+				$disp .= '    </span>';
+				$disp .= '   </div>';
+				$disp .= '  </a>';
+				$disp .= ' </div>';
+				$disp .= '</div>';
+			}
+			$disp .= ' </div>';
+			$disp .= '</div>';
+			echo $disp;
 		}
 
 	}
