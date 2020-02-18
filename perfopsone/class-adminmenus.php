@@ -90,7 +90,7 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 
 				foreach ( self::$menus['analytics'] as $item ) {
 					$i          = [];
-					$i['icon']  = call_user_func( $item['icon_callback'] );
+					$i['icon']  = call_user_func( [ \Traffic\Plugin\Core::class, 'get_base64_logo' ] );
 					$i['title'] = $item['name'];
 					$i['id']    = 'analytics-' . $item['slug'];
 					if ( !$item['activated'] ) {
@@ -104,7 +104,7 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 				}
 				foreach ( self::$menus['analytics'] as $item ) {
 					$i          = [];
-					$i['icon']  = call_user_func( $item['icon_callback'] );
+					$i['icon']  = call_user_func( [ \DecaLog\Plugin\Core::class, 'get_base64_logo' ] );
 					$i['title'] = $item['name'];
 					$i['id']    = 'analytics-' . $item['slug'];
 					if ( $item['activated'] ) {
@@ -172,14 +172,14 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 			);
 			$disp  = '';
 			$disp .= '<div style="width:100%;text-align:center;padding:0px;margin-top:10px;margin-left:-10px;" class="perfopsone-admin-inside">';
-			$disp .= ' <div style="display:flex;flex-direction:row;flex-wrap:wrap;">';
+			$disp .= ' <div style="display:flex;flex-direction:row;flex-wrap:wrap;justify-content:center;">';
 			$disp .= '  <style>';
-			$disp .= '   .perfopsone-admin-inside .po-container {flex:auto;padding:10px;}';
+			$disp .= '   .perfopsone-admin-inside .po-container {flex:none;padding:10px;}';
 			$disp .= '   .perfopsone-admin-inside .po-actionable:hover {border-radius:6px;cursor:pointer; -moz-transition: all .2s ease-in; -o-transition: all .2s ease-in; -webkit-transition: all .2s ease-in; transition: all .2s ease-in; background: #f5f5f5;border:1px solid #e0e0e0;filter: grayscale(0%) opacity(100%);}';
-			$disp .= '   .perfopsone-admin-inside .po-actionable {width:300px;height:120px;border-radius:6px;cursor:pointer; -moz-transition: all .4s ease-in; -o-transition: all .4s ease-in; -webkit-transition: all .4s ease-in; transition: all .4s ease-in; background: transparent;border:1px solid transparent;filter: grayscale(80%) opacity(66%);}';
+			$disp .= '   .perfopsone-admin-inside .po-actionable {overflow:scroll;width:340px;height:120px;border-radius:6px;cursor:pointer; -moz-transition: all .4s ease-in; -o-transition: all .4s ease-in; -webkit-transition: all .4s ease-in; transition: all .4s ease-in; background: transparent;border:1px solid transparent;filter: grayscale(80%) opacity(66%);}';
 			$disp .= '   .perfopsone-admin-inside .po-actionable a {font-style:normal;text-decoration:none;color:#73879C;}';
 			$disp .= '   .perfopsone-admin-inside .po-icon {display:block;width:120px;float:left;padding-top:10px;}';
-			$disp .= '   .perfopsone-admin-inside .po-text {display:grid;text-align:left;padding-top:16px;}';
+			$disp .= '   .perfopsone-admin-inside .po-text {display:grid;text-align:left;padding-top:16px;padding-right:16px;}';
 			$disp .= '   .perfopsone-admin-inside .po-title {font-size:1.8em;font-weight: 600;}';
 			$disp .= '   .perfopsone-admin-inside .po-description {font-size:1em;padding-top:10px;}';
 			$disp .= '  </style>';
@@ -202,7 +202,6 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 			$disp .= '</div>';
 			echo $disp;
 		}
-
 	}
 }
 
