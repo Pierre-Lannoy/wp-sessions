@@ -15,7 +15,7 @@ define( 'POSE_SLUG', 'sessions' );
 define( 'POSE_VERSION', '1.0.0-dev1' );
 define( 'POSE_CODENAME', '"-"' );
 
-define( 'POSE_MINIMUM_WP_VERSION', '4.9' );
+define( 'POSE_MINIMUM_WP_VERSION', '5.2' );
 define( 'POSE_MINIMUM_PHP_VERSION', '7.2' );
 
 define( 'POSE_CDN_AVAILABLE', true );
