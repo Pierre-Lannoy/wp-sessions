@@ -51,6 +51,10 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 						add_menu_page( esc_html__( 'Available Reports', 'sessions' ), sprintf( esc_html__( '%s Insights', 'sessions' ), 'PerfOps' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_insights_page' ], 'dashicons-lightbulb', 81 );
 						add_submenu_page( 'perfopsone-' . $menu, esc_html__( 'Available Reports', 'sessions' ), __( 'Available Reports', 'sessions' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_insights_page' ], 0 );
 						break;
+					case 'records':
+						add_menu_page( esc_html__( 'Available Catalogues', 'sessions' ), sprintf( esc_html__( '%s Records', 'sessions' ), 'PerfOps' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_records_page' ], 'dashicons-book', 81 );
+						add_submenu_page( 'perfopsone-' . $menu, esc_html__( 'Available Catalogues', 'sessions' ), __( 'Available Catalogues', 'sessions' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_records_page' ], 0 );
+						break;
 					case 'settings':
 						add_menu_page( esc_html__( 'Control Center', 'sessions' ), sprintf( esc_html__( '%s Settings', 'sessions' ), 'PerfOps' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_settings_page' ], 'dashicons-admin-settings', 81 );
 						add_submenu_page( 'perfopsone-' . $menu, esc_html__( 'Control Center', 'sessions' ), __( 'Control Center', 'sessions' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_settings_page' ], 0 );
@@ -86,41 +90,6 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 					}
 					$items[] = $i;
 				}
-
-
-				foreach ( self::$menus['analytics'] as $item ) {
-					$i          = [];
-					$i['icon']  = call_user_func( [ \Traffic\Plugin\Core::class, 'get_base64_logo' ] );
-					$i['title'] = $item['name'];
-					$i['id']    = 'analytics-' . $item['slug'];
-					if ( !$item['activated'] ) {
-						$i['text'] = $item['description'];
-						$i['url']  = esc_url( admin_url( 'admin.php?page=' . $item['slug'] ) );
-					} else {
-						$i['text'] = esc_html__( 'This analytics feature is currently disabled. Click here to activate it.', 'sessions' );
-						$i['url']  = $item['remedy'];
-					}
-					$items[] = $i;
-				}
-				foreach ( self::$menus['analytics'] as $item ) {
-					$i          = [];
-					$i['icon']  = call_user_func( [ \DecaLog\Plugin\Core::class, 'get_base64_logo' ] );
-					$i['title'] = $item['name'];
-					$i['id']    = 'analytics-' . $item['slug'];
-					if ( $item['activated'] ) {
-						$i['text'] = $item['description'];
-						$i['url']  = esc_url( admin_url( 'admin.php?page=' . $item['slug'] ) );
-					} else {
-						$i['text'] = esc_html__( 'This analytics feature is currently disabled. Click here to activate it.', 'sessions' );
-						$i['url']  = $item['remedy'];
-					}
-					$items[] = $i;
-				}
-
-
-
-
-
 				self::display_as_bubble( $items );
 			}
 		}
@@ -131,18 +100,67 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 		 * @since 1.0.0
 		 */
 		public static function get_tools_page() {
-
-
+			if ( array_key_exists( 'tools', self::$menus ) ) {
+				$items = [];
+				foreach ( self::$menus['tools'] as $item ) {
+					$i          = [];
+					$i['icon']  = call_user_func( $item['icon_callback'] );
+					$i['title'] = $item['name'];
+					$i['id']    = 'analytics-' . $item['slug'];
+					if ( $item['activated'] ) {
+						$i['text'] = $item['description'];
+						$i['url']  = esc_url( admin_url( 'admin.php?page=' . $item['slug'] ) );
+						$items[]   = $i;
+					}
+				}
+				self::display_as_bubble( $items );
+			}
 		}
 
 		/**
-		 * Get the tools main page.
+		 * Get the insights main page.
 		 *
 		 * @since 1.0.0
 		 */
 		public static function get_insights_page() {
+			if ( array_key_exists( 'insights', self::$menus ) ) {
+				$items = [];
+				foreach ( self::$menus['insights'] as $item ) {
+					$i          = [];
+					$i['icon']  = call_user_func( $item['icon_callback'] );
+					$i['title'] = $item['name'];
+					$i['id']    = 'analytics-' . $item['slug'];
+					if ( $item['activated'] ) {
+						$i['text'] = $item['description'];
+						$i['url']  = esc_url( admin_url( 'admin.php?page=' . $item['slug'] ) );
+						$items[]   = $i;
+					}
+				}
+				self::display_as_bubble( $items );
+			}
+		}
 
-
+		/**
+		 * Get the records main page.
+		 *
+		 * @since 1.0.0
+		 */
+		public static function get_records_page() {
+			if ( array_key_exists( 'records', self::$menus ) ) {
+				$items = [];
+				foreach ( self::$menus['records'] as $item ) {
+					$i          = [];
+					$i['icon']  = call_user_func( $item['icon_callback'] );
+					$i['title'] = $item['name'];
+					$i['id']    = 'analytics-' . $item['slug'];
+					if ( $item['activated'] ) {
+						$i['text'] = $item['description'];
+						$i['url']  = esc_url( admin_url( 'admin.php?page=' . $item['slug'] ) );
+						$items[]   = $i;
+					}
+				}
+				self::display_as_bubble( $items );
+			}
 		}
 
 		/**
