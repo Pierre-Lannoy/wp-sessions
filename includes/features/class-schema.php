@@ -151,7 +151,7 @@ class Schema {
 			$record['u_sessions'] = $query[0]['sessions'];
 		}
 		Logger::debug( 'Misc stats added.' );
-		Cache::set_global( 'data/statcheck', time() );
+		Cache::set_global( 'data/statcheck', time(), 'infinite' );
 		return $record;
 	}
 
