@@ -310,7 +310,7 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 			$disp .= '   .perfopsone-admin-inside .po-update {font-size:1.2em;font-weight: 400;color:#9B59B6;}';
 			$disp .= '   .perfopsone-admin-inside .po-description {font-size:1em;padding-top:10px;}';
 			$disp .= '   .perfopsone-admin-inside .po-requires {font-size:1em;}';
-			$disp .= '   .perfopsone-admin-inside .po-needupdate {vertical-align:super;font-size:0.6em;color:#9B59B6;padding-left:4px;}';
+			$disp .= '   .perfopsone-admin-inside .po-needupdate {vertical-align:super;font-size:0.6em;color:#9B59B6;padding-left:2px;}';
 			$disp .= '   .perfopsone-admin-inside .po-okupdate {vertical-align:super;font-size:0.6em;color:#3398DB;}';
 			$disp .= '  </style>';
 			foreach ( $items as $item ) {
