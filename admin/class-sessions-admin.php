@@ -23,6 +23,7 @@ use POSessions\System\Timezone;
 use POSessions\System\GeoIP;
 use POSessions\Plugin\Feature\LimiterTypes;
 use PerfOpsOne\AdminMenus;
+use POSessions\System\Statistics;
 
 /**
  * The admin-specific functionality of the plugin.
@@ -106,7 +107,7 @@ class Sessions_Admin {
 			$perfops['tools'][]     = [
 				'name'          => esc_html_x( 'Sessions', 'Common name - not the name of the plugin.', 'sessions' ),
 				/* translators: as in the sentence "Manage active sessions on your network." or "Manage active sessions on your website." */
-				'description'   => sprintf( esc_html__( 'Manage active sessions on your %s.', 'sessions' ), Environment::is_wordpress_multisite() ? esc_html__( 'network', 'sessions' ) : esc_html__( 'website', 'sessions' ) ),
+				'description'   => sprintf( esc_html__( 'Browse an manage active sessions on your %s.', 'sessions' ), Environment::is_wordpress_multisite() ? esc_html__( 'network', 'sessions' ) : esc_html__( 'website', 'sessions' ) ),
 				'icon_callback' => [ \POSessions\Plugin\Core::class, 'get_base64_logo' ],
 				'slug'          => 'pose-manager',
 				'page_title'    => esc_html__( 'Sessions Management', 'sessions' ),
@@ -132,6 +133,7 @@ class Sessions_Admin {
 				'plugin'        => POSE_SLUG,
 				'activated'     => true,
 				'remedy'        => '',
+				'statistics'    => [ '\POSessions\System\Statistics', 'sc_get_raw' ],
 			];
 		}
 		return $perfops;

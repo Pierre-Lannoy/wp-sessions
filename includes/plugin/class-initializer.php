@@ -52,6 +52,7 @@ class Initializer {
 	 * @since 1.0.0
 	 */
 	public function late_initialize() {
+		\POSessions\Plugin\Feature\Capture::late_init();
 		require_once POSE_PLUGIN_DIR . 'perfopsone/init.php';
 	}
 
