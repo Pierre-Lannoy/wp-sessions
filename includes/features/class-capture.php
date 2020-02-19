@@ -133,6 +133,15 @@ class Capture {
 	}
 
 	/**
+	 * Initialize the meta class and set its properties.
+	 *
+	 * @since    1.0.0
+	 */
+	public static function late_init() {
+		add_action( 'wordfence_security_event', [ self::class, 'wordfence_security_event' ], 10, 3 );
+	}
+
+	/**
 	 * Get the statistics.
 	 *
 	 * @return array The current statistics.
@@ -274,6 +283,18 @@ class Capture {
 	public static function jpp_kill_login( $ip ) {
 		self::$login_block ++;
 		Logger::info( sprintf( 'Login blocked for "%s".', $ip ) );
+	}
+
+	/**
+	 * "wordfence_security_event" filter.
+	 *
+	 * @since    1.6.0
+	 */
+	public function wordfence_security_event( $event, $details, $a ) {
+		if ( 'loginLockout' === $event || 'breachLogin' === $event ) {
+			self::$login_block ++;
+			Logger::info( 'Login blocked.' );
+		}
 	}
 
 	/**
