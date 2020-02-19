@@ -207,21 +207,42 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 						$i[ $key ] = call_user_func( $item['statistics'], [ 'item' => $key ] );
 					}
 					if ( 0 < (int) $i['installs'] ) {
-						$i['installs'] = sprintf( esc_html__( '%d+ installs', 'sessions' ), Conversion::number_shorten( (float) $i['installs'], 0 ) );
+						$i['installs'] = sprintf( esc_html__( '%s installs.', 'sessions' ), Conversion::number_shorten( (int) $i['installs'], 1 ) );
 					} else {
 						$i['installs'] = '';
 					}
 					if ( 0 < (int) $i['downloads'] ) {
-						$i['downloads'] = sprintf( esc_html__( '%d+ downloads', 'sessions' ), Conversion::number_shorten( (float) $i['downloads'], 0 ) );
+						$i['downloads'] = sprintf( esc_html__( '%s downloads.', 'sessions' ), Conversion::number_shorten( (int) $i['downloads'], 1 ) );
 					} else {
 						$i['downloads'] = '';
 					}
 					if ( 0 < (int) $i['reviews'] ) {
-						$i['reviews'] = sprintf( esc_html__( '%d reviews', 'sessions' ), Conversion::number_shorten( (float) $i['reviews'], 0 ) );
-						$i['rating']  = (int) $i['rating'];
+						$i['reviews'] = sprintf( esc_html__( '%s reviews.', 'sessions' ), Conversion::number_shorten( (int) $i['reviews'], 0 ) );
+						$i['rating']  = $i['rating'] / 20;
 					} else {
-						$i['reviews'] = esc_html__( 'no review yet', 'sessions' );
-						$i['rating']  = 0;
+						$i['reviews'] = esc_html__( 'No review yet.', 'sessions' );
+						$i['rating']  = 0.0;
+					}
+					$i['stars'] = '';
+					if ( 0 < (int) $i['rating'] ) {
+						for ( $k = 0; $k < (int) $i['rating']; $k++ ) {
+							$i['stars'] .= '<span class="dashicons dashicons-star-filled" style="color:#FFA828;"></span>';
+						}
+					}
+					if ( 0 < $i['rating'] - (int) $i['rating'] ) {
+						$i['stars'] .= '<span class="dashicons dashicons-star-half" style="color:#FFA828;"></span>';
+					} elseif ( 5 > $i['rating'] ) {
+						$i['stars'] .= '<span class="dashicons dashicons-star-empty" style="color:#FFA828;"></span>';
+					}
+					if ( 5 > (int) $i['rating'] ) {
+						for ( $k = 0; $k < 4 - (int) $i['rating']; $k++ ) {
+							$i['stars'] .= '<span class="dashicons dashicons-star-empty" style="color:#FFA828;"></span>';
+						}
+					}
+					if ( 0 < $i['rating'] ) {
+						$i['rating'] = (string) round( $i['rating'], 1 ) . '/5';
+					} else {
+						$i['rating'] = '';
 					}
 					if ( $item['activated'] && $d->is_detected() ) {
 						$i['url'] = esc_url( admin_url( 'admin.php?page=' . $item['slug'] ) );
@@ -301,29 +322,38 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 			$disp .= '  <style>';
 			$disp .= '   .perfopsone-admin-inside .po-container {width:100%;flex:none;padding:10px;}';
 			$disp .= '   .perfopsone-admin-inside .po-actionable:hover {border-radius:6px;cursor:pointer; -moz-transition: all .2s ease-in; -o-transition: all .2s ease-in; -webkit-transition: all .2s ease-in; transition: all .2s ease-in; background: #f5f5f5;border:1px solid #e0e0e0;filter: grayscale(0%) opacity(100%);}';
-			$disp .= '   .perfopsone-admin-inside .po-actionable {overflow:scroll;width:100%;height:120px;border-radius:6px;cursor:pointer; -moz-transition: all .4s ease-in; -o-transition: all .4s ease-in; -webkit-transition: all .4s ease-in; transition: all .4s ease-in; background: transparent;border:1px solid transparent;filter: grayscale(80%) opacity(66%);}';
+			$disp .= '   .perfopsone-admin-inside .po-actionable {overflow:hidden;width:100%;height:120px;border-radius:6px;cursor:pointer; -moz-transition: all .4s ease-in; -o-transition: all .4s ease-in; -webkit-transition: all .4s ease-in; transition: all .4s ease-in; background: transparent;border:1px solid transparent;filter: grayscale(80%) opacity(66%);}';
 			$disp .= '   .perfopsone-admin-inside .po-actionable a {font-style:normal;text-decoration:none;color:#73879C;}';
 			$disp .= '   .perfopsone-admin-inside .po-icon {display:block;width:120px;float:left;padding-top:10px;}';
-			$disp .= '   .perfopsone-admin-inside .po-text {display: grid;text-align:left;padding-top:20px;padding-right:16px;}';
-			$disp .= '   .perfopsone-admin-inside .po-title {font-size:1.8em;font-weight: 600;}';
+			$disp .= '   .perfopsone-admin-inside .po-text {width:70%;display: grid;text-align:left;padding-top:20px;padding-right:16px;}';
+			$disp .= '   .perfopsone-admin-inside .po-title {height: 0;font-size:1.8em;font-weight: 600;}';
+			$disp .= '   .perfopsone-admin-inside .po-stars {height:0;font-size:1.8em;font-weight: 600;}';
 			$disp .= '   .perfopsone-admin-inside .po-version {font-size:0.6em;font-weight: 500;padding-left: 10px;vertical-align: middle;}';
-			$disp .= '   .perfopsone-admin-inside .po-update {font-size:1.2em;font-weight: 400;color:#9B59B6;}';
-			$disp .= '   .perfopsone-admin-inside .po-description {font-size:1em;padding-top:10px;}';
+			$disp .= '   .perfopsone-admin-inside .po-update {font-size:1.1em;font-weight: 400;color:#9B59B6;}';
+			$disp .= '   .perfopsone-admin-inside .po-description {font-size:1em;padding-top:0px;margin-bottom: -10px;}';
 			$disp .= '   .perfopsone-admin-inside .po-requires {font-size:1em;}';
 			$disp .= '   .perfopsone-admin-inside .po-needupdate {vertical-align:super;font-size:0.6em;color:#9B59B6;padding-left:2px;}';
 			$disp .= '   .perfopsone-admin-inside .po-okupdate {vertical-align:super;font-size:0.6em;color:#3398DB;}';
+			$disp .= '   .perfopsone-admin-inside .po-summary {width:140px;display:grid;text-align:left;margin-left:20px;padding-left:30px;top:20px;position:relative;padding-right:16px;}';
+			$disp .= '   @media (max-width: 960px) {';
+			$disp .= '   .perfopsone-admin-inside .po-summary { display:none;}';
+			$disp .= '   }';
 			$disp .= '  </style>';
 			foreach ( $items as $item ) {
 				$disp .= '<div class="po-container">';
 				$disp .= ' <div class="po-actionable">';
 				$disp .= '  <a href="' . $item['url'] . '"/>';
-				$disp .= '   <div id="' . $item['id'] . '">';
+				$disp .= '   <div id="' . $item['id'] . '" style="display:flex;justify-content: flex-start;">';
 				$disp .= '    <div class="po-icon"><img style="width:100px" src="' . $item['icon'] . '"/></div>';
 				$disp .= '    <div class="po-text">';
 				$disp .= '     <span class="po-title">' . $item['title'] . '<span class="po-version">' . $item['version'] . '</span></span>';
 				$disp .= '     <span class="po-update">' . $item['need_update'] . '</span>';
 				$disp .= '     <span class="po-description">' . $item['text'] . '</span>';
-				$disp .= '     <span class="po-requires">' . sprintf ( esc_html__( 'Requires at least PHP %1$s%2$s and WordPress %3$s%4$s.', 'sessions' ), $item['php_version'], '<span class="po-needupdate">' . $item['need_php_update'] . '</span><span class="po-okupdate">' . $item['ok_php_update'] . '</span>', $item['wp_version'], '<span class="po-needupdate">' . $item['need_wp_update'] . '</span><span class="po-okupdate">' . $item['ok_wp_update'] . '</span>'  ) . '</span>';
+				$disp .= '     <span class="po-requires">' . sprintf( esc_html__( 'Requires at least PHP %1$s%2$s and WordPress %3$s%4$s.', 'sessions' ), $item['php_version'], '<span class="po-needupdate">' . $item['need_php_update'] . '</span><span class="po-okupdate">' . $item['ok_php_update'] . '</span>', $item['wp_version'], '<span class="po-needupdate">' . $item['need_wp_update'] . '</span><span class="po-okupdate">' . $item['ok_wp_update'] . '</span>' ) . '</span>';
+				$disp .= '    </div>';
+				$disp .= '    <div class="po-summary">';
+				$disp .= '     <span class="po-stars">' . $item['stars'] . '</span>';
+				$disp .= '     <span class="po-requires">' . $item['reviews'] . '<br/>' . $item['installs'] . '<br/>' . $item['downloads'] . '</span>';
 				$disp .= '    </div>';
 				$disp .= '   </div>';
 				$disp .= '  </a>';
