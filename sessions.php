@@ -11,6 +11,8 @@
  * Plugin URI:        https://github.com/Pierre-Lannoy/wp-sessions
  * Description:       Full featured analytics reporting and management tool that detects all devices accessing your WordPress site.
  * Version:           1.0.0
+ * Requires at least: 5.0
+ * Requires PHP:      7.2
  * Author:            Pierre Lannoy
  * Author URI:        https://pierre.lannoy.fr
  * License:           GPLv3
