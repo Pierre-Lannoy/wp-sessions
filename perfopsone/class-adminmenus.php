@@ -294,6 +294,7 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 			$disp .= '   .perfopsone-admin-inside .po-text {display:grid;text-align:left;padding-top:16px;padding-right:16px;}';
 			$disp .= '   .perfopsone-admin-inside .po-title {font-size:1.8em;font-weight: 600;}';
 			$disp .= '   .perfopsone-admin-inside .po-description {font-size:1em;padding-top:10px;}';
+			$disp .= '   .perfopsone-admin-inside a:focus {box-shadow:none;outline:none;}';
 			$disp .= '  </style>';
 			foreach ( $items as $item ) {
 				$disp .= '<div class="po-container">';
@@ -349,6 +350,7 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 			$disp .= '   .perfopsone-admin-inside .po-needupdate {vertical-align:super;font-size:0.6em;color:#9B59B6;padding-left:2px;}';
 			$disp .= '   .perfopsone-admin-inside .po-okupdate {vertical-align:super;font-size:0.6em;color:#3398DB;}';
 			$disp .= '   .perfopsone-admin-inside .po-summary {width:140px;display:grid;text-align:left;margin-left:20px;padding-left:30px;top:20px;position:relative;padding-right:16px;}';
+			$disp .= '   .perfopsone-admin-inside a:focus {box-shadow:none;outline:none;}';
 			$disp .= '   @media (max-width: 960px) {';
 			$disp .= '   .perfopsone-admin-inside .po-summary { display:none;}';
 			$disp .= '   }';
