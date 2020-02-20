@@ -221,12 +221,12 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 						$i[ $key ] = call_user_func( $item['statistics'], [ 'item' => $key ] );
 					}
 					if ( 0 < (int) $i['installs'] ) {
-						$i['installs'] = sprintf( esc_html__( '%s installs.', 'sessions' ), Conversion::number_shorten( (int) $i['installs'], 1 ) );
+						$i['installs'] = sprintf( esc_html__( '%s+ installs.', 'sessions' ), Conversion::number_shorten( (int) $i['installs'], 0 ) );
 					} else {
 						$i['installs'] = '';
 					}
 					if ( 0 < (int) $i['downloads'] ) {
-						$i['downloads'] = sprintf( esc_html__( '%s downloads.', 'sessions' ), Conversion::number_shorten( (int) $i['downloads'], 1 ) );
+						$i['downloads'] = sprintf( esc_html__( '%s downloads.', 'sessions' ), Conversion::number_shorten( (int) $i['downloads'], 2 ) );
 					} else {
 						$i['downloads'] = '';
 					}
