@@ -20,8 +20,6 @@ $url        = esc_url(
 		admin_url( 'admin.php' )
 	)
 );
-$note = sprintf( __( 'Note: analytics reports are available via the <a href="%s">analytics menu</a>.', 'sessions' ), $url );
-
 ?>
 
 <div class="wrap">
@@ -78,7 +76,4 @@ $note = sprintf( __( 'Note: analytics reports are available via the <a href="%s"
 	<?php if ( 'about' === $active_tab ) { ?>
 		<?php include __DIR__ . '/sessions-admin-settings-about.php'; ?>
 	<?php } ?>
-    <p>&nbsp;</p>
-    <em><?php echo $note;?></em>
-
 </div>
