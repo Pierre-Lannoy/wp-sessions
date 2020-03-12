@@ -407,7 +407,7 @@ class Sessions_Admin {
 				'id'          => 'pose_plugin_options_usecdn',
 				'checked'     => Option::network_get( 'use_cdn' ),
 				'description' => esc_html__( 'If checked, Sessions will use a public CDN (jsDelivr) to serve scripts and stylesheets.', 'sessions' ),
-				'full_width'  => true,
+				'full_width'  => false,
 				'enabled'     => true,
 			]
 		);
@@ -423,7 +423,7 @@ class Sessions_Admin {
 				'id'          => 'pose_plugin_options_nag',
 				'checked'     => Option::network_get( 'display_nag' ),
 				'description' => esc_html__( 'Allows Sessions to display admin notices throughout the admin dashboard.', 'sessions' ) . '<br/>' . esc_html__( 'Note: Sessions respects DISABLE_NAG_NOTICES flag.', 'sessions' ),
-				'full_width'  => true,
+				'full_width'  => false,
 				'enabled'     => true,
 			]
 		);
@@ -471,7 +471,7 @@ class Sessions_Admin {
 				'id'          => 'pose_plugin_features_rolemode',
 				'value'       => Option::network_get( 'rolemode' ),
 				'description' => esc_html__( 'Operation mode of this feature.', 'sessions' ),
-				'full_width'  => true,
+				'full_width'  => false,
 				'enabled'     => true,
 			]
 		);
@@ -487,7 +487,7 @@ class Sessions_Admin {
 				'id'          => 'pose_plugin_features_analytics',
 				'checked'     => Option::network_get( 'analytics' ),
 				'description' => esc_html__( 'If checked, Sessions will store statistics about accounts and sessions.', 'sessions' ),
-				'full_width'  => true,
+				'full_width'  => false,
 				'enabled'     => true,
 			]
 		);
@@ -503,7 +503,7 @@ class Sessions_Admin {
 				'id'          => 'pose_plugin_features_history',
 				'value'       => Option::network_get( 'history' ),
 				'description' => esc_html__( 'Maximum age of data to keep for statistics.', 'sessions' ),
-				'full_width'  => true,
+				'full_width'  => false,
 				'enabled'     => true,
 			]
 		);
@@ -576,7 +576,7 @@ class Sessions_Admin {
 					'id'          => 'pose_plugin_roles_block_' . $role,
 					'value'       => $settings[ $role ]['block'],
 					'description' => esc_html__( 'Allowed logins.', 'sessions' ),
-					'full_width'  => true,
+					'full_width'  => false,
 					'enabled'     => true,
 				]
 			);
@@ -592,7 +592,7 @@ class Sessions_Admin {
 					'id'          => 'pose_plugin_roles_limit_' . $role,
 					'value'       => $settings[ $role ]['limit'],
 					'description' => esc_html__( 'Maximal number of sessions for users.', 'sessions' ),
-					'full_width'  => true,
+					'full_width'  => false,
 					'enabled'     => true,
 				]
 			);
@@ -608,7 +608,7 @@ class Sessions_Admin {
 					'id'          => 'pose_plugin_roles_method_' . $role,
 					'value'       => $settings[ $role ]['method'],
 					'description' => esc_html__( 'Method to be used when the maximal number of sessions is reached.', 'sessions' ),
-					'full_width'  => true,
+					'full_width'  => false,
 					'enabled'     => true,
 				]
 			);
@@ -624,7 +624,7 @@ class Sessions_Admin {
 					'id'          => 'pose_plugin_roles_idle_' . $role,
 					'value'       => $settings[ $role ]['idle'],
 					'description' => esc_html__( 'Idle sessions supervision.', 'sessions' ),
-					'full_width'  => true,
+					'full_width'  => false,
 					'enabled'     => true,
 				]
 			);
@@ -640,7 +640,7 @@ class Sessions_Admin {
 					'id'          => 'pose_plugin_roles_cookie-ttl_' . $role,
 					'value'       => $settings[ $role ]['cookie-ttl'],
 					'description' => esc_html__( 'Standard cookie duration.', 'sessions' ),
-					'full_width'  => true,
+					'full_width'  => false,
 					'enabled'     => true,
 				]
 			);
@@ -656,7 +656,7 @@ class Sessions_Admin {
 					'id'          => 'pose_plugin_roles_cookie-rttl_' . $role,
 					'value'       => $settings[ $role ]['cookie-rttl'],
 					'description' => esc_html__( '"Remember Me" cookie duration.', 'sessions' ),
-					'full_width'  => true,
+					'full_width'  => false,
 					'enabled'     => true,
 				]
 			);
