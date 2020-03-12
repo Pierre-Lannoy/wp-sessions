@@ -256,24 +256,32 @@ class Form {
 	/**
 	 * Get a checkbox form field.
 	 *
-	 * @param   string  $text   The text of the checkbox.
-	 * @param   string  $id     The id (and the name) of the control.
-	 * @param   boolean $checked    Is the checkbox on?
-	 * @param   string  $description    Optional. A description to display.
-	 * @param   boolean $full_width     Optional. Is the control full width?
+	 * @param   string  $text        The text of the checkbox.
+	 * @param   string  $id          The id (and the name) of the control.
+	 * @param   boolean $checked     Optional. Is the checkbox on?
+	 * @param   string  $description Optional. A description to display.
+	 * @param   string  $more        Optional. The content of a "more" box.
+	 * @param   boolean $full_width  Optional. Is the control full width?
 	 * @param   boolean $enabled     Optional. Is the control enabled?
 	 * @return  string  The HTML string ready to print.
 	 * @since   1.0.0
 	 */
-	public function field_checkbox( $text, $id, $checked = false, $description = null, $full_width = true, $enabled = true ) {
+	public function field_checkbox( $text, $id, $checked = false, $description = null, $more = null, $full_width = true, $enabled = true ) {
 		if ( $full_width ) {
 			$width = ' style="width:100%;"';
 		} else {
 			$width = '';
 		}
-		$html = '<fieldset' . $width . '><label><input' . ( $enabled ? '' : ' disabled' ) . ' name="' . $id . '"  id="' . $id . '" type="checkbox" value="1"' . ( $checked ? ' checked="checked"' : '' ) . '/>' . $text . '</label></fieldset>';
+		$html = '<fieldset' . $width . '><label><input' . ( $enabled ? '' : ' disabled' ) . ' name="' . $id . '" type="checkbox" value="1"' . ( $checked ? ' checked="checked"' : '' ) . '/>' . $text . '</label></fieldset>';
 		if ( isset( $description ) ) {
+			if ( isset( $more ) ) {
+				$description .= '<img id="button-' . $id . '" style="cursor:pointer;vertical-align:middle;width:16px;margin-left:6px;" src="' . Feather\Icons::get_base64( 'help-circle', 'none', '#9999BB' ) . '" />';
+			}
 			$html .= '<p class="description">' . $description . '</p>';
+		}
+		if ( isset( $more ) ) {
+			$html .= '<p id="more-' . $id . '" style="line-height:1.8em;word-break:break-word;font-size:smaller;padding:8px;border-radius:2px;background-color:#F9F9F9;display:none;">' . $more . '</p>';
+			$html .= '<script>jQuery(document).ready(function($){$("#button-' . $id . '").click(function(){$("#more-' . $id . '").slideToggle(200);});});</script>';
 		}
 		return $html;
 	}
@@ -285,7 +293,7 @@ class Form {
 	 * @since   1.0.0
 	 */
 	public function echo_field_checkbox( $args ) {
-		echo $this->field_checkbox( $args['text'], $args['id'], $args['checked'], $args['description'], $args['full_width'], $args['enabled'] );
+		echo $this->field_checkbox( $args['text'], $args['id'], $args['checked'], $args['description'], array_key_exists( 'more', $args ) ? $args['more'] : null, $args['full_width'], $args['enabled'] );
 	}
 
 	/**
