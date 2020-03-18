@@ -106,11 +106,11 @@ class Sessions_Admin {
 			];
 			$perfops['tools'][]     = [
 				'name'          => esc_html_x( 'Sessions', 'Common name - not the name of the plugin.', 'sessions' ),
-				/* translators: as in the sentence "Manage active sessions on your network." or "Manage active sessions on your website." */
+				/* translators: as in the sentence "Browse and manage active sessions on your network." or "Browse and manage active sessions on your website." */
 				'description'   => sprintf( esc_html__( 'Browse and manage active sessions on your %s.', 'sessions' ), Environment::is_wordpress_multisite() ? esc_html__( 'network', 'sessions' ) : esc_html__( 'website', 'sessions' ) ),
 				'icon_callback' => [ \POSessions\Plugin\Core::class, 'get_base64_logo' ],
 				'slug'          => 'pose-manager',
-				'page_title'    => esc_html__( 'Sessions Management', 'sessions' ),
+				'page_title'    => esc_html__( 'Active Sessions Management', 'sessions' ),
 				'menu_title'    => esc_html_x( 'Sessions', 'Common name - not the name of the plugin.', 'sessions' ),
 				'capability'    => 'manage_options',
 				'callback'      => [ $this, 'get_manager_page' ],
@@ -211,8 +211,7 @@ class Sessions_Admin {
 	 * @since 1.0.0
 	 */
 	public function get_manager_page() {
-		$analytics = AnalyticsFactory::get_analytics();
-		include POSE_ADMIN_DIR . 'partials/sessions-admin-view-analytics.php';
+		include POSE_ADMIN_DIR . 'partials/sessions-admin-tools.php';
 	}
 
 	/**
