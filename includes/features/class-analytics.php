@@ -808,7 +808,7 @@ class Analytics {
 			$detail       .= '&nbsp;&nbsp;&nbsp;<span class="pose-chart-button not-ready left" id="pose-chart-button-password" data-position="left" data-tooltip="' . $help_password . '"><img style="width:12px;vertical-align:baseline;" src="' . Feather\Icons::get_base64( 'key', 'none', '#73879C' ) . '" /></span>';
 			$result        = '<div class="pose-row">';
 			$result       .= '<div class="pose-box pose-box-full-line">';
-			$result       .= '<div class="pose-module-title-bar"><span class="pose-module-title">' . esc_html__( 'Metrics Variations', 'opcache-manager' ) . '<span class="pose-module-more">' . $detail . '</span></span></div>';
+			$result       .= '<div class="pose-module-title-bar"><span class="pose-module-title">' . esc_html__( 'Metrics Variations', 'sessions' ) . '<span class="pose-module-more">' . $detail . '</span></span></div>';
 			$result       .= '<div class="pose-module-content" id="pose-main-chart">' . $this->get_graph_placeholder( 274 ) . '</div>';
 			$result       .= '</div>';
 			$result       .= '</div>';
