@@ -718,6 +718,25 @@ class Session {
 	}
 
 	/**
+	 * Get all sessions.
+	 *
+	 * @return  array  The details of sessions.
+	 * @since   1.0.0
+	 */
+	public static function get_all_sessions() {
+		global $wpdb;
+		$sql = 'SELECT * FROM ' . $wpdb->usermeta . " WHERE meta_key = 'session_tokens' ORDER BY user_id DESC LIMIT " . (int) Option::network_get( 'buffer_limit' );
+		// phpcs:ignore
+		$result = $wpdb->get_results( $sql, ARRAY_A );
+		foreach ( $result as &$record ) {
+			if ( ! is_array( $record['meta_value'] ) && is_string( $record['meta_value'] ) ) {
+				$record['meta_value'] = maybe_unserialize( $record['meta_value'] );
+			}
+		}
+		return $result;
+	}
+
+	/**
 	 * Set sessions.
 	 *
 	 * @param   array   $sessions The sessions records.
