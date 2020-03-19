@@ -201,6 +201,8 @@ class Sessions extends \WP_List_Table {
 					}
 					$item['device']      = '-';
 					$item['os_name']     = '-';
+					$item['os']          = '-';
+					$item['browser']     = '-';
 					$item['client_name'] = '-';
 					$item['os_ver']      = '';
 					$item['client_ver']  = '';
@@ -214,16 +216,19 @@ class Sessions extends \WP_List_Table {
 							$item['os_id']       = $device->os_short_name;
 							$item['os_name']     = $device->os_name;
 							$item['os_ver']      = ( '' !== $device->os_version ? ' ' . $device->os_version : '' );
+							$item['os']          = $item['os_name'] . $item['os_ver'];
 							$item['client_id']   = $device->client_short_name;
 							$item['client_name'] = ( '' !== $device->client_name ? $device->client_name : $device->client_full_type );
 							if ( $device->client_is_browser ) {
 								$this->icons[ $item['ua'] ]['browser'] = $device->browser_icon_base64();
 								$item['client_ver']                    = ( '' !== $device->client_version ? ' ' . $device->client_version : '' );
+								$item['client']                        = $item['client_name'] . $item['client_ver'];
+							} else {
+								$item['client'] = $item['client_name'];
 							}
 							$this->icons[ $item['ua'] ]['device'] = $device->brand_icon_base64();
 							$this->icons[ $item['ua'] ]['os']     = $device->os_icon_base64();
 						}
-
 					}
 					if ( array_key_exists( 'ip', $session ) ) {
 						$item['ip'] = $session['ip'];
@@ -268,7 +273,14 @@ class Sessions extends \WP_List_Table {
 	 * @since    1.0.0
 	 */
 	protected function column_id( $item ) {
-		return User::get_user_string( $item['user_id'] );
+		$user_info = get_userdata( $item['user_id'] );
+		$name      = $user_info->display_name;
+		$icon      = '<img style="width:32px;margin-right:10px;margin-top: 1px;" src="' . esc_url( get_avatar_url( $item['user_id'], [ 'size' => '64' ] ) ) . '" />';
+
+
+		$user = $name;
+
+		return $icon . $user;
 	}
 
 	/**
@@ -390,9 +402,9 @@ class Sessions extends \WP_List_Table {
 		if ( array_key_exists( 'session_idle', $item ) ) {
 			$value = $item['session_idle'] - time();
 			if ( $value < 72 * HOUR_IN_SECONDS ) {
-				return sprintf( esc_html__( 'In %s.', 'sessions' ), implode( ', ', Date::get_age_array_from_seconds( $value, true, true ) ) );
+				return sprintf( esc_html__( 'In %s', 'sessions' ), implode( ', ', Date::get_age_array_from_seconds( $value, true, true ) ) );
 			}
-			return sprintf( esc_html__( 'In %s.', 'sessions' ), sprintf( esc_html__( '%d days', 'sessions' ), (int) round( $value / ( 24 * HOUR_IN_SECONDS ), 0 ) ) );
+			return sprintf( esc_html__( 'In %s', 'sessions' ), sprintf( esc_html__( '%d days', 'sessions' ), (int) round( $value / ( 24 * HOUR_IN_SECONDS ), 0 ) ) );
 		}
 		return '';
 	}
@@ -408,9 +420,9 @@ class Sessions extends \WP_List_Table {
 		if ( array_key_exists( 'expiration', $item ) ) {
 			$value = $item['expiration'] - time();
 			if ( $value < 72 * HOUR_IN_SECONDS ) {
-				return sprintf( esc_html__( 'In %s.', 'sessions' ), implode( ', ', Date::get_age_array_from_seconds( $value, true, true ) ) );
+				return sprintf( esc_html__( 'In %s', 'sessions' ), implode( ', ', Date::get_age_array_from_seconds( $value, true, true ) ) );
 			}
-			return sprintf( esc_html__( 'In %s.', 'sessions' ), sprintf( esc_html__( '%d days', 'sessions' ), (int) round( $value / ( 24 * HOUR_IN_SECONDS ), 0 ) ) );
+			return sprintf( esc_html__( 'In %s', 'sessions' ), sprintf( esc_html__( '%d days', 'sessions' ), (int) round( $value / ( 24 * HOUR_IN_SECONDS ), 0 ) ) );
 		}
 		return '';
 	}
@@ -493,10 +505,12 @@ class Sessions extends \WP_List_Table {
 	 */
 	protected function get_sortable_columns() {
 		$sortable_columns = [
-			'id'    => [ 'id', true ],
-			'count' => [ 'count', true ],
-			'ttl'   => [ 'ttl', true ],
-			'size'  => [ 'size', true ],
+			'device'     => [ 'device', true ],
+			'os'         => [ 'os', true ],
+			'browser'    => [ 'browser', true ],
+			'login'      => [ 'login', true ],
+			'idle'       => [ 'idle', true ],
+			'expiration' => [ 'expiration', true ],
 		];
 		return $sortable_columns;
 	}
@@ -575,7 +589,7 @@ class Sessions extends \WP_List_Table {
 		usort(
 			$data,
 			function ( $a, $b ) {
-				if ( 'id' === $this->orderby ) {
+				if ( 'device' === $this->orderby || 'os' === $this->orderby || 'browser' === $this->orderby ) {
 					$result = strcmp( strtolower( $a[ $this->orderby ] ), strtolower( $b[ $this->orderby ] ) );
 				} else {
 					$result = intval( $a[ $this->orderby ] ) < intval( $b[ $this->orderby ] ) ? 1 : -1;
