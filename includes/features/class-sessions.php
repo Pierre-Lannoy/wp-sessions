@@ -18,6 +18,10 @@ use POSessions\System\Timezone;
 use POSessions\System\Option;
 use POSessions\System\Session;
 use POSessions\System\User;
+use POSessions\System\GeoIP;
+use Flagiconcss\Flags;
+use POSessions\System\UserAgent;
+use POSessions\System\Role;
 
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
@@ -116,12 +120,44 @@ class Sessions extends \WP_List_Table {
 	private $action = '';
 
 	/**
+	 * Is devices detectable.
+	 *
+	 * @since    1.0.0
+	 * @var      boolean    $available_devices    Is devices detectable.
+	 */
+	private $available_devices = false;
+
+	/**
+	 * The icons.
+	 *
+	 * @since    1.0.0
+	 * @var      array    $icons    The icons for device, browser and os.
+	 */
+	private $icons = [];
+
+	/**
 	 * The bulk args.
 	 *
 	 * @since    1.0.0
 	 * @var      array    $bulk    The bulk args.
 	 */
 	private $bulk = [];
+
+	/**
+	 * The Role settings.
+	 *
+	 * @since    1.0.0
+	 * @var      array    $settings    The Role settings.
+	 */
+	private $settings = [];
+
+	/**
+	 * The Roles.
+	 *
+	 * @since    1.0.0
+	 * @var      array    $roles    The Roles.
+	 */
+	private $roles = [];
 
 	/**
 	 * Initialize the class and set its properties.
@@ -140,6 +176,9 @@ class Sessions extends \WP_List_Table {
 		if ( version_compare( $wp_version, '4.2-z', '>=' ) && $this->compat_fields && is_array( $this->compat_fields ) ) {
 			array_push( $this->compat_fields, 'all_items' );
 		}
+		$this->available_devices = class_exists( 'PODeviceDetector\API\Device' );
+		$this->settings          = Option::roles_get();
+		$this->roles             = Role::get_all();
 		$this->process_args();
 		$this->process_action();
 		$this->sessions = [];
@@ -150,20 +189,44 @@ class Sessions extends \WP_List_Table {
 					$item['token']    = $token;
 					$item['umeta_id'] = $user['umeta_id'];
 					$item['user_id']  = $user['user_id'];
-					if ( array_key_exists( 'expiration', $user ) ) {
-						$item['expiration'] = $user['expiration'];
+					$item['id']       = $user['umeta_id'] . ':' . $token;
+					if ( array_key_exists( 'expiration', $session ) ) {
+						$item['expiration'] = $session['expiration'];
 					}
-					if ( array_key_exists( 'login', $user ) ) {
-						$item['login'] = $user['login'];
+					if ( array_key_exists( 'login', $session ) ) {
+						$item['login'] = $session['login'];
 					}
-					if ( array_key_exists( 'session_idle', $user ) ) {
-						$item['session_idle'] = $user['session_idle'];
+					if ( array_key_exists( 'session_idle', $session ) ) {
+						$item['session_idle'] = $session['session_idle'];
 					}
-					if ( array_key_exists( 'ua', $user ) ) {
-						$item['ua'] = $user['ua'];
+					$item['device']      = '-';
+					$item['os_name']     = '-';
+					$item['client_name'] = '-';
+					$item['os_ver']      = '';
+					$item['client_ver']  = '';
+					if ( array_key_exists( 'ua', $session ) ) {
+						$item['ua'] = $session['ua'];
+						if ( $this->available_devices ) {
+							$device              = UserAgent::get( $item['ua'] );
+							$item['brand_id']    = $device->brand_short_name;
+							$item['model']       = $device->model_name;
+							$item['device']      = ( '' !== $device->brand_name ? $device->brand_name : esc_html__( 'Generic', 'sessions' ) ) . ( '' !== $device->model_name ? ' ' . $device->model_name : '' );
+							$item['os_id']       = $device->os_short_name;
+							$item['os_name']     = $device->os_name;
+							$item['os_ver']      = ( '' !== $device->os_version ? ' ' . $device->os_version : '' );
+							$item['client_id']   = $device->client_short_name;
+							$item['client_name'] = ( '' !== $device->client_name ? $device->client_name : $device->client_full_type );
+							if ( $device->client_is_browser ) {
+								$this->icons[ $item['ua'] ]['browser'] = $device->browser_icon_base64();
+								$item['client_ver']                    = ( '' !== $device->client_version ? ' ' . $device->client_version : '' );
+							}
+							$this->icons[ $item['ua'] ]['device'] = $device->brand_icon_base64();
+							$this->icons[ $item['ua'] ]['os']     = $device->os_icon_base64();
+						}
+
 					}
-					if ( array_key_exists( 'ip', $user ) ) {
-						$item['ip'] = $user['ip'];
+					if ( array_key_exists( 'ip', $session ) ) {
+						$item['ip'] = $session['ip'];
 					}
 					$this->sessions[] = $item;
 				}
@@ -209,39 +272,166 @@ class Sessions extends \WP_List_Table {
 	}
 
 	/**
-	 * "count" column formatter.
+	 * "ip" column formatter.
 	 *
 	 * @param   array $item   The current item.
 	 * @return  string  The cell formatted, ready to print.
 	 * @since    1.0.0
 	 */
-	protected function column_count( $item ) {
-		return Conversion::number_shorten( $item['count'] );
-	}
-
-	/**
-	 * "size" column formatter.
-	 *
-	 * @param   array $item   The current item.
-	 * @return  string  The cell formatted, ready to print.
-	 * @since    1.0.0
-	 */
-	protected function column_size( $item ) {
-		return Conversion::data_shorten( $item['size'] );
-	}
-
-	/**
-	 * "ttl" column formatter.
-	 *
-	 * @param   array $item   The current item.
-	 * @return  string  The cell formatted, ready to print.
-	 * @since    1.0.0
-	 */
-	protected function column_ttl( $item ) {
-		if ( time() > $item['ttl'] + ( Option::site_get( 'advanced_ttl' ) * HOUR_IN_SECONDS ) ) {
-			return esc_html__( 'Staled', 'sessions' );
+	protected function column_ip( $item ) {
+		$icon = '';
+		if ( filter_var( $item['ip'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE ) ) {
+			$geoip   = new GeoIP();
+			$country = $geoip->get_iso3166_alpha2( $item['ip'] );
+			if ( isset( $country ) ) {
+				$icon = '<img style="width:14px;padding-left:4px;vertical-align:baseline;" src="' . Flags::get_base64( $country ) . '" />';
+			}
 		}
-		return sprintf( esc_html__( 'Valid for another %s', 'sessions' ), human_time_diff( $item['ttl'] + ( Option::site_get( 'advanced_ttl' ) * HOUR_IN_SECONDS ) ) );
+		return $item['ip'] . $icon;
+	}
+
+	/**
+	 * "device" column formatter.
+	 *
+	 * @param   array $item   The current item.
+	 * @return  string  The cell formatted, ready to print.
+	 * @since    1.0.0
+	 */
+	protected function column_device( $item ) {
+		$icon = '';
+		$name = $item['device'];
+		if ( array_key_exists( $item['ua'], $this->icons ) && array_key_exists( 'device', $this->icons[ $item['ua'] ] ) ) {
+			$icon = '<img style="width:16px;float:left;padding-right:6px;" src="' . $this->icons[ $item['ua'] ]['device'] . '" />';
+		}
+		if ( array_key_exists( 'brand_id', $item ) ) {
+			$url  = [
+				'site'     => 'all',
+				'type'     => 'device',
+				'id'       => $item['brand_id'],
+				'extended' => '' !== $item['model'] ? $item['model'] : '-',
+			];
+			$name = $this->get_internal_link( UserAgent::get_analytics_url( $url ), $item['device'] );
+		}
+		return $icon . $name;
+	}
+
+	/**
+	 * "OS" column formatter.
+	 *
+	 * @param   array $item   The current item.
+	 * @return  string  The cell formatted, ready to print.
+	 * @since    1.0.0
+	 */
+	protected function column_os( $item ) {
+		$icon = '';
+		$name = $item['os_name'] . $item['os_ver'];
+		if ( array_key_exists( $item['ua'], $this->icons ) && array_key_exists( 'os', $this->icons[ $item['ua'] ] ) ) {
+			$icon = '<img style="width:16px;float:left;padding-right:6px;" src="' . $this->icons[ $item['ua'] ]['os'] . '" />';
+		}
+		if ( array_key_exists( 'os_id', $item ) ) {
+			$url  = [
+				'site' => 'all',
+				'type' => 'os',
+				'id'   => $item['os_id'],
+			];
+			$name = $this->get_internal_link( UserAgent::get_analytics_url( $url ), $item['os_name'] ) . $item['os_ver'];
+		}
+		return $icon . $name;
+	}
+
+	/**
+	 * "browser" column formatter.
+	 *
+	 * @param   array $item   The current item.
+	 * @return  string  The cell formatted, ready to print.
+	 * @since    1.0.0
+	 */
+	protected function column_browser( $item ) {
+		$icon = '';
+		$name = $item['client_name'] . $item['client_ver'];
+		if ( array_key_exists( $item['ua'], $this->icons ) && array_key_exists( 'browser', $this->icons[ $item['ua'] ] ) ) {
+			$icon = '<img style="width:16px;float:left;padding-right:6px;" src="' . $this->icons[ $item['ua'] ]['browser'] . '" />';
+		}
+		if ( array_key_exists( 'client_id', $item ) ) {
+			$url  = [
+				'site' => 'all',
+				'type' => 'browser',
+				'id'   => $item['client_id'],
+			];
+			$name = $this->get_internal_link( UserAgent::get_analytics_url( $url ), $item['client_name'] ) . $item['client_ver'];
+		}
+		return $icon . $name;
+	}
+
+	/**
+	 * "login" column formatter.
+	 *
+	 * @param   array $item   The current item.
+	 * @return  string  The cell formatted, ready to print.
+	 * @since    1.0.0
+	 */
+	protected function column_login( $item ) {
+		if ( array_key_exists( 'login', $item ) ) {
+			$datetime = new \DateTime( date( 'Y-m-d H:i:s', $item['login'] ) );
+			$datetime->setTimezone( Timezone::network_get() );
+			return $datetime->format( 'Y-m-d H:i:s' );
+		}
+		return '';
+	}
+
+	/**
+	 * "idle" column formatter.
+	 *
+	 * @param   array $item   The current item.
+	 * @return  string  The cell formatted, ready to print.
+	 * @since    1.0.0
+	 */
+	protected function column_idle( $item ) {
+		if ( array_key_exists( 'session_idle', $item ) ) {
+			$value = $item['session_idle'] - time();
+			if ( $value < 72 * HOUR_IN_SECONDS ) {
+				return sprintf( esc_html__( 'In %s.', 'sessions' ), implode( ', ', Date::get_age_array_from_seconds( $value, true, true ) ) );
+			}
+			return sprintf( esc_html__( 'In %s.', 'sessions' ), sprintf( esc_html__( '%d days', 'sessions' ), (int) round( $value / ( 24 * HOUR_IN_SECONDS ), 0 ) ) );
+		}
+		return '';
+	}
+
+	/**
+	 * "expiration" column formatter.
+	 *
+	 * @param   array $item   The current item.
+	 * @return  string  The cell formatted, ready to print.
+	 * @since    1.0.0
+	 */
+	protected function column_expiration( $item ) {
+		if ( array_key_exists( 'expiration', $item ) ) {
+			$value = $item['expiration'] - time();
+			if ( $value < 72 * HOUR_IN_SECONDS ) {
+				return sprintf( esc_html__( 'In %s.', 'sessions' ), implode( ', ', Date::get_age_array_from_seconds( $value, true, true ) ) );
+			}
+			return sprintf( esc_html__( 'In %s.', 'sessions' ), sprintf( esc_html__( '%d days', 'sessions' ), (int) round( $value / ( 24 * HOUR_IN_SECONDS ), 0 ) ) );
+		}
+		return '';
+	}
+
+	/**
+	 * Get user role.
+	 *
+	 * @param   array $item   The current item.
+	 * @return  string  The role.
+	 * @since    1.0.0
+	 */
+	private function get_role( $item ) {
+		$user = get_user_by( 'id', $item['user_id'] );
+		$role = '';
+		foreach ( $this->roles as $key => $detail ) {
+			if ( in_array( $key, $user->roles, true ) ) {
+				$role = $key;
+				break;
+			}
+		}
+		return $role;
 	}
 
 	/**
@@ -259,28 +449,6 @@ class Sessions extends \WP_List_Table {
 		return '<a href="' . $url . '" style="text-decoration:none;color:inherit;">' . $anchor . '</a>';
 	}
 
-	private function get_client() {
-		if ( $this->device->client_is_browser ) {
-			$url     = [
-				'site' => $this->event['site_id'],
-				'type' => 'browser',
-				'id'   => $this->device->client_short_name,
-			];
-			$iclient = '<img style="width:16px;float:left;padding-right:6px;" src="' . $this->device->browser_icon_base64() . '" />';
-			$client  = $this->get_internal_link( UserAgent::get_analytics_url( $url ), ( '-' !== $this->device->client_name ? $this->device->client_name : esc_html__( 'Generic', 'decalog' ) ) ) . ( '-' !== $this->device->client_version ? ' ' . $this->device->client_version : '' );
-			$content = '<span style="width:100%;cursor: default;">' . $iclient . $client . '</span> <span style="color:silver">(' . $this->device->client_engine . ')</span>';
-			return $this->get_section( $content );
-		}
-		$url     = [
-			'site' => $this->event['site_id'],
-			'type' => 'browser',
-			'id'   => $this->device->client_short_name,
-		];
-		$client  = $this->get_internal_link( UserAgent::get_analytics_url( $url ), ( '-' !== $this->device->client_name ? $this->device->client_name : esc_html__( 'Generic', 'decalog' ) ) ) . ( '-' !== $this->device->client_version ? ' ' . $this->device->client_version : '' );
-		$content = '<span style="width:100%;cursor: default;">' . $this->get_icon( 'play-circle' ) . $client . '</span> <span style="color:silver">' . $this->device->client_full_type . '</span>';
-		return $this->get_section( $content );
-	}
-
 	/**
 	 * Enumerates columns.
 	 *
@@ -293,9 +461,11 @@ class Sessions extends \WP_List_Table {
 			'id'         => esc_html__( 'Session', 'sessions' ),
 			'ip'         => esc_html__( 'Remote IP', 'sessions' ),
 			'device'     => esc_html__( 'Device', 'sessions' ),
+			'os'         => esc_html__( 'OS', 'sessions' ),
+			'browser'    => esc_html__( 'Client', 'sessions' ),
 			'login'      => esc_html__( 'Login', 'sessions' ),
-			'idle'       => esc_html__( 'Idle', 'sessions' ),
-			'expiration' => esc_html__( 'TTL', 'sessions' ),
+			'idle'       => esc_html__( 'Idle exp.', 'sessions' ),
+			'expiration' => esc_html__( 'Standard exp.', 'sessions' ),
 		];
 		return $columns;
 	}
@@ -307,7 +477,12 @@ class Sessions extends \WP_List_Table {
 	 * @since    1.0.0
 	 */
 	protected function get_hidden_columns() {
-		return [];
+		if ( $this->available_devices ) {
+			return [];
+		} else {
+			return [ 'device', 'os', 'browser' ];
+		}
+
 	}
 
 	/**
