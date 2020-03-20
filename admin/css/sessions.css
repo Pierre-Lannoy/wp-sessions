@@ -896,3 +896,13 @@ button.btn {
     background-color: var(--header-action-font-color);
     color: var(--main-bg-color);
 }
+
+@keyframes pose-selftoken-blink {
+    from { filter: grayscale(0%) opacity(100%) }
+    50% { filter: grayscale(80%) opacity(20%) }
+    to { filter: grayscale(0%) opacity(100%) }
+}
+
+.pose-selftoken {
+    animation:pose-selftoken-blink 1600ms infinite;
+}

@@ -22,6 +22,8 @@ use POSessions\System\GeoIP;
 use Flagiconcss\Flags;
 use POSessions\System\UserAgent;
 use POSessions\System\Role;
+use Feather\Icons;
+use POSessions\System\Hash;
 
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
@@ -120,6 +122,14 @@ class Sessions extends \WP_List_Table {
 	private $action = '';
 
 	/**
+	 * The token of the current session.
+	 *
+	 * @since    1.0.0
+	 * @var      string    $selftoken    The token of the current session.
+	 */
+	private $selftoken = '';
+
+	/**
 	 * Is devices detectable.
 	 *
 	 * @since    1.0.0
@@ -172,6 +182,7 @@ class Sessions extends \WP_List_Table {
 				'ajax'     => true,
 			]
 		);
+		$this->selftoken = Hash::simple_hash( Session::get_cookie_element( 'logged_in', 'token' ), false );
 		global $wp_version;
 		if ( version_compare( $wp_version, '4.2-z', '>=' ) && $this->compat_fields && is_array( $this->compat_fields ) ) {
 			array_push( $this->compat_fields, 'all_items' );
@@ -188,8 +199,7 @@ class Sessions extends \WP_List_Table {
 					$item             = [];
 					$item['token']    = $token;
 					$item['umeta_id'] = $user['umeta_id'];
-					$item['user_id']  = $user['user_id'];
-					$item['id']       = $user['umeta_id'] . ':' . $token;
+					$item['id']       = $user['user_id'];
 					if ( array_key_exists( 'expiration', $session ) ) {
 						$item['expiration'] = $session['expiration'];
 					}
@@ -222,9 +232,9 @@ class Sessions extends \WP_List_Table {
 							if ( $device->client_is_browser ) {
 								$this->icons[ $item['ua'] ]['browser'] = $device->browser_icon_base64();
 								$item['client_ver']                    = ( '' !== $device->client_version ? ' ' . $device->client_version : '' );
-								$item['client']                        = $item['client_name'] . $item['client_ver'];
+								$item['browser']                       = $item['client_name'] . $item['client_ver'];
 							} else {
-								$item['client'] = $item['client_name'];
+								$item['browser'] = $item['client_name'];
 							}
 							$this->icons[ $item['ua'] ]['device'] = $device->brand_icon_base64();
 							$this->icons[ $item['ua'] ]['os']     = $device->os_icon_base64();
@@ -232,6 +242,13 @@ class Sessions extends \WP_List_Table {
 					}
 					if ( array_key_exists( 'ip', $session ) ) {
 						$item['ip'] = $session['ip'];
+					}
+					if ( 0 < count( $this->filters ) ) {
+						foreach ( $this->filters as $filter => $value ) {
+							if ( array_key_exists( $filter, $item ) && (string) $value !== (string) $item[ $filter ] ) {
+								continue 2;
+							}
+						}
 					}
 					$this->sessions[] = $item;
 				}
@@ -260,8 +277,8 @@ class Sessions extends \WP_List_Table {
 	 */
 	public function column_cb( $item ) {
 		return sprintf(
-			'<input type="checkbox" name="bulk[]" value="%s" />',
-			$item['id']
+			'<input ' . ( $item['token'] === $this->selftoken ? 'disabled ' : '' ) . 'type="checkbox" name="bulk[]" value="%s" />',
+			$item['umeta_id'] . ':' . $item['token']
 		);
 	}
 
@@ -273,14 +290,18 @@ class Sessions extends \WP_List_Table {
 	 * @since    1.0.0
 	 */
 	protected function column_id( $item ) {
-		$user_info = get_userdata( $item['user_id'] );
+		$user_info = get_userdata( $item['id'] );
 		$name      = $user_info->display_name;
-		$icon      = '<img style="width:32px;margin-right:10px;margin-top: 1px;" src="' . esc_url( get_avatar_url( $item['user_id'], [ 'size' => '64' ] ) ) . '" />';
-
-
-		$user = $name;
-
-		return $icon . $user;
+		$icon      = '<img style="width:32px;margin-right:10px;margin-top:1px;float:left;" src="' . esc_url( get_avatar_url( $item['id'], [ 'size' => '64' ] ) ) . '" />';
+		$role      = $this->get_role( $item );
+		if ( array_key_exists( $role, $this->roles ) ) {
+			$role = $this->roles[ $role ]['l10n_name'];
+		} else {
+			$role = '';
+		}
+		$role = '<br /><span style="color:silver">' . $role . '</span>';
+		$user = '<strong><a href="' . get_edit_profile_url( $item['id'] ) . '">' . $name . '</a></strong>';
+		return $icon . $user . $this->get_filter( 'id', $item['id'] ) . $role;
 	}
 
 	/**
@@ -296,10 +317,10 @@ class Sessions extends \WP_List_Table {
 			$geoip   = new GeoIP();
 			$country = $geoip->get_iso3166_alpha2( $item['ip'] );
 			if ( isset( $country ) ) {
-				$icon = '<img style="width:14px;padding-left:4px;vertical-align:baseline;" src="' . Flags::get_base64( $country ) . '" />';
+				$icon = '<img style="width:14px;padding-right:4px;vertical-align:baseline;" src="' . Flags::get_base64( $country ) . '" />';
 			}
 		}
-		return $item['ip'] . $icon;
+		return $icon . $item['ip'] . $this->get_filter( 'ip', $item['ip'] );
 	}
 
 	/**
@@ -324,7 +345,7 @@ class Sessions extends \WP_List_Table {
 			];
 			$name = $this->get_internal_link( UserAgent::get_analytics_url( $url ), $item['device'] );
 		}
-		return $icon . $name;
+		return $icon . $name . $this->get_filter( 'device', $item['device'] );
 	}
 
 	/**
@@ -336,7 +357,7 @@ class Sessions extends \WP_List_Table {
 	 */
 	protected function column_os( $item ) {
 		$icon = '';
-		$name = $item['os_name'] . $item['os_ver'];
+		$name = $item['os_name'] . $item['os_ver'] . $this->get_filter( 'os_name', $item['os_name'] );
 		if ( array_key_exists( $item['ua'], $this->icons ) && array_key_exists( 'os', $this->icons[ $item['ua'] ] ) ) {
 			$icon = '<img style="width:16px;float:left;padding-right:6px;" src="' . $this->icons[ $item['ua'] ]['os'] . '" />';
 		}
@@ -346,7 +367,7 @@ class Sessions extends \WP_List_Table {
 				'type' => 'os',
 				'id'   => $item['os_id'],
 			];
-			$name = $this->get_internal_link( UserAgent::get_analytics_url( $url ), $item['os_name'] ) . $item['os_ver'];
+			$name = $this->get_internal_link( UserAgent::get_analytics_url( $url ), $item['os_name'] ) . $this->get_filter( 'os_name', $item['os_name'] ) . '<br /><span style="color:silver">' . $item['os_ver'] . '</span>';
 		}
 		return $icon . $name;
 	}
@@ -360,7 +381,7 @@ class Sessions extends \WP_List_Table {
 	 */
 	protected function column_browser( $item ) {
 		$icon = '';
-		$name = $item['client_name'] . $item['client_ver'];
+		$name = $item['client_name'] . $item['client_ver'] . $this->get_filter( 'client_name', $item['client_name'] );
 		if ( array_key_exists( $item['ua'], $this->icons ) && array_key_exists( 'browser', $this->icons[ $item['ua'] ] ) ) {
 			$icon = '<img style="width:16px;float:left;padding-right:6px;" src="' . $this->icons[ $item['ua'] ]['browser'] . '" />';
 		}
@@ -370,7 +391,7 @@ class Sessions extends \WP_List_Table {
 				'type' => 'browser',
 				'id'   => $item['client_id'],
 			];
-			$name = $this->get_internal_link( UserAgent::get_analytics_url( $url ), $item['client_name'] ) . $item['client_ver'];
+			$name = $this->get_internal_link( UserAgent::get_analytics_url( $url ), $item['client_name'] ) . $this->get_filter( 'client_name', $item['client_name'] ) . '<br /><span style="color:silver">' . $item['client_ver'] . '</span>';
 		}
 		return $icon . $name;
 	}
@@ -435,7 +456,7 @@ class Sessions extends \WP_List_Table {
 	 * @since    1.0.0
 	 */
 	private function get_role( $item ) {
-		$user = get_user_by( 'id', $item['user_id'] );
+		$user = get_user_by( 'id', $item['id'] );
 		$role = '';
 		foreach ( $this->roles as $key => $detail ) {
 			if ( in_array( $key, $user->roles, true ) ) {
@@ -505,6 +526,7 @@ class Sessions extends \WP_List_Table {
 	 */
 	protected function get_sortable_columns() {
 		$sortable_columns = [
+			'id'         => [ 'id', true ],
 			'device'     => [ 'device', true ],
 			'os'         => [ 'os', true ],
 			'browser'    => [ 'browser', true ],
@@ -640,7 +662,7 @@ class Sessions extends \WP_List_Table {
 	 */
 	public function get_page_url() {
 		$args              = [];
-		$args['page']      = 'sessions-tools';
+		$args['page']      = 'pose-manager';
 		$args['logger_id'] = $this->logger;
 		if ( count( $this->filters ) > 0 ) {
 			foreach ( $this->filters as $key => $filter ) {
@@ -649,8 +671,12 @@ class Sessions extends \WP_List_Table {
 				}
 			}
 		}
-		if ( 25 !== $this->limit ) {
+		if ( 40 !== $this->limit ) {
 			$args['limit'] = $this->limit;
+		}
+		if ( 'id' !== $this->orderby || 'desc' !== $this->order ) {
+			$args['orderby'] = $this->orderby;
+			$args['order']   = $this->order;
 		}
 		$url = add_query_arg( $args, admin_url( 'admin.php' ) );
 		return $url;
@@ -842,6 +868,17 @@ class Sessions extends \WP_List_Table {
 	}
 
 	/**
+	 * Generates content for a single row of the table
+	 *
+	 * @param object $item The current item
+	 */
+	public function single_row( $item ) {
+		echo '<tr' . ( $item['token'] === $this->selftoken ? ' class="pose-selftoken"' : '' ) . '>';
+		$this->single_row_columns( $item );
+		echo '</tr>';
+	}
+
+	/**
 	 * Get the cleaned url.
 	 *
 	 * @param boolean $url Optional. The url, false for current url.
@@ -893,6 +930,12 @@ class Sessions extends \WP_List_Table {
 		$this->orderby = filter_input( INPUT_GET, 'orderby', FILTER_SANITIZE_STRING );
 		if ( ! $this->orderby ) {
 			$this->orderby = 'id';
+		}
+		foreach ( [ 'id', 'ip', 'device', 'os_name', 'client_name' ] as $f ) {
+			$v = filter_input( INPUT_GET, $f, FILTER_SANITIZE_STRING );
+			if ( $v ) {
+				$this->filters[ $f ] = $v;
+			}
 		}
 		foreach ( [ 'top', 'bottom' ] as $which ) {
 			if ( wp_verify_nonce( $this->nonce, 'bulk-sessions-tools' ) && array_key_exists( 'dowarmup-' . $which, $_POST ) ) {
