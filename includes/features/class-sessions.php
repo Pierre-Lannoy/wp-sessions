@@ -545,8 +545,7 @@ class Sessions extends \WP_List_Table {
 	 */
 	public function get_bulk_actions() {
 		return [
-			'invalidate' => esc_html__( 'Clear cache(s)', 'sessions' ),
-			'recompile'  => esc_html__( 'Update cache(s)', 'sessions' ),
+			'invalidate' => esc_html__( 'Delete session(s)', 'sessions' ),
 		];
 	}
 
@@ -969,24 +968,24 @@ class Sessions extends \WP_List_Table {
 	 */
 	public function process_action() {
 		switch ( $this->action ) {
-			case 'warmup':
-				oEmbed::set_cache();
-				$message = esc_html__( 'All caches have been updated or created.', 'sessions' );
-				$code    = 0;
-				break;
 			case 'reset':
-				oEmbed::purge_cache();
-				$message = esc_html__( 'All caches have been cleared.', 'sessions' );
-				$code    = 0;
+				$count = Session::delete_all_sessions();
+				if ( is_integer( $count ) ) {
+					if ( 0 < $count ) {
+						$message = esc_html__( 'All sessions have been deleted.', 'sessions' );
+						$code    = 0;
+					} else {
+						$message = esc_html__( 'No sessions to delete.', 'sessions' );
+						$code    = 0;
+					}
+				} else {
+					$message = esc_html__( 'Unable to delete all sessions. Please see events log.', 'sessions' );
+					$code    = 500;
+				}
 				break;
 			case 'invalidate':
 				oEmbed::purge_cache( $this->bulk );
 				$message = esc_html__( 'Selected caches have been cleared.', 'sessions' );
-				$code    = 0;
-				break;
-			case 'recompile':
-				oEmbed::set_cache( $this->bulk );
-				$message = esc_html__( 'Selected caches have been updated or created.', 'sessions' );
 				$code    = 0;
 				break;
 			default:

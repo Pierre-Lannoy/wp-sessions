@@ -785,4 +785,83 @@ class Session {
 		return count( $idle ) + count( $exp );
 	}
 
+
+
+	/**
+	 * Delete all sessions.
+	 *
+	 * @return int|bool False if it was not possible, otherwise the number of deleted meta.
+	 * @since    1.0.0
+	 */
+	public static function delete_all_sessions() {
+		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() ) {
+			$id = get_current_user_id();
+			if ( isset( $id ) && is_integer( $id ) && 0 < $id ) {
+				global $wpdb;
+				$count = $wpdb->query( "DELETE FROM $wpdb->usermeta WHERE meta_key='session_tokens' AND user_id <> '" . $id . "'" );
+				if ( false === $count ) {
+					Logger::warning( 'Unable to delete all sessions.' );
+					return $count;
+				} else {
+					$cpt = self::delete_remaining_sessions();
+					if ( 0 < $cpt ) {
+						$count += $cpt;
+					}
+					if ( 0 === $count ) {
+						Logger::notice( 'No sessions to delete.' );
+					} else {
+						Logger::notice( sprintf( 'All sessions have been deleted (%d deleted meta).', $count ) );
+					}
+					return $count;
+				}
+			} else {
+				Logger::alert( 'An unknown user attempted to delete all active sessions.' );
+				return false;
+			}
+		} else {
+			Logger::alert( 'A non authorized user attempted to delete all active sessions.' );
+			return false;
+		}
+	}
+
+	/**
+	 * Delete remaining sessions.
+	 *
+	 * @return int|bool False if it was not possible, otherwise the number of deleted sessions.
+	 * @since    1.0.0
+	 */
+	public static function delete_remaining_sessions() {
+		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() ) {
+			$user_id   = get_current_user_id();
+			$selftoken = Hash::simple_hash( self::get_cookie_element( 'logged_in', 'token' ), false );
+			if ( isset( $user_id ) && is_integer( $user_id ) && 0 < $user_id ) {
+				global $wpdb;
+				$sql = 'SELECT meta_value FROM ' . $wpdb->usermeta . " WHERE meta_key='session_tokens' AND user_id = '" . $user_id . "';";
+				// phpcs:ignore
+				$query = $wpdb->get_results( $sql, ARRAY_A );
+				if ( is_array( $query ) && 0 < count( $query ) ) {
+					$sessions = $query[0]['meta_value'];
+					if ( ! is_array( $sessions ) && is_string( $sessions ) ) {
+						$sessions = maybe_unserialize( $sessions );
+					}
+					if ( is_array( $sessions ) ) {
+						$cpt = 0;
+						foreach ( array_diff_key( array_keys( $sessions ), [ $selftoken ] ) as $key ) {
+							unset( $sessions[ $key ] );
+							++$cpt;
+						}
+						self::set_user_sessions( $sessions, $user_id );
+						return $cpt;
+					}
+				}
+			} else {
+				Logger::alert( 'An unknown user attempted to delete all active sessions.' );
+				return false;
+			}
+		} else {
+			Logger::alert( 'A non authorized user attempted to delete all active sessions.' );
+			return false;
+		}
+	}
+
 }
