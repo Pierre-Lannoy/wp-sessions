@@ -835,24 +835,16 @@ class Session {
 			$user_id   = get_current_user_id();
 			$selftoken = Hash::simple_hash( self::get_cookie_element( 'logged_in', 'token' ), false );
 			if ( isset( $user_id ) && is_integer( $user_id ) && 0 < $user_id ) {
-				global $wpdb;
-				$sql = 'SELECT meta_value FROM ' . $wpdb->usermeta . " WHERE meta_key='session_tokens' AND user_id = '" . $user_id . "';";
-				// phpcs:ignore
-				$query = $wpdb->get_results( $sql, ARRAY_A );
-				if ( is_array( $query ) && 0 < count( $query ) ) {
-					$sessions = $query[0]['meta_value'];
-					if ( ! is_array( $sessions ) && is_string( $sessions ) ) {
-						$sessions = maybe_unserialize( $sessions );
+				$sessions = self::get_user_sessions( $user_id );
+				$cpt      = count( $sessions ) - 1;
+				if ( is_array( $sessions ) ) {
+					foreach ( array_diff_key( array_keys( $sessions ), [ $selftoken ] ) as $key ) {
+						unset( $sessions[ $key ] );
 					}
-					if ( is_array( $sessions ) ) {
-						$cpt = 0;
-						foreach ( array_diff_key( array_keys( $sessions ), [ $selftoken ] ) as $key ) {
-							unset( $sessions[ $key ] );
-							++$cpt;
-						}
-						self::set_user_sessions( $sessions, $user_id );
-						return $cpt;
-					}
+					self::set_user_sessions( $sessions, $user_id );
+					return $cpt;
+				} else {
+					return 0;
 				}
 			} else {
 				Logger::alert( 'An unknown user attempted to delete all active sessions.' );
@@ -860,6 +852,43 @@ class Session {
 			}
 		} else {
 			Logger::alert( 'A non authorized user attempted to delete all active sessions.' );
+			return false;
+		}
+	}
+
+	/**
+	 * Delete selected sessions.
+	 *
+	 * @param array   $bulk   The sessions to delete.
+	 * @return int|bool False if it was not possible, otherwise the number of deleted meta.
+	 * @since    1.0.0
+	 */
+	public static function delete_selected_sessions( $bulk ) {
+		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() ) {
+			$selftoken = Hash::simple_hash( self::get_cookie_element( 'logged_in', 'token' ), false );
+			$count     = 0;
+			foreach ( $bulk as $id ) {
+				$val = explode( ':', $id );
+				if ( 2 === count( $val ) ) {
+					$token    = (string) $val[1];
+					$user_id  = (int) $val[0];
+					$sessions = self::get_user_sessions( $user_id );
+					if ( $selftoken !== $token ) {
+						unset( $sessions[ $token ] );
+						if ( self::set_user_sessions( $sessions, $user_id ) ) {
+							++$count;
+						}
+					}
+				}
+			}
+			if ( 0 === $count ) {
+				Logger::notice( 'No sessions to delete.' );
+			} else {
+				Logger::notice( sprintf( 'All selected sessions have been deleted (%d deleted sessions).', $count ) );
+			}
+			return $count;
+		} else {
+			Logger::alert( 'A non authorized user attempted to delete some active sessions.' );
 			return false;
 		}
 	}

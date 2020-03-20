@@ -278,7 +278,7 @@ class Sessions extends \WP_List_Table {
 	public function column_cb( $item ) {
 		return sprintf(
 			'<input ' . ( $item['token'] === $this->selftoken ? 'disabled ' : '' ) . 'type="checkbox" name="bulk[]" value="%s" />',
-			$item['umeta_id'] . ':' . $item['token']
+			$item['id'] . ':' . $item['token']
 		);
 	}
 
@@ -984,9 +984,19 @@ class Sessions extends \WP_List_Table {
 				}
 				break;
 			case 'invalidate':
-				oEmbed::purge_cache( $this->bulk );
-				$message = esc_html__( 'Selected caches have been cleared.', 'sessions' );
-				$code    = 0;
+				$count = Session::delete_selected_sessions( $this->bulk );
+				if ( is_integer( $count ) ) {
+					if ( 0 < $count ) {
+						$message = esc_html__( 'All selected sessions have been deleted.', 'sessions' );
+						$code    = 0;
+					} else {
+						$message = esc_html__( 'No sessions to delete.', 'sessions' );
+						$code    = 0;
+					}
+				} else {
+					$message = esc_html__( 'Unable to delete all selected sessions. Please see events log.', 'sessions' );
+					$code    = 500;
+				}
 				break;
 			default:
 				return;
