@@ -24,6 +24,5 @@ use POSessions\System\Environment;
 </div>
 
 <div class="alignleft actions bulkactions">
-    <input style="margin-left:10px;" type="submit" name="doinvalidate-<?php echo $which; ?>"  id="doinvalidate-<?php echo $which; ?>" class="button-primary action" value="<?php esc_html_e('Clear All Caches', 'sessions');?>"  />
-    <input style="margin-left:10px;" type="submit" name="dowarmup-<?php echo $which; ?>" id="dowarmup-<?php echo $which; ?>" class="button-primary action" value="<?php echo esc_html__( 'Update All Caches', 'sessions' );?>"  />
+    <input style="margin-left:10px;" type="submit" name="doinvalidate-<?php echo $which; ?>"  id="doinvalidate-<?php echo $which; ?>" class="button-primary action" value="<?php esc_html_e('Delete All Sessions', 'sessions');?>"  />
 </div>
