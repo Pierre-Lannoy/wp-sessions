@@ -113,6 +113,29 @@ class Session {
 	}
 
 	/**
+	 * Get the number of active sessions.
+	 *
+	 * @return integer  The number of sessions.
+	 * @since 1.0.0
+	 */
+	public function get_sessions_count() {
+		if ( isset( $this->sessions ) ) {
+			return count( $this->sessions );
+		}
+		return 0;
+	}
+
+	/**
+	 * Get the user id.
+	 *
+	 * @return integer  The user id.
+	 * @since 1.0.0
+	 */
+	public function get_user_id() {
+		return $this->user_id;
+	}
+
+	/**
 	 * Initializes the class and set its properties.
 	 *
 	 * @param boolean $full Optional. Indicates if it's a full init (from the 'init' hook).
