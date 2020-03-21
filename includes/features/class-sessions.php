@@ -660,9 +660,8 @@ class Sessions extends \WP_List_Table {
 	 * @since 1.0.0
 	 */
 	public function get_page_url() {
-		$args              = [];
-		$args['page']      = 'pose-manager';
-		$args['logger_id'] = $this->logger;
+		$args         = [];
+		$args['page'] = 'pose-manager';
 		if ( count( $this->filters ) > 0 ) {
 			foreach ( $this->filters as $key => $filter ) {
 				if ( '' !== $filter ) {
