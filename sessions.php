@@ -9,7 +9,7 @@
  * @wordpress-plugin
  * Plugin Name:       Sessions
  * Plugin URI:        https://github.com/Pierre-Lannoy/wp-sessions
- * Description:       Full featured analytics reporting and management tool that detects all devices accessing your WordPress site.
+ * Description:       Powerful sessions manager for WordPress with sessions limiter and full analytics reporting capabilities.
  * Version:           1.0.0
  * Requires at least: 5.2
  * Requires PHP:      7.2

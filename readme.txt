@@ -1,6 +1,6 @@
 === Sessions ===
 Contributors: PierreLannoy
-Tags: bot, detection, detector, device, mobile
+Tags: authentication, login, protection, role, session
 Requires at least: 5.2
 Requires PHP: 7.2
 Tested up to: 5.3
@@ -8,39 +8,31 @@ Stable tag: 1.0.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Full featured analytics reporting and management tool that detects all devices accessing your WordPress site.
+Powerful sessions manager for WordPress with sessions limiter and full analytics reporting capabilities.
 
 == Description ==
 
-**Sessions** is a full featured analytics reporting and management tool that detects all devices accessing your WordPress site.
+**Sessions** is a powerful sessions manager for WordPress with a multi-criteria sessions limiter and full analytics reporting about logins, logouts and account creation.
 
-For each call made to your site, **Sessions** analyzes the sent header, detects the device doing the call (and its characteristics) and can:
+You can limit concurrent sessions, on a per role basis for the following criteria:
 
-* modify the `is_mobile()` WordPress core function to be more precise and reliable;
-* add some CSS classes to the `body` tag of your site (many classes to choose from);
-* let you use the result of the detection in your own developments;
-* record detected characteristics for reporting.
+* count per user;
+* count per IP adresses;
+* count per country (requires the free [GeoIP Detection](https://wordpress.org/plugins/geoip-detect/) plugin);
+* count per device classes and types, client types, browser or OS (requires the free [Device Detector](https://wordpress.org/plugins/device-detector/) plugin).
 
-**Sessions** can report the following main items and characteristics:
+For each roles defined on your site, you can also block login based on private/public IP ranges, and define idle times for sessions auto-termination.
 
-* KPIs: number of hits, class breakdown, clients types and engines;
-* Classes: Bot, Desktop, Mobile and Other;
-* Devices types: Camera, Car Browser, Console, Feature Phone, Phablet, Portable Media Player, Smart Display, Smartphone, Tablet, TV;
-* Client types: Application Library, Browser, Feed Reader, Media Player, Mobile Application, PIM.
-* Technical characteristics and versions of all browsers;
-* Device identification: brand, model, etc.;
-* OS identification: name, version, etc.;
-* Calling channel: site backend, site frontend, cron job, Ajax request, XML-RPC request, Rest API request, Atom/RDF/RSS feed;
+**Sessions** can report the following main items and metrics:
 
-For a full list of items, characteristics and supported devices, please see the 'devices' tab in the plugin settings.
+* KPIs: login success, active sessions, cleaned sessions, active users, turnover and spam sessions;
+* active and cleaned sessions details;
+* users and sessions variations;
+* moves distribution;
+* login/logout breakdowns;
+* password resets;
 
-**Sessions** supports multisite report delegation and per site configuration (see FAQ).
-
-Based on the amazing [Matomo](https://github.com/matomo-org/matomo) UDD, Sessions is a free and open source plugin for WordPress. It integrates many other free and open source works (as-is or modified). Please, see 'about' tab in the plugin settings to see the details.
-
-= Developers =
-
-If you're a plugins / themes developer and want to take advantage of the detection features of Sessions, visit the [GitHub repository](https://github.com/Pierre-Lannoy/wp-sessions) of the plugin to learn how to use it.
+**Sessions** is a free and open source plugin for WordPress. It integrates many other free and open source works (as-is or modified). Please, see 'about' tab in the plugin settings to see the details.
 
 = Support =
 
@@ -69,7 +61,7 @@ If you like this plugin or find it useful and want to thank me for the work done
 
 = Once Activated =
 
-1. Visit 'Settings > Sessions' in the left-hand menu of your WP Admin to adjust settings.
+1. Visit 'PerfOps Settings > Sessions' in the left-hand menu of your WP Admin to adjust settings.
 2. Enjoy!
 
 == Frequently Asked Questions ==
@@ -80,15 +72,11 @@ You need at least **WordPress 5.2** and **PHP 7.2**.
 
 = Can this plugin work on multisite? =
 
-Yes. It is designed to work on multisite too. Network Admins can configure the plugin and have access to all analytics. Sites Admins have access to the analytics of their site(s) and can configure options for their own site(s).
+Yes. It is designed to work on multisite too. Network Admins can use all the plugin features. Sites Admins have no access to the plugin features.
 
 = Where can I get support? =
 
 Support is provided via the official [WordPress page](https://wordpress.org/support/plugin/sessions/).
-
-= Where can I find documentation? =
-
-Developer's documentation can be found in the [GitHub repository](https://github.com/Pierre-Lannoy/wp-sessions) of the plugin.
 
 = Where can I report a bug? =
  
