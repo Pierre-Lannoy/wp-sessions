@@ -542,7 +542,7 @@ class Session {
 								}
 						}
 					} else {
-						Logger::warning( sprintf( 'New session not allowed for %s. Reason: IP range.', User::get_user_string( $this->user_id ), ), 403 );
+						Logger::warning( sprintf( 'New session not allowed for %s. Reason: IP range.', User::get_user_string( $this->user_id ) ), 403 );
 						$this->die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_bad_ip_message', __( 'You\'re not allowed to initiate a new session from your current IP address.', 'sessions' ) ), 403 );
 					}
 					if ( 'allow' !== $result ) {

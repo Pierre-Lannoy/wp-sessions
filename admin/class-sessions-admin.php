@@ -272,7 +272,7 @@ class Sessions_Admin {
 				Option::roles_set( $settings );
 				$message  = esc_html__( 'Plugin settings have been saved.', 'sessions' );
 				$message .= '<br/>' . esc_html__( 'Note these settings will only affect new sessions.', 'sessions' );
-				$message .= ' ' . esc_html__( 'For immediate implementation for all accounts, you must terminate all current sessions.', 'sessions' );
+				$message .= ' ' . esc_html__( 'For immediate implementation for all accounts, you must delete all active sessions.', 'sessions' );
 				$code     = 0;
 				add_settings_error( 'pose_no_error', $code, $message, 'updated' );
 				Logger::info( 'Plugin settings updated.', $code );
