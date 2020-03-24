@@ -1,8 +1,8 @@
 <?php
 /**
- * posts list
+ * Sessions list
  *
- * Lists all available posts.
+ * Lists all active sessions.
  *
  * @package Features
  * @author  Pierre Lannoy <https://pierre.lannoy.fr/>.
@@ -31,9 +31,9 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 }
 
 /**
- * Define the posts list functionality.
+ * Define the sessions list functionality.
  *
- * Lists all available posts.
+ * Lists all active sessions.
  *
  * @package Features
  * @author  Pierre Lannoy <https://pierre.lannoy.fr/>.
@@ -42,10 +42,10 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 class Sessions extends \WP_List_Table {
 
 	/**
-	 * The posts handler.
+	 * Active sessions
 	 *
 	 * @since    1.0.0
-	 * @var      array    $sessions    The posts list.
+	 * @var      array    $sessions    The sessions list.
 	 */
 	private $sessions = [];
 
@@ -177,8 +177,8 @@ class Sessions extends \WP_List_Table {
 	public function __construct() {
 		parent::__construct(
 			[
-				'singular' => 'post',
-				'plural'   => 'posts',
+				'singular' => 'session',
+				'plural'   => 'sessions',
 				'ajax'     => true,
 			]
 		);
@@ -692,7 +692,7 @@ class Sessions extends \WP_List_Table {
 			$l          = [];
 			$l['value'] = $d;
 			// phpcs:ignore
-			$l['text']     = sprintf( esc_html__( 'Display %d posts per page', 'sessions' ), $d );
+			$l['text']     = sprintf( esc_html__( 'Display %d sessions per page', 'sessions' ), $d );
 			$l['selected'] = ( intval( $d ) === intval( $this->limit ) ? 'selected="selected" ' : '' );
 			$result[]      = $l;
 		}
