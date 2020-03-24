@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Sessions\n"
-"POT-Creation-Date: 2020-03-21 17:29+0100\n"
+"POT-Creation-Date: 2020-03-24 12:09+0100\n"
 "PO-Revision-Date: 2019-07-08 14:07+0200\n"
 "Last-Translator: Pierre Lannoy <pierre@lannoy.fr>\n"
 "Language-Team: Pierre Lannoy <pierre@lannoy.fr>\n"
@@ -99,8 +99,8 @@ msgstr ""
 
 #: admin/class-sessions-admin.php:275
 msgid ""
-"For immediate implementation for all accounts, you must terminate all "
-"current sessions."
+"For immediate implementation for all accounts, you must delete all active "
+"sessions."
 msgstr ""
 
 #: admin/class-sessions-admin.php:280 admin/class-sessions-admin.php:306
@@ -749,7 +749,7 @@ msgstr ""
 
 #: includes/features/class-sessions.php:695
 #, php-format
-msgid "Display %d posts per page"
+msgid "Display %d sessions per page"
 msgstr ""
 
 #: includes/features/class-sessions.php:722
