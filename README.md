@@ -4,8 +4,6 @@
 [![wordpress](https://badgen.net/badge/wordpress/5.2+/green)](https://wordpress.org/plugins/sessions/)
 [![license](https://badgen.net/github/license/Pierre-Lannoy/wp-sessions/)](/license.txt)
 
-> ⚠️ This plugin is currently waiting wp.org directory approval. It can therefore be subject to major modifications.
-
 __Sessions__ is a powerful sessions manager for WordPress with a multi-criteria sessions limiter and full analytics reporting about logins, logouts and account creation.
 
 See [WordPress directory page](https://wordpress.org/plugins/sessions/). 
