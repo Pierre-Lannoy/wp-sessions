@@ -14,7 +14,7 @@ use POSessions\System\Environment;
 ?>
 
 <div class="alignleft actions bulkactions">
-    <label for="limit-selector" class="screen-reader-text"><?php esc_html_e('Number of posts to display', 'sessions');?></label>
+    <label for="limit-selector" class="screen-reader-text"><?php esc_html_e('Number of sessions to display', 'sessions');?></label>
     <select name="limit-<?php echo $which; ?>" id="limit-selector-<?php echo $which; ?>">
 		<?php foreach ($list->get_line_number_select() as $line) { ?>
             <option <?php echo $line['selected']; ?>value="<?php echo $line['value']; ?>"><?php echo $line['text']; ?></option>
