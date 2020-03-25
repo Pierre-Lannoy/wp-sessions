@@ -67,6 +67,7 @@ function pose_uninstall() {
  * @since 1.0.0
  */
 function pose_run() {
+	\POSessions\System\Logger::init();
 	$plugin = new POSessions\Plugin\Core();
 	$plugin->run();
 }

@@ -35,7 +35,6 @@ class Initializer {
 	 * @since 1.0.0
 	 */
 	public function initialize() {
-		\POSessions\System\Logger::init();
 		\POSessions\System\Cache::init();
 		\POSessions\System\Sitehealth::init();
 		\POSessions\Plugin\Feature\Schema::init();

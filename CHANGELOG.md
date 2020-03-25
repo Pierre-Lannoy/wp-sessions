@@ -3,7 +3,9 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased - will be 1.0.1]
+## [Unreleased - will be 1.1.0]
+### Added
+- Compatibility with [DecaLog](https://wordpress.org/plugins/decalog/) early loading feature.
 ### Fixed
 - Some typos in the settings screen.
 
