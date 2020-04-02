@@ -85,10 +85,11 @@ class Option {
 		self::$defaults['limit']       = 'none';
 		self::$defaults['method']      = 'block';
 		self::$defaults['idle']        = 0;
+		self::$defaults['maxip']       = 0;
 		self::$defaults['block']       = 'none';
 		self::$defaults['cookie-ttl']  = 48;
 		self::$defaults['cookie-rttl'] = 336;
-		self::$specific                = [ 'limit', 'method', 'idle', 'block', 'cookie-ttl', 'cookie-rttl' ];
+		self::$specific                = [ 'limit', 'maxip', 'method', 'idle', 'block', 'cookie-ttl', 'cookie-rttl' ];
 	}
 
 	/**

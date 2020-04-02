@@ -553,6 +553,12 @@ class Sessions_Admin {
 			// phpcs:ignore
 			$idle[] = [ $h, esc_html( sprintf( _n( 'Terminate a session when idle for more than %d hour', 'Terminate a session when idle for more than %d hours', $h, 'sessions' ), $h ) ) ];
 		}
+		$maxip   = [];
+		$maxip[] = [ 0, esc_html__( 'Unlimited', 'sessions' ) ];
+		foreach ( [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]  as $h ) {
+			// phpcs:ignore
+			$maxip[] = [ $h, esc_html( sprintf( _n( '%d IP address', '%d IP addresses', $h, 'sessions' ), $h ) ) ];
+		}
 		$ttl = [];
 		foreach ( [ 1, 2, 3, 4 ]  as $h ) {
 			// phpcs:ignore
@@ -581,6 +587,22 @@ class Sessions_Admin {
 			);
 			register_setting( 'pose_plugin_roles_section', 'pose_plugin_roles_block_' . $role );
 			add_settings_field(
+				'pose_plugin_roles_maxip_' . $role,
+				'',
+				[ $form, 'echo_field_select' ],
+				'pose_plugin_roles_section',
+				'pose_plugin_roles_section',
+				[
+					'list'        => $maxip,
+					'id'          => 'pose_plugin_roles_maxip_' . $role,
+					'value'       => $settings[ $role ]['maxip'],
+					'description' => esc_html__( 'Maximal number of concurrent IP for users.', 'sessions' ),
+					'full_width'  => false,
+					'enabled'     => true,
+				]
+			);
+			register_setting( 'pose_plugin_roles_section', 'pose_plugin_roles_maxip_' . $role );
+			add_settings_field(
 				'pose_plugin_roles_limit_' . $role,
 				'',
 				[ $form, 'echo_field_select' ],
@@ -606,7 +628,7 @@ class Sessions_Admin {
 					'list'        => $methods,
 					'id'          => 'pose_plugin_roles_method_' . $role,
 					'value'       => $settings[ $role ]['method'],
-					'description' => esc_html__( 'Method to be used when the maximal number of sessions is reached.', 'sessions' ),
+					'description' => esc_html__( 'Method to be used when the maximal number of sessions or concurrent IP is reached.', 'sessions' ),
 					'full_width'  => false,
 					'enabled'     => true,
 				]
