@@ -60,6 +60,14 @@ class Session {
 	private $sessions = [];
 
 	/**
+	 * The user's distinct sessions IP.
+	 *
+	 * @since  1.1.0
+	 * @var    array    $ip    The user's distinct sessions IP.
+	 */
+	private $ip = [];
+
+	/**
 	 * The current token.
 	 *
 	 * @since  1.0.0
@@ -192,10 +200,27 @@ class Session {
 		if ( 'none' === $block ) {
 			return 'allow';
 		}
-		if ( 'external' === $block && Environment::is_current_ip_private() ) {
+		if ( 'external' === $block && IP::is_current_private() ) {
 			return 'allow';
 		}
-		if ( 'local' === $block && Environment::is_current_ip_public() ) {
+		if ( 'local' === $block && IP::is_current_public() ) {
+			return 'allow';
+		}
+		return 'disallow';
+	}
+
+	/**
+	 * Verify if the max number of ip.
+	 *
+	 * @param integer  $maxip The ip max number.
+	 * @return string 'allow' or 'disallow'.
+	 * @since 1.1.0
+	 */
+	private function verify_ip_max( $maxip ) {
+		if ( 0 === $maxip || in_array( IP::get_current(), $this->ip, true ) ) {
+			return 'allow';
+		}
+		if ( $maxip > count( $this->ip ) ) {
 			return 'allow';
 		}
 		return 'disallow';
@@ -243,11 +268,11 @@ class Session {
 		if ( ! is_array( $this->sessions ) ) {
 			return 'allow';
 		}
-		$ip      = Environment::current_ip();
+		$ip      = IP::get_current();
 		$compare = [];
 		$buffer  = [];
 		foreach ( $this->sessions as $token => $session ) {
-			if ( $ip === $session['ip'] ) {
+			if ( IP::expand( $session['ip'] ) === $ip ) {
 				$compare[ $token ] = $session;
 			} else {
 				$buffer[ $token ] = $session;
@@ -285,7 +310,7 @@ class Session {
 		if ( ! is_array( $this->sessions ) ) {
 			return 'allow';
 		}
-		$ip      = Environment::current_ip();
+		$ip      = IP::get_current();
 		$geo     = new GeoIP();
 		$country = $geo->get_iso3166_alpha2( $ip );
 		$compare = [];
@@ -473,6 +498,13 @@ class Session {
 			$this->user     = $user;
 			$this->sessions = self::get_user_sessions( $this->user_id );
 			$role           = '';
+			$this->ip       = [];
+			foreach ( $this->sessions as $session ) {
+				$ip = IP::expand( $session['ip'] );
+				if ( ! in_array( $ip, $this->ip, true ) ) {
+					$this->ip[] = $ip;
+				}
+			}
 			foreach ( Role::get_all() as $key => $detail ) {
 				if ( in_array( $key, $this->user->roles, true ) ) {
 					$role = $key;
@@ -511,6 +543,9 @@ class Session {
 					}
 					$result = $this->verify_ip_range( $settings[ $role ]['block'] );
 					if ( 'allow' === $result ) {
+						$result = $this->verify_ip_max( (int) $settings[ $role ]['maxip'] );
+					}
+					if ( 'allow' === $result ) {
 						switch ( $mode ) {
 							case 'none':
 								$result = 'allow';
@@ -542,7 +577,7 @@ class Session {
 								}
 						}
 					} else {
-						Logger::warning( sprintf( 'New session not allowed for %s. Reason: IP range.', User::get_user_string( $this->user_id ) ), 403 );
+						Logger::warning( sprintf( 'New session not allowed for %s. Reason: IP range or max used IP.', User::get_user_string( $this->user_id ) ), 403 );
 						$this->die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_bad_ip_message', __( 'You\'re not allowed to initiate a new session from your current IP address.', 'sessions' ) ), 403 );
 					}
 					if ( 'allow' !== $result ) {

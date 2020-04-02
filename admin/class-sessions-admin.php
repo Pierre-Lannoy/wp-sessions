@@ -596,7 +596,7 @@ class Sessions_Admin {
 					'list'        => $maxip,
 					'id'          => 'pose_plugin_roles_maxip_' . $role,
 					'value'       => $settings[ $role ]['maxip'],
-					'description' => esc_html__( 'Maximal number of concurrent IP for users.', 'sessions' ),
+					'description' => esc_html__( 'Maximal number of IP per user.', 'sessions' ),
 					'full_width'  => false,
 					'enabled'     => true,
 				]
@@ -628,7 +628,7 @@ class Sessions_Admin {
 					'list'        => $methods,
 					'id'          => 'pose_plugin_roles_method_' . $role,
 					'value'       => $settings[ $role ]['method'],
-					'description' => esc_html__( 'Method to be used when the maximal number of sessions or concurrent IP is reached.', 'sessions' ),
+					'description' => esc_html__( 'Method to be used when the maximal number of sessions is reached.', 'sessions' ),
 					'full_width'  => false,
 					'enabled'     => true,
 				]

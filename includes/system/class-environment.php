@@ -10,6 +10,7 @@
 namespace POSessions\System;
 
 use Exception;
+use POSessions\System\IP;
 
 /**
  * The class responsible to manage and detect plugin environment.
@@ -82,52 +83,6 @@ class Environment {
 			$id = 8;
 		}
 		return $id;
-	}
-
-	/**
-	 * Get the current client IP.
-	 *
-	 * @return  string The current client IP.
-	 * @since 1.0.0
-	 */
-	public static function current_ip() {
-		$ip = '';
-		if ( array_key_exists( 'REMOTE_ADDR', $_SERVER ) ) {
-			$iplist = explode( ',', filter_input( INPUT_SERVER, 'REMOTE_ADDR' ) );
-			$ip     = trim( end( $iplist ) );
-		}
-		if ( array_key_exists( 'HTTP_X_REAL_IP', $_SERVER ) ) {
-			$iplist = explode( ',', filter_input( INPUT_SERVER, 'HTTP_X_REAL_IP' ) );
-			$ip     = trim( end( $iplist ) );
-		}
-		if ( '' === $ip && array_key_exists( 'HTTP_X_FORWARDED_FOR', $_SERVER ) ) {
-			$iplist = array_reverse( explode( ',', filter_input( INPUT_SERVER, 'HTTP_X_FORWARDED_FOR' ) ) );
-			$ip     = trim( end( $iplist ) );
-		}
-		if ( '' === $ip ) {
-			$ip = '127.0.0.1';
-		}
-		return $ip;
-	}
-
-	/**
-	 * Verify if the current client IP is private.
-	 *
-	 * @return  boolean True if the IP is private, false otherwise.
-	 * @since 1.0.0
-	 */
-	public static function is_current_ip_private() {
-		return ! filter_var( self::current_ip(), FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE );
-	}
-
-	/**
-	 * Verify if the current client IP is public.
-	 *
-	 * @return  boolean True if the IP is public, false otherwise.
-	 * @since 1.0.0
-	 */
-	public static function is_current_ip_public() {
-		return ! self::is_current_ip_private();
 	}
 
 	/**
