@@ -19,7 +19,6 @@ use POSessions\System\Option;
 use POSessions\System\Session;
 use POSessions\System\User;
 use POSessions\System\GeoIP;
-use Flagiconcss\Flags;
 use POSessions\System\UserAgent;
 use POSessions\System\Role;
 use Feather\Icons;
@@ -48,6 +47,14 @@ class Sessions extends \WP_List_Table {
 	 * @var      array    $sessions    The sessions list.
 	 */
 	private $sessions = [];
+
+	/**
+	 * GeoIP helper.
+	 *
+	 * @since    1.0.0
+	 * @var      \POSessions\System\GeoIP    $geoip    GeoIP helper.
+	 */
+	private $geoip = null;
 
 	/**
 	 * The number of lines to display.
@@ -182,6 +189,7 @@ class Sessions extends \WP_List_Table {
 				'ajax'     => true,
 			]
 		);
+		$this->geoip = new GeoIP();
 		$this->selftoken = Hash::simple_hash( Session::get_cookie_element( 'logged_in', 'token' ), false );
 		global $wp_version;
 		if ( version_compare( $wp_version, '4.2-z', '>=' ) && $this->compat_fields && is_array( $this->compat_fields ) ) {
@@ -312,15 +320,9 @@ class Sessions extends \WP_List_Table {
 	 * @since    1.0.0
 	 */
 	protected function column_ip( $item ) {
-		$icon = '';
-		if ( filter_var( $item['ip'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE ) ) {
-			$geoip   = new GeoIP();
-			$country = $geoip->get_iso3166_alpha2( $item['ip'] );
-			if ( isset( $country ) ) {
-				$icon = '<img style="width:14px;padding-right:4px;vertical-align:baseline;" src="' . Flags::get_base64( $country ) . '" />';
-			}
-		}
-		return $icon . $item['ip'] . $this->get_filter( 'ip', $item['ip'] );
+		$icon   = $this->geoip->get_flag( $item['ip'], '', 'width:14px;padding-left:4px;padding-right:4px;vertical-align:baseline;' );
+		$result = $icon . $item['ip'] . $this->get_filter( 'ip', $item['ip'] );
+		return $result;
 	}
 
 	/**
