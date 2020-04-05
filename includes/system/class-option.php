@@ -75,12 +75,13 @@ class Option {
 		self::$defaults['version']           = '0.0.0';
 		self::$defaults['history']           = 30;
 		self::$defaults['analytics']         = true;
+		self::$defaults['forceip']           = true;
 		self::$defaults['rolemode']          = 0;
 		self::$defaults['zk_semaphore']      = 300;
 		self::$defaults['zk_cycle']          = 90;
 		self::$defaults['zk_tsize']          = 20;
 		self::$defaults['buffer_limit']      = 4000;
-		self::$network                       = [ 'version', 'use_cdn', 'download_favicons', 'script_in_footer', 'display_nag', 'analytics', 'history', 'rolemode', 'zk_cycle', 'zk_tsize', 'zk_semaphore', 'buffer_limit' ];
+		self::$network                       = [ 'version', 'use_cdn', 'download_favicons', 'script_in_footer', 'display_nag', 'analytics', 'force_ip', 'history', 'rolemode', 'zk_cycle', 'zk_tsize', 'zk_semaphore', 'buffer_limit' ];
 		// Specific options.
 		self::$defaults['limit']       = 'none';
 		self::$defaults['method']      = 'block';
@@ -246,6 +247,7 @@ class Option {
 		self::network_set( 'display_nag', self::$defaults['display_nag'] );
 		self::network_set( 'analytics', self::$defaults['analytics'] );
 		self::network_set( 'history', self::$defaults['history'] );
+		self::network_set( 'forceip', self::$defaults['forceip'] );
 		self::network_set( 'rolemode', self::$defaults['rolemode'] );
 		self::network_set( 'zk_cycle', self::$defaults['zk_cycle'] );
 		self::network_set( 'zk_tsize', self::$defaults['zk_tsize'] );

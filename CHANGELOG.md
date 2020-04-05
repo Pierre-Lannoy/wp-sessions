@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased - will be 1.1.0]
 ### Added
 - It's now possible to set the maximum number of IP addresses per user.
+- It's now possible to override the (weak) WordPress IP detection.
 - Compatibility with [DecaLog](https://wordpress.org/plugins/decalog/) early loading feature.
 ### Changed
 - In site health "info" tab, the boolean are now clearly displayed.

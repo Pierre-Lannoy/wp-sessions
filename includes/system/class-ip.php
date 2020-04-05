@@ -66,6 +66,10 @@ class IP {
 			$iplist = explode( ',', filter_input( INPUT_SERVER, 'HTTP_X_REAL_IP' ) );
 			$ip     = trim( end( $iplist ) );
 		}
+		if ( array_key_exists( 'HTTP_CF_CONNECTING_IP', $_SERVER ) ) {
+			$iplist = explode( ',', filter_input( INPUT_SERVER, 'HTTP_CF_CONNECTING_IP' ) );
+			$ip     = trim( end( $iplist ) );
+		}
 		if ( '' === $ip && array_key_exists( 'HTTP_X_FORWARDED_FOR', $_SERVER ) ) {
 			$iplist = array_reverse( explode( ',', filter_input( INPUT_SERVER, 'HTTP_X_FORWARDED_FOR' ) ) );
 			$ip     = trim( end( $iplist ) );
