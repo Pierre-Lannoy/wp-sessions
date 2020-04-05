@@ -12,6 +12,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - In site health "info" tab, the boolean are now clearly displayed.
 ### Fixed
 - Some typos in the settings screen.
+### Removed
+- Dependency to "Geolocation IP Detection" plugin. Nevertheless, this plugin can be used as a fallback solution.
+- Flagiconcss as library. If there's no other way, flags will be rendered as emoji.
 
 ## [1.0.0] - 2020-03-24
 ### Initial release
