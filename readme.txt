@@ -40,6 +40,14 @@ This plugin is free and provided without warranty of any kind. Use it at your ow
 
 Anyway, I'll be glad to help you if you encounter issues when using this plugin. Just use the support section of this plugin page.
 
+= Privacy =
+
+This plugin, as any piece of software, is neither compliant nor non-compliant with privacy laws and regulations. It is your responsibility to use it - by activating the corresponding options or services - with respect for the personal data of your users and applicable laws.
+
+This plugin doesn't set any cookie in the user's browser.
+
+This plugin may handle personally identifiable information (PII). If the GDPR or CCPA or similar regulation applies to your case, you must adapt your processes (consent management, security measure, treatment register, etc.).
+
 = Donation =
 
 If you like this plugin or find it useful and want to thank me for the work done, please consider making a donation to [La Quadrature Du Net](https://www.laquadrature.net/en) or the [Electronic Frontier Foundation](https://www.eff.org/) which are advocacy groups defending the rights and freedoms of citizens on the Internet. By supporting them, you help the daily actions they perform to defend our fundamental freedoms!
