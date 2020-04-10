@@ -81,7 +81,7 @@ class Option {
 		self::$defaults['zk_cycle']          = 90;
 		self::$defaults['zk_tsize']          = 20;
 		self::$defaults['buffer_limit']      = 4000;
-		self::$network                       = [ 'version', 'use_cdn', 'download_favicons', 'script_in_footer', 'display_nag', 'analytics', 'force_ip', 'history', 'rolemode', 'zk_cycle', 'zk_tsize', 'zk_semaphore', 'buffer_limit' ];
+		self::$network                       = [ 'version', 'use_cdn', 'download_favicons', 'script_in_footer', 'display_nag', 'analytics', 'forceip', 'history', 'rolemode', 'zk_cycle', 'zk_tsize', 'zk_semaphore', 'buffer_limit' ];
 		// Specific options.
 		self::$defaults['limit']       = 'none';
 		self::$defaults['method']      = 'block';
@@ -138,8 +138,8 @@ class Option {
 			$default = self::$defaults[ $option ];
 		}
 		$val = get_option( POSE_PRODUCT_ABBREVIATION . '_' . $option, $default );
-		if ( empty( $val ) && is_bool( $default ) ) {
-			return $default;
+		if ( is_bool( $default ) ) {
+			return (bool) $val;
 		}
 		return $val;
 	}
@@ -157,8 +157,8 @@ class Option {
 			$default = self::$defaults[ $option ];
 		}
 		$val = get_site_option( POSE_PRODUCT_ABBREVIATION . '_' . $option, $default );
-		if ( empty( $val ) && is_bool( $default ) ) {
-			return $default;
+		if ( is_bool( $default ) ) {
+			return (bool) $val;
 		}
 		return $val;
 	}
@@ -210,9 +210,6 @@ class Option {
 	 * @since 1.0.0
 	 */
 	public static function network_set( $option, $value ) {
-		if ( false === $value ) {
-			update_site_option( POSE_PRODUCT_ABBREVIATION . '_' . $option, true );
-		}
 		return update_site_option( POSE_PRODUCT_ABBREVIATION . '_' . $option, $value );
 	}
 
