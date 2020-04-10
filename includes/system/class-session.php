@@ -144,17 +144,6 @@ class Session {
 	}
 
 	/**
-	 * Initializes the class and set its properties.
-	 *
-	 * @param boolean $full Optional. Indicates if it's a full init (from the 'init' hook).
-	 * @since 1.0.0
-	 */
-	public function initialize( $full = true ) {
-		$this->token = Hash::simple_hash( self::get_cookie_element( 'logged_in', 'token' ), false );
-		$this->set_idle();
-	}
-
-	/**
 	 * Modifies cookies durations.
 	 *
 	 * @param int  $expiration  Duration of the expiration period in seconds.
@@ -730,7 +719,7 @@ class Session {
 	}
 
 	/**
-	 * Initialize static properties and hooks.
+	 * Initialize hooks.
 	 *
 	 * @since    1.0.0
 	 */
@@ -738,15 +727,25 @@ class Session {
 		if ( Option::network_get( 'forceip' ) ) {
 			$_SERVER['REMOTE_ADDR'] = IP::get_current();
 		}
+		add_action( 'init', [ self::class, 'initialize' ], PHP_INT_MAX );
+		add_filter( 'authenticate', [ self::$instance, 'limit_logins' ], PHP_INT_MAX, 3 );
+		add_filter( 'jetpack_sso_handle_login', [ self::$instance, 'jetpack_sso_handle_login' ], PHP_INT_MAX, 2 );
+	}
+
+	/**
+	 * Initialize static properties.
+	 *
+	 * @since    1.0.0
+	 */
+	public static function initialize() {
 		if ( ! isset( self::$instance ) ) {
 			self::$instance = new static();
 		}
 		if ( self::$instance->is_needed() ) {
-			add_action( 'init', [ self::$instance, 'initialize' ], PHP_INT_MAX );
+			self::$instance->token = Hash::simple_hash( self::get_cookie_element( 'logged_in', 'token' ), false );
+			self::$instance->set_idle();
 			add_filter( 'auth_cookie_expiration', [ self::$instance, 'cookie_expiration' ], PHP_INT_MAX, 3 );
 		}
-		add_filter( 'authenticate', [ self::$instance, 'limit_logins' ], PHP_INT_MAX, 3 );
-		add_filter( 'jetpack_sso_handle_login', [ self::$instance, 'jetpack_sso_handle_login' ], PHP_INT_MAX, 2 );
 	}
 
 	/**
