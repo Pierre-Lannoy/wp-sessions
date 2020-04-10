@@ -641,8 +641,14 @@ class Analytics {
 					}
 					break;
 			}
-			$current                          = (int) round( $current / count( $data ), 0 );
-			$previous                         = (int) round( $previous / count( $pdata ), 0 );
+			$current  = 0;
+			$previous = 0;
+			if ( 0 < count( $data ) ) {
+				$current = (int) round( $current / count( $data ), 0 );
+			}
+			if ( 0 < count( $data ) ) {
+				$previous = (int) round( $previous / count( $pdata ), 0 );
+			}
 			$result[ 'kpi-main-' . $queried ] = Conversion::number_shorten( (int) $current, 1, false, '&nbsp;' );
 			if ( 0 !== $current && 0 !== $previous ) {
 				$percent = round( 100 * ( $current - $previous ) / $previous, 1 );
