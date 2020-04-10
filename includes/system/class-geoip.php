@@ -148,7 +148,7 @@ class GeoIP {
 		}
 		// IP Locator.
 		if ( '' !== $ip && 'ip-locator' === $this->provider_id ) {
-			$country = iplocator_get_country_name( $ip );
+			$country = iplocator_get_country_code( $ip );
 			if ( empty( $country ) || 2 !== strlen( $country ) ) {
 				$country = null;
 			}
@@ -191,6 +191,35 @@ class GeoIP {
 		// GeoIP Detect.
 		elseif ( '' !== $ip && 'geoip-detect' === $this->provider_id ) {
 			return EmojiFlag::get( $this->get_iso3166_alpha2( $ip ) ) . '&nbsp;';
+		}
+		return '';
+	}
+
+	/**
+	 * Get the image flag.
+	 *
+	 * @param   string    $cc         The country code.
+	 * @param   string    $class      Optional. The class(es) name(s).
+	 * @param   string    $style      Optional. The style.
+	 * @param   string    $id         Optional. The ID.
+	 * @param   string    $alt        Optional. The alt text.
+	 * @param   boolean   $squared    Optional. The flag must be squared.
+	 * @return  string                The svg flag base 64 encoded.
+	 * @since 1.0.0
+	 */
+	public function get_flag_from_country_code( $cc, $class = '', $style = '', $id = '', $alt = '', $squared = false ) {
+		// IP Locator.
+		if ( '' !== $cc && 'ip-locator' === $this->provider_id ) {
+			if ( class_exists( '\IPLocator\API\Flag' ) ) {
+				$flag = new \IPLocator\API\Flag( $cc );
+				return $flag->image( $class, $style, $id, $alt, $squared );
+			} else {
+				return EmojiFlag::get( $cc ) . '&nbsp;';
+			}
+		}
+		// GeoIP Detect.
+		elseif ( '' !== $cc && 'geoip-detect' === $this->provider_id ) {
+			return EmojiFlag::get( $cc ) . '&nbsp;';
 		}
 		return '';
 	}
