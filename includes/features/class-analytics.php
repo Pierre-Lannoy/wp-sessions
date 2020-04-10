@@ -646,7 +646,7 @@ class Analytics {
 			if ( 0 < count( $data ) ) {
 				$current = (int) round( $current / count( $data ), 0 );
 			}
-			if ( 0 < count( $data ) ) {
+			if ( 0 < count( $pdata ) ) {
 				$previous = (int) round( $previous / count( $pdata ), 0 );
 			}
 			$result[ 'kpi-main-' . $queried ] = Conversion::number_shorten( (int) $current, 1, false, '&nbsp;' );

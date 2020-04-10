@@ -483,6 +483,17 @@ class Session {
 	/**
 	 * Enforce sessions limitation if needed.
 	 *
+	 * @param array  $user      Local User information.
+	 * @param object $user_data WordPress.com User Login information.
+	 * @since 1.0.0
+	 */
+	public function jetpack_sso_handle_login( $user, $user_data ) {
+		$this->limit_logins( $user, '', '' );
+	}
+
+	/**
+	 * Enforce sessions limitation if needed.
+	 *
 	 * @param mixed   $user     WP_User if the user is authenticated, WP_Error or null otherwise.
 	 * @param string  $username Username or email address.
 	 * @param string  $password User password.
@@ -493,55 +504,6 @@ class Session {
 		if ( -1 === (int) Option::network_get( 'rolemode' ) ) {
 			return $user;
 		}
-		if ( $user instanceof \WP_Error ) {
-			if ( empty( $username ) && empty( $password ) ) {
-				//$a = wp_validate_auth_cookie( $_COOKIE[ LOGGED_IN_COOKIE ], 'logged_in' );
-				//Logger::critical($a?$a:'false');
-
-
-
-				/*$u = wp_authenticate_cookie( $user, $username, $password );
-				if ( $u instanceof \WP_Error ) {
-					Logger::critical('User id error');
-					Logger::critical($u->get_error_message(), $u->get_error_code());
-					return $user;
-				}
-				$user = $u;*/
-
-
-				/*
-
-				$user_id = wp_validate_auth_cookie();
-				if ( $user_id ) {
-					$u = new \WP_User( $user_id );
-					if ( $u instanceof \WP_Error ) {
-						Logger::critical('User id error');
-						Logger::critical($u->get_error_message(), $u->get_error_code());
-						return $user;
-					}
-					$user = $u;
-				} else {
-					Logger::critical('No user id');
-					return $user;
-				}*/
-/*
-				global $auth_secure_cookie;
-
-				if ( $auth_secure_cookie ) {
-					$auth_cookie = SECURE_AUTH_COOKIE;
-				} else {
-					$auth_cookie = AUTH_COOKIE;
-				}
-
-				if ( ! empty( $_COOKIE[ $auth_cookie ] ) ) {
-					return new WP_Error( 'expired_session', __( 'Please log in again.' ) );
-				}
-*/
-				// If the cookie is not set, be silent.
-			}
-		}
-
-
 		if ( $user instanceof \WP_User ) {
 			$this->user_id  = $user->ID;
 			$this->user     = $user;
@@ -784,6 +746,7 @@ class Session {
 			add_filter( 'auth_cookie_expiration', [ self::$instance, 'cookie_expiration' ], PHP_INT_MAX, 3 );
 		}
 		add_filter( 'authenticate', [ self::$instance, 'limit_logins' ], PHP_INT_MAX, 3 );
+		add_filter( 'jetpack_sso_handle_login', [ self::$instance, 'jetpack_sso_handle_login' ], PHP_INT_MAX, 2 );
 	}
 
 	/**

@@ -68,6 +68,8 @@ function pose_uninstall() {
  */
 function pose_run() {
 	\POSessions\System\Logger::init();
+	\POSessions\System\Session::init();
+	\POSessions\Plugin\Feature\Capture::init();
 	$plugin = new POSessions\Plugin\Core();
 	$plugin->run();
 }

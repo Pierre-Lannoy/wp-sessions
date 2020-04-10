@@ -109,7 +109,7 @@ class Schema {
 	}
 
 	/**
-	 * Adds ùisc stats to a buffer, if needed.
+	 * Adds misc stats to a buffer, if needed.
 	 *
 	 * @param array $record The buffer to write.
 	 * @return  array   The completed buffer if needed.

@@ -270,8 +270,11 @@ class Capture {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function wp_login( $user_login, $user ) {
+	public static function wp_login( $user_login, $user = null ) {
 		self::$login_success ++;
+		if ( ! $user ) {
+			$user = get_user_by( 'login', $user_login );
+		}
 		Logger::info( sprintf( 'Login success for %s.', User::get_user_string( $user instanceof \WP_User ? $user->ID : 0 ) ) );
 	}
 

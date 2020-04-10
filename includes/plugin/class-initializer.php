@@ -39,9 +39,7 @@ class Initializer {
 		\POSessions\System\Sitehealth::init();
 		\POSessions\Plugin\Feature\Schema::init();
 		\POSessions\System\APCu::init();
-		\POSessions\System\Session::init();
 		\POSessions\Plugin\Feature\UserAdministration::init();
-		\POSessions\Plugin\Feature\Capture::init();
 		\POSessions\Plugin\Feature\ZooKeeper::init();
 	}
 
