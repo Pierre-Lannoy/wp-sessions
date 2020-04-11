@@ -297,6 +297,7 @@ class Sessions_Admin {
 				Option::network_set( 'display_nag', array_key_exists( 'pose_plugin_options_nag', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_options_nag' ) : false );
 				Option::network_set( 'analytics', array_key_exists( 'pose_plugin_features_analytics', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_features_analytics' ) : false );
 				Option::network_set( 'forceip', array_key_exists( 'pose_plugin_features_forceip', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_features_forceip' ) : false );
+				Option::network_set( 'followip', array_key_exists( 'pose_plugin_features_followip', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_features_followip' ) : false );
 				Option::network_set( 'history', array_key_exists( 'pose_plugin_features_history', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_features_history', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'history' ) );
 				Option::network_set( 'rolemode', array_key_exists( 'pose_plugin_features_rolemode', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_features_rolemode', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'rolemode' ) );
 				$message = esc_html__( 'Plugin settings have been saved.', 'sessions' );
@@ -492,6 +493,24 @@ class Sessions_Admin {
 			]
 		);
 		register_setting( 'pose_plugin_features_section', 'pose_plugin_features_forceip' );
+
+		add_settings_field(
+			'pose_plugin_features_followip',
+			esc_html__( 'IP follow-up', 'sessions' ),
+			[ $form, 'echo_field_checkbox' ],
+			'pose_plugin_features_section',
+			'pose_plugin_features_section',
+			[
+				'text'        => esc_html__( 'Activated', 'sessions' ),
+				'id'          => 'pose_plugin_features_followip',
+				'checked'     => Option::network_get( 'followip' ),
+				'description' => esc_html__( 'If checked, Sessions will refresh IPs when a session is resumed (recommended).', 'sessions' ),
+				'full_width'  => false,
+				'enabled'     => true,
+			]
+		);
+		register_setting( 'pose_plugin_features_section', 'pose_plugin_features_followip' );
+		
 		add_settings_field(
 			'pose_plugin_features_analytics',
 			esc_html__( 'Analytics', 'sessions' ),
