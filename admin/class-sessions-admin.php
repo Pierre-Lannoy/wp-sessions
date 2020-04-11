@@ -493,7 +493,6 @@ class Sessions_Admin {
 			]
 		);
 		register_setting( 'pose_plugin_features_section', 'pose_plugin_features_forceip' );
-
 		add_settings_field(
 			'pose_plugin_features_followip',
 			esc_html__( 'IP follow-up', 'sessions' ),
@@ -510,7 +509,6 @@ class Sessions_Admin {
 			]
 		);
 		register_setting( 'pose_plugin_features_section', 'pose_plugin_features_followip' );
-		
 		add_settings_field(
 			'pose_plugin_features_analytics',
 			esc_html__( 'Analytics', 'sessions' ),
@@ -632,7 +630,7 @@ class Sessions_Admin {
 					'list'        => $maxip,
 					'id'          => 'pose_plugin_roles_maxip_' . $role,
 					'value'       => $settings[ $role ]['maxip'],
-					'description' => esc_html__( 'Maximal number of IP per user.', 'sessions' ),
+					'description' => esc_html__( 'Maximal number of IP per user. Requires IP follow-up to be activated - see "Options" tab.', 'sessions' ),
 					'full_width'  => false,
 					'enabled'     => true,
 				]

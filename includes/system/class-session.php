@@ -22,6 +22,7 @@ use POSessions\System\UserAgent;
 use POSessions\Plugin\Feature\Schema;
 use POSessions\Plugin\Feature\Capture;
 use POSessions\Plugin\Feature\LimiterTypes;
+use POSessions\System\IP;
 
 /**
  * Define the session functionality.
@@ -646,6 +647,27 @@ class Session {
 	}
 
 	/**
+	 * Set the ip field if needed.
+	 *
+	 * @return boolean  True if the features are needed, false otherwise.
+	 * @since 1.0.0
+	 */
+	private function set_ip() {
+		if ( ! Option::network_get( 'followip' ) ) {
+			return false;
+		}
+		if ( ! $this->is_needed() || ! isset( $this->user ) ) {
+			return false;
+		}
+		if ( ! array_key_exists( $this->token, $this->sessions ) ) {
+			return false;
+		}
+		$this->sessions[ $this->token ]['ip'] = IP::expand( $_SERVER['REMOTE_ADDR'] );
+		self::set_user_sessions( $this->sessions, $this->user_id );
+		return true;
+	}
+
+	/**
 	 * Get the limits as printable text.
 	 *
 	 * @return string  The limits, ready to print.
@@ -744,6 +766,7 @@ class Session {
 		if ( self::$instance->is_needed() ) {
 			self::$instance->token = Hash::simple_hash( self::get_cookie_element( 'logged_in', 'token' ), false );
 			self::$instance->set_idle();
+			self::$instance->set_ip();
 			add_filter( 'auth_cookie_expiration', [ self::$instance, 'cookie_expiration' ], PHP_INT_MAX, 3 );
 		}
 	}
@@ -912,6 +935,7 @@ class Session {
 				if ( is_array( $sessions ) ) {
 					foreach ( array_diff_key( array_keys( $sessions ), [ $selftoken ] ) as $key ) {
 						unset( $sessions[ $key ] );
+						do_action( 'sessions_force_terminate', $user_id );
 					}
 					self::set_user_sessions( $sessions, $user_id );
 					return $cpt;

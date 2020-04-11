@@ -7,11 +7,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 - It's now possible to set the maximum number of IP addresses per user.
 - It's now possible to override the (weak) WordPress IP detection (this setting is strongly recommended).
+- It's now possible to refresh IP when a session is resumed (this setting is strongly recommended).
 - Now compatible with Jetpack SSO.
 - Now compatible with Next Active Directory Integration SSO.
 - Compatibility with [DecaLog](https://wordpress.org/plugins/decalog/) early loading feature.
 - Full integration with [IP Locator](https://wordpress.org/plugins/ip-locator/).
 ### Changed
+- Active sessions deleted by an admin are now counted as cleaned sessions.
 - In site health "info" tab, the boolean are now clearly displayed.
 - Better display of KPIs when there's no (or not yet) data to compute.
 ### Fixed
