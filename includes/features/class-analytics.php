@@ -641,13 +641,15 @@ class Analytics {
 					}
 					break;
 			}
-			$current  = 0;
-			$previous = 0;
 			if ( 0 < count( $data ) ) {
 				$current = (int) round( $current / count( $data ), 0 );
+			} else {
+				$current = 0;
 			}
 			if ( 0 < count( $pdata ) ) {
 				$previous = (int) round( $previous / count( $pdata ), 0 );
+			} else {
+				$previous = 0;
 			}
 			$result[ 'kpi-main-' . $queried ] = Conversion::number_shorten( (int) $current, 1, false, '&nbsp;' );
 			if ( 0 !== $current && 0 !== $previous ) {
