@@ -37,7 +37,6 @@ class Initializer {
 	public function initialize() {
 		\POSessions\System\Cache::init();
 		\POSessions\System\Sitehealth::init();
-		\POSessions\Plugin\Feature\Schema::init();
 		\POSessions\System\APCu::init();
 		\POSessions\Plugin\Feature\UserAdministration::init();
 		\POSessions\Plugin\Feature\ZooKeeper::init();

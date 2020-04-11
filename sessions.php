@@ -67,9 +67,11 @@ function pose_uninstall() {
  * @since 1.0.0
  */
 function pose_run() {
+	// It is needed to do these init here because some plugins make very early die()
 	\POSessions\System\Logger::init();
 	\POSessions\System\Session::init();
 	\POSessions\Plugin\Feature\Capture::init();
+	\POSessions\Plugin\Feature\Schema::init();
 	$plugin = new POSessions\Plugin\Core();
 	$plugin->run();
 }
