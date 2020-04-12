@@ -750,8 +750,6 @@ class Session {
 			$_SERVER['REMOTE_ADDR'] = IP::get_current();
 		}
 		add_action( 'init', [ self::class, 'initialize' ], PHP_INT_MAX );
-		add_filter( 'authenticate', [ self::$instance, 'limit_logins' ], PHP_INT_MAX, 3 );
-		add_filter( 'jetpack_sso_handle_login', [ self::$instance, 'jetpack_sso_handle_login' ], PHP_INT_MAX, 2 );
 	}
 
 	/**
@@ -769,6 +767,8 @@ class Session {
 			self::$instance->set_ip();
 			add_filter( 'auth_cookie_expiration', [ self::$instance, 'cookie_expiration' ], PHP_INT_MAX, 3 );
 		}
+		add_filter( 'authenticate', [ self::$instance, 'limit_logins' ], PHP_INT_MAX, 3 );
+		add_filter( 'jetpack_sso_handle_login', [ self::$instance, 'jetpack_sso_handle_login' ], PHP_INT_MAX, 2 );
 	}
 
 	/**
@@ -905,6 +905,7 @@ class Session {
 					if ( 0 === $count ) {
 						Logger::notice( 'No sessions to delete.' );
 					} else {
+						do_action( 'sessions_force_admin_terminate', $count );
 						Logger::notice( sprintf( 'All sessions have been deleted (%d deleted meta).', $count ) );
 					}
 					return $count;
@@ -935,7 +936,6 @@ class Session {
 				if ( is_array( $sessions ) ) {
 					foreach ( array_diff_key( array_keys( $sessions ), [ $selftoken ] ) as $key ) {
 						unset( $sessions[ $key ] );
-						do_action( 'sessions_force_terminate', $user_id );
 					}
 					self::set_user_sessions( $sessions, $user_id );
 					return $cpt;
@@ -980,6 +980,7 @@ class Session {
 			if ( 0 === $count ) {
 				Logger::notice( 'No sessions to delete.' );
 			} else {
+				do_action( 'sessions_force_admin_terminate', $count );
 				Logger::notice( sprintf( 'All selected sessions have been deleted (%d deleted sessions).', $count ) );
 			}
 			return $count;
