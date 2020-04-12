@@ -3,7 +3,7 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased - will be 1.1.0]
+## [1.1.0] - 2020-04-12
 ### Added
 - It's now possible to set the maximum number of IP addresses per user.
 - It's now possible to override the (weak) WordPress IP detection (this setting is strongly recommended).

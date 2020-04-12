@@ -10,7 +10,7 @@
  * Plugin Name:       Sessions
  * Plugin URI:        https://github.com/Pierre-Lannoy/wp-sessions
  * Description:       Powerful sessions manager for WordPress with sessions limiter and full analytics reporting capabilities.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Pierre Lannoy
@@ -67,7 +67,7 @@ function pose_uninstall() {
  * @since 1.0.0
  */
 function pose_run() {
-	// It is needed to do these init here because some plugins make very early die()
+	// It is needed to do these inits here because some plugins make very early die()
 	\POSessions\System\Logger::init();
 	\POSessions\System\Session::init();
 	\POSessions\Plugin\Feature\Capture::init();
