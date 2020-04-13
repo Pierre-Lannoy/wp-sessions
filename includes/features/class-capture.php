@@ -212,7 +212,7 @@ class Capture {
 	 * @since    1.0.0
 	 */
 	public static function sessions_force_admin_terminate( $count ) {
-		self::$forced ++;
+		self::$forced = self::$forced + $count;
 		Logger::debug( sprintf( 'Batch termination for %d sessions.', $count ) );
 	}
 
