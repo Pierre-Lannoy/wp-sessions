@@ -762,7 +762,7 @@ class Session {
 			self::$instance = new static();
 		}
 		if ( self::$instance->is_needed() ) {
-			self::$instance->token = Hash::simple_hash( self::get_cookie_element( 'logged_in', 'token' ), false );
+			self::$instance->token = Hash::simple_hash( wp_get_session_token(), false );
 			self::$instance->set_idle();
 			self::$instance->set_ip();
 			add_filter( 'auth_cookie_expiration', [ self::$instance, 'cookie_expiration' ], PHP_INT_MAX, 3 );
@@ -929,7 +929,7 @@ class Session {
 	public static function delete_remaining_sessions() {
 		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() ) {
 			$user_id   = get_current_user_id();
-			$selftoken = Hash::simple_hash( self::get_cookie_element( 'logged_in', 'token' ), false );
+			$selftoken = Hash::simple_hash( wp_get_session_token(), false );
 			if ( isset( $user_id ) && is_integer( $user_id ) && 0 < $user_id ) {
 				$sessions = self::get_user_sessions( $user_id );
 				$cpt      = count( $sessions ) - 1;
@@ -961,7 +961,7 @@ class Session {
 	 */
 	public static function delete_selected_sessions( $bulk ) {
 		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() ) {
-			$selftoken = Hash::simple_hash( self::get_cookie_element( 'logged_in', 'token' ), false );
+			$selftoken = Hash::simple_hash( wp_get_session_token(), false );
 			$count     = 0;
 			foreach ( $bulk as $id ) {
 				$val = explode( ':', $id );

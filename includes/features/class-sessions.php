@@ -189,8 +189,8 @@ class Sessions extends \WP_List_Table {
 				'ajax'     => true,
 			]
 		);
-		$this->geoip = new GeoIP();
-		$this->selftoken = Hash::simple_hash( Session::get_cookie_element( 'logged_in', 'token' ), false );
+		$this->geoip     = new GeoIP();
+		$this->selftoken = Hash::simple_hash( wp_get_session_token(), false );
 		global $wp_version;
 		if ( version_compare( $wp_version, '4.2-z', '>=' ) && $this->compat_fields && is_array( $this->compat_fields ) ) {
 			array_push( $this->compat_fields, 'all_items' );
