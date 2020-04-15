@@ -5,7 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased - will be 1.1.1]
 ### Fixed
-- Batch deletion are wrongly counted.
+- The counted deleted user may be wrong in KPIs.
+- Batch sessions deletion are wrongly counted.
 
 ## [1.1.0] - 2020-04-12
 ### Added

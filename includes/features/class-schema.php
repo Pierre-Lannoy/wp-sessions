@@ -94,7 +94,7 @@ class Schema {
 				$value_insert[] = "'" . $v . "'";
 			} else {
 				$value_insert[] = (int) $v;
-				$value_update[] = '`' . $k . '`=' . $k . ' + ' . (int) $v;
+				$value_update[] = '`' . $k . '`=`' . $k . '` + ' . (int) $v;
 			}
 		}
 		if ( count( $field_insert ) > 1 ) {
