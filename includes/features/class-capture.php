@@ -122,6 +122,7 @@ class Capture {
 	public static function init() {
 		add_action( 'sessions_after_idle_terminate', [ self::class, 'sessions_after_idle_terminate' ], 10, 1 );
 		add_action( 'sessions_after_expired_terminate', [ self::class, 'sessions_after_expired_terminate' ], 10, 1 );
+		add_action( 'auth_cookie_expired', [ self::class, 'auth_cookie_expired' ], 10, 1 );
 		add_action( 'sessions_force_terminate', [ self::class, 'sessions_force_terminate' ], 10, 1 );
 		add_action( 'sessions_force_admin_terminate', [ self::class, 'sessions_force_admin_terminate' ], 10, 1 );
 		add_action( 'delete_user', [ self::class, 'delete_user' ], 10, 2 );
@@ -192,6 +193,17 @@ class Capture {
 	public static function sessions_after_idle_terminate( $user_id ) {
 		self::$idle ++;
 		Logger::info( sprintf( 'Idle session terminated for %s.', User::get_user_string( $user_id ) ) );
+	}
+
+	/**
+	 * Post actions for cookie expiration.
+	 *
+	 * @param   array   $cookie_elements  The cookies elements.
+	 * @since    1.0.0
+	 */
+	public static function auth_cookie_expired( $cookie_elements ) {
+		self::$forced ++;
+		Logger::info( 'Session cookie is expired.' );
 	}
 
 	/**
