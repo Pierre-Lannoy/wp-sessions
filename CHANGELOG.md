@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 - Expired sessions cookies are now counted as cleaned sessions.
 ### Fixed
+- There's an error while activating the plugin when the server is Microsoft IIS with Windows 10.
 - The counted deleted user may be wrong in KPIs.
 - Batch sessions deletion are wrongly counted.
 
