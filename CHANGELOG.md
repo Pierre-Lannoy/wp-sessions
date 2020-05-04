@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - There's an error while activating the plugin when the server is Microsoft IIS with Windows 10.
 - The counted deleted user may be wrong in KPIs.
 - Batch sessions deletion are wrongly counted.
+- With Microsoft Edge, some layouts may be ugly.
 
 ## [1.1.0] - 2020-04-12
 ### Added
