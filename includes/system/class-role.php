@@ -102,4 +102,42 @@ class Role {
 		return $result;
 	}
 
+	/**
+	 * Get user main role.
+	 *
+	 * @param   integer $user_id   The user id.
+	 * @return  string  The role id.
+	 * @since    1.0.0
+	 */
+	public static function get_user_main( $user_id ) {
+		$user = get_user_by( 'id', $user_id );
+		$role = '';
+		foreach ( self::get_all() as $key => $detail ) {
+			if ( in_array( $key, $user->roles, true ) ) {
+				$role = $key;
+				break;
+			}
+		}
+		return $role;
+	}
+
+	/**
+	 * Get all user roles.
+	 *
+	 * @param   integer $user_id   The user id.
+	 * @return  array  The roles id.
+	 * @since    1.0.0
+	 */
+	public static function get_user_all( $user_id ) {
+		$user = get_user_by( 'id', $user_id );
+		$role = [];
+		foreach ( self::get_all() as $key => $detail ) {
+			if ( in_array( $key, $user->roles, true ) ) {
+				$role[] = $key;
+				break;
+			}
+		}
+		return $role;
+	}
+
 }

@@ -301,7 +301,7 @@ class Sessions extends \WP_List_Table {
 		$user_info = get_userdata( $item['id'] );
 		$name      = $user_info->display_name;
 		$icon      = '<img style="width:32px;margin-right:10px;margin-top:1px;float:left;" src="' . esc_url( get_avatar_url( $item['id'], [ 'size' => '64' ] ) ) . '" />';
-		$role      = $this->get_role( $item );
+		$role      = Role::get_user_main( $item['id'] );
 		if ( array_key_exists( $role, $this->roles ) ) {
 			$role = $this->roles[ $role ]['l10n_name'];
 		} else {
@@ -448,25 +448,6 @@ class Sessions extends \WP_List_Table {
 			return sprintf( esc_html__( 'In %s', 'sessions' ), sprintf( esc_html__( '%d days', 'sessions' ), (int) round( $value / ( 24 * HOUR_IN_SECONDS ), 0 ) ) );
 		}
 		return '';
-	}
-
-	/**
-	 * Get user role.
-	 *
-	 * @param   array $item   The current item.
-	 * @return  string  The role.
-	 * @since    1.0.0
-	 */
-	private function get_role( $item ) {
-		$user = get_user_by( 'id', $item['id'] );
-		$role = '';
-		foreach ( $this->roles as $key => $detail ) {
-			if ( in_array( $key, $user->roles, true ) ) {
-				$role = $key;
-				break;
-			}
-		}
-		return $role;
 	}
 
 	/**
