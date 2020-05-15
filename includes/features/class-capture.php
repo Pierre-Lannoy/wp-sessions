@@ -140,7 +140,7 @@ class Capture {
 	 * @since    1.0.0
 	 */
 	public static function late_init() {
-		add_action( 'wordfence_security_event', [ self::class, 'wordfence_security_event' ], 10, 3 );
+		add_action( 'wordfence_security_event', [ self::class, 'wordfence_security_event' ], 10, 1 );
 	}
 
 	/**
@@ -317,7 +317,7 @@ class Capture {
 	 *
 	 * @since    1.6.0
 	 */
-	public function wordfence_security_event( $event, $details, $a ) {
+	public static function wordfence_security_event( $event, $details = null, $a = null ) {
 		if ( 'loginLockout' === $event || 'breachLogin' === $event ) {
 			self::$login_block ++;
 			Logger::info( 'Login blocked.' );

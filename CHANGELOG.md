@@ -3,9 +3,12 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased - will be 1.1.2]
+## [1.1.2] - 2020-05-15
+### Changed
+- Supports now Wordfence alerting system inconsistency.
 ### Fixed
 - When used for the first time, settings checkboxes may remain checked after being unchecked.
+- When Wordfence lock out an account, a warning maybe wrongly send to [DecaLog](https://wordpress.org/plugins/decalog/).
 
 ## [1.1.1] - 2020-05-05
 ### Changed
