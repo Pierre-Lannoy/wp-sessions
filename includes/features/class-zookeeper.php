@@ -35,7 +35,7 @@ class ZooKeeper {
 	 * @since    1.0.0
 	 */
 	public static function init() {
-		add_action( 'shutdown', [ self::class, 'execute_tasks' ] );
+		add_action( 'shutdown', [ self::class, 'execute_tasks' ], 10 );
 	}
 
 	/**

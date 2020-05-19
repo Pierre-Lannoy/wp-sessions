@@ -54,7 +54,7 @@ class Schema {
 	 * @since    1.0.0
 	 */
 	public static function init() {
-		add_action( 'shutdown', [ self::class, 'write' ], 10, 0 );
+		add_action( 'shutdown', [ self::class, 'write' ], 11, 0 );
 	}
 
 	/**
