@@ -63,10 +63,10 @@ class Analytics {
 	private $end = '';
 
 	/**
-	 * The period duration in seconds.
+	 * The period duration in days.
 	 *
 	 * @since  1.0.0
-	 * @var    integer    $duration    The period duration in seconds.
+	 * @var    integer    $duration    The period duration in days.
 	 */
 	private $duration = 0;
 
@@ -612,16 +612,16 @@ class Analytics {
 		$data   = Schema::get_grouped_kpi( $this->filter, '', ! $this->is_today );
 		$pdata  = Schema::get_grouped_kpi( $this->previous );
 		// COUNTS
-		if ( 'session' === $queried || 'cleaned' === $queried || 'user' === $queried ) {
+		if ( 'session' === $queried || 'cleaned' === $queried ) {
 			$current  = 0.0;
 			$previous = 0.0;
 			switch ( $queried ) {
 				case 'session':
 					foreach ( $data as $row ) {
-						$current = $current + (float) $row['u_sessions'];
+						$current = $current + (float) ceil( $row['u_sessions'] / ( 0 < $row['cnt'] ? $row['cnt'] : 1 ) );
 					}
 					foreach ( $pdata as $row ) {
-						$previous = $previous + (float) $row['u_sessions'];
+						$previous = $previous + (float) ceil( $row['u_sessions'] / ( 0 < $row['cnt'] ? $row['cnt'] : 1 ) );
 					}
 					break;
 				case 'cleaned':
@@ -632,25 +632,9 @@ class Analytics {
 						$previous = $previous + (float) $row['expired'] + (float) $row['idle'] + (float) $row['forced'];
 					}
 					break;
-				case 'user':
-					foreach ( $data as $row ) {
-						$current = $current + (float) $row['u_active'];
-					}
-					foreach ( $pdata as $row ) {
-						$previous = $previous + (float) $row['u_active'];
-					}
-					break;
 			}
-			if ( 0 < count( $data ) ) {
-				$current = (int) round( $current / count( $data ), 0 );
-			} else {
-				$current = 0;
-			}
-			if ( 0 < count( $pdata ) ) {
-				$previous = (int) round( $previous / count( $pdata ), 0 );
-			} else {
-				$previous = 0;
-			}
+			$current                          = (int) ceil( $current );
+			$previous                         = (int) ceil( $previous );
 			$result[ 'kpi-main-' . $queried ] = Conversion::number_shorten( (int) $current, 1, false, '&nbsp;' );
 			if ( 0 !== $current && 0 !== $previous ) {
 				$percent = round( 100 * ( $current - $previous ) / $previous, 1 );
@@ -665,7 +649,7 @@ class Analytics {
 			}
 		}
 		// RATIOS
-		if ( 'login' === $queried || 'turnover' === $queried || 'spam' === $queried ) {
+		if ( 'login' === $queried || 'turnover' === $queried || 'spam' === $queried || 'user' === $queried ) {
 			$base_value  = 0.0;
 			$pbase_value = 0.0;
 			$data_value  = 0.0;
@@ -721,6 +705,23 @@ class Analytics {
 						$txt = esc_html__( 'no spam users', 'sessions' );
 					} else {
 						$txt = sprintf( esc_html( _n( '%s spam user', '%s spam users', $val, 'sessions' ) ), Conversion::number_shorten( $val, 2, false, '&nbsp;' ) );
+					}
+					$result[ 'kpi-bottom-' . $queried ] = '<span class="pose-kpi-large-bottom-text">' . $txt . '</span>';
+					break;
+				case 'user':
+					foreach ( $data as $row ) {
+						$base_value = $base_value + ( 0 !== (int) $row['cnt'] ? (float) $row['u_total'] / (float) $row['cnt'] : 0.0 );
+						$data_value = $data_value + ( 0 !== (int) $row['cnt'] ? (float) $row['u_active'] / (float) $row['cnt'] : 0.0 );
+					}
+					foreach ( $pdata as $row ) {
+						$pbase_value = $pbase_value + ( 0 !== (int) $row['cnt'] ? (float) $row['u_total'] / (float) $row['cnt'] : 0.0 );
+						$pdata_value = $pdata_value + ( 0 !== (int) $row['cnt'] ? (float) $row['u_active'] / (float) $row['cnt'] : 0.0 );
+					}
+					$val = (int) $data_value;
+					if ( 0 === $val ) {
+						$txt = esc_html__( 'no spam users', 'sessions' );
+					} else {
+						$txt = sprintf( esc_html( _n( '%s active user', '%s active users', (int) ( $val / $this->duration ), 'sessions' ) ), Conversion::number_shorten( $val / $this->duration, 2, false, '&nbsp;' ) );
 					}
 					$result[ 'kpi-bottom-' . $queried ] = '<span class="pose-kpi-large-bottom-text">' . $txt . '</span>';
 					break;
@@ -859,7 +860,7 @@ class Analytics {
 			case 'user':
 				$icon  = Feather\Icons::get_base64( 'users', 'none', '#73879C' );
 				$title = esc_html_x( 'Active Users', 'Noun - Percentage of active users.', 'sessions' );
-				$help  = esc_html__( 'Percentage of active users.', 'sessions' );
+				$help  = esc_html__( 'Ratio of active users.', 'sessions' );
 				break;
 			case 'turnover':
 				$icon  = Feather\Icons::get_base64( 'refresh-cw', 'none', '#73879C' );

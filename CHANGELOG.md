@@ -3,8 +3,11 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased - will be 1.1.3]
+## [1.1.3] - 2020-05-22
 ### Changed
+- KPI for active sessions is now a ratio.
+- Better consistency between KPI and chart for active sessions.
+- Better consistency between KPI and chart for cleaned sessions.
 - Better precision for cleaned sessions breakdown.
 
 ## [1.1.2] - 2020-05-15
@@ -12,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Supports now Wordfence alerting system inconsistency.
 ### Fixed
 - When used for the first time, settings checkboxes may remain checked after being unchecked.
-- When Wordfence lock out an account, a warning maybe wrongly send to [DecaLog](https://wordpress.org/plugins/decalog/).
+- When Wordfence lock out an account, a warning maybe wrongly sent to [DecaLog](https://wordpress.org/plugins/decalog/).
 
 ## [1.1.1] - 2020-05-05
 ### Changed
