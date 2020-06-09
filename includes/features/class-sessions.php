@@ -308,7 +308,7 @@ class Sessions extends \WP_List_Table {
 			$role = '';
 		}
 		$role = '<br /><span style="color:silver">' . $role . '</span>';
-		$user = '<strong><a href="' . get_edit_profile_url( $item['id'] ) . '">' . $name . '</a></strong>';
+		$user = '<strong><a href="' . get_edit_user_link( $item['id'] ) . '">' . $name . '</a></strong>';
 		return $icon . $user . $this->get_filter( 'id', $item['id'] ) . $role;
 	}
 
