@@ -115,6 +115,9 @@ class Date {
 	 * @since 1.0.0
 	 */
 	public static function get_age_array_from_seconds( $age, $legend = false, $abbrev = false ) {
+		if ( $age < 0 ) {
+			$age = 0 - $age;
+		}
 		if ( $abbrev ) {
 			$intervals = [
 				[ 60, _x( 'sec', 'Unit abbreviation - Stands for "second".', 'sessions' ), _x( 'sec', 'Unit abbreviation - Stands for "second".', 'sessions' ) ],

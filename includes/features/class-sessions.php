@@ -424,6 +424,16 @@ class Sessions extends \WP_List_Table {
 	protected function column_idle( $item ) {
 		if ( array_key_exists( 'session_idle', $item ) ) {
 			$value = $item['session_idle'] - time();
+			if ( 0 === $value ) {
+				return esc_html__( 'Now', 'sessions' );
+			}
+			if ( 0 > $value ) {
+				$value = 0 - $value;
+				if ( $value < 72 * HOUR_IN_SECONDS ) {
+					return sprintf( esc_html__( '%s ago', 'sessions' ), implode( ', ', Date::get_age_array_from_seconds( $value, true, true ) ) );
+				}
+				return sprintf( esc_html__( '%s ago', 'sessions' ), sprintf( esc_html__( '%d days', 'sessions' ), (int) round( $value / ( 24 * HOUR_IN_SECONDS ), 0 ) ) );
+			}
 			if ( $value < 72 * HOUR_IN_SECONDS ) {
 				return sprintf( esc_html__( 'In %s', 'sessions' ), implode( ', ', Date::get_age_array_from_seconds( $value, true, true ) ) );
 			}
@@ -442,6 +452,16 @@ class Sessions extends \WP_List_Table {
 	protected function column_expiration( $item ) {
 		if ( array_key_exists( 'expiration', $item ) ) {
 			$value = $item['expiration'] - time();
+			if ( 0 === $value ) {
+				return esc_html__( 'Now', 'sessions' );
+			}
+			if ( 0 > $value ) {
+				$value = 0 - $value;
+				if ( $value < 72 * HOUR_IN_SECONDS ) {
+					return sprintf( esc_html__( '%s ago', 'sessions' ), implode( ', ', Date::get_age_array_from_seconds( $value, true, true ) ) );
+				}
+				return sprintf( esc_html__( '%s ago', 'sessions' ), sprintf( esc_html__( '%d days', 'sessions' ), (int) round( $value / ( 24 * HOUR_IN_SECONDS ), 0 ) ) );
+			}
 			if ( $value < 72 * HOUR_IN_SECONDS ) {
 				return sprintf( esc_html__( 'In %s', 'sessions' ), implode( ', ', Date::get_age_array_from_seconds( $value, true, true ) ) );
 			}

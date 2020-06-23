@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased - will be 1.1.4]
 ### Changed
 - In sessions list (tools), clicking on the user name now redirects to its profile edit page.
+### Fixed
+- When a session is already expired, the time detail in sessions list may be blank.
 
 ## [1.1.3] - 2020-05-22
 ### Changed
@@ -19,7 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Supports now Wordfence alerting system inconsistency.
 ### Fixed
 - When used for the first time, settings checkboxes may remain checked after being unchecked.
-- When Wordfence lock out an account, a warning maybe wrongly sent to [DecaLog](https://wordpress.org/plugins/decalog/).
+- When Wordfence locks out an account, a warning maybe wrongly sent to [DecaLog](https://wordpress.org/plugins/decalog/).
 
 ## [1.1.1] - 2020-05-05
 ### Changed
