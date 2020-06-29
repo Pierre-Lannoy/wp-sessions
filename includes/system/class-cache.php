@@ -197,9 +197,7 @@ class Cache {
 		$chrono    = microtime( true );
 		$item_name = self::normalized_item_name( $item_name );
 		$found     = false;
-		if ( wp_using_ext_object_cache() ) {
-			$result = wp_cache_get( $item_name, self::$pool_name, false, $found );
-		} elseif ( self::$apcu_available ) {
+		if ( self::$apcu_available ) {
 			$result = apcu_fetch( self::$pool_name . '_' . $item_name, $found );
 		} else {
 			$result = get_transient( self::$pool_name . '_' . $item_name );
@@ -275,8 +273,8 @@ class Cache {
 	 * @param  string $item_name Item name. Expected to not be SQL-escaped.
 	 * @param  mixed  $value     Item value. Must be serializable if non-scalar.
 	 *                           Expected to not be SQL-escaped.
-	 * @param  int|string $ttl       Optional. The previously defined ttl @see self::init() if it's a string.
-	 *                               The ttl value in seconds if it's and integer.
+	 * @param  int|string $ttl   Optional. The previously defined ttl @see self::init() if it's a string.
+	 *                           The ttl value in seconds if it's and integer.
 	 * @return bool False if value was not set and true if value was set.
 	 * @since  1.0.0
 	 */
@@ -290,9 +288,7 @@ class Cache {
 			$expiration = (int) $ttl;
 		}
 		if ( $expiration > 0 ) {
-			if ( wp_using_ext_object_cache() ) {
-				$result = wp_cache_set( $item_name, $value, self::$pool_name, (int) $expiration );
-			} elseif ( self::$apcu_available ) {
+			if ( self::$apcu_available ) {
 				$result = apcu_store( self::$pool_name . '_' . $item_name, $value, $expiration );
 			} else {
 				$result = set_transient( self::$pool_name . '_' . $item_name, $value, $expiration );
@@ -318,8 +314,8 @@ class Cache {
 	 * @param  string $item_name Item name. Expected to not be SQL-escaped.
 	 * @param  mixed  $value     Item value. Must be serializable if non-scalar.
 	 *                           Expected to not be SQL-escaped.
-	 * @param  int|string $ttl       Optional. The previously defined ttl @see self::init() if it's a string.
-	 *                               The ttl value in seconds if it's and integer.
+	 * @param  int|string $ttl   Optional. The previously defined ttl @see self::init() if it's a string.
+	 *                           The ttl value in seconds if it's and integer.
 	 * @return bool False if value was not set and true if value was set.
 	 * @since  1.0.0
 	 */
@@ -340,8 +336,8 @@ class Cache {
 	 * @param  string $item_name Item name. Expected to not be SQL-escaped.
 	 * @param  mixed  $value     Item value. Must be serializable if non-scalar.
 	 *                           Expected to not be SQL-escaped.
-	 * @param  int|string $ttl       Optional. The previously defined ttl @see self::init() if it's a string.
-	 *                               The ttl value in seconds if it's and integer.
+	 * @param  int|string $ttl   Optional. The previously defined ttl @see self::init() if it's a string.
+	 *                           The ttl value in seconds if it's and integer.
 	 * @return bool False if value was not set and true if value was set.
 	 * @since  1.0.0
 	 */
@@ -358,7 +354,8 @@ class Cache {
 	 * @param  string  $item_name    Item name. Expected to not be SQL-escaped.
 	 * @param  mixed   $value        Item value. Must be serializable if non-scalar.
 	 *                               Expected to not be SQL-escaped.
-	 * @param  string  $ttl          Optional. The previously defined ttl @see self::init().
+	 * @param  int|string $ttl       Optional. The previously defined ttl @see self::init() if it's a string.
+	 *                               The ttl value in seconds if it's and integer.
 	 * @param  boolean $blog_aware   Optional. Has the name must take care of blog.
 	 * @param  boolean $locale_aware Optional. Has the name must take care of locale.
 	 * @param  boolean $user_aware   Optional. Has the name must take care of user.
@@ -381,13 +378,6 @@ class Cache {
 	private static function delete_for_ful_name( $item_name ) {
 		$item_name = self::normalized_item_name( $item_name );
 		$result    = 0;
-		if ( wp_using_ext_object_cache() ) {
-			if ( strlen( $item_name ) - 1 === strpos( $item_name, '_*' ) ) {
-				return false;
-			} else {
-				return wp_cache_delete( $item_name, self::$pool_name );
-			}
-		}
 		if ( self::$apcu_available ) {
 			if ( strlen( $item_name ) - 1 === strpos( $item_name, '_*' ) ) {
 				return false;
@@ -462,9 +452,7 @@ class Cache {
 	/**
 	 * Get the minimum value of a ttl time range.
 	 *
-	 * This function accepts generic car "*" for transients.
-	 *
-	 * @param  string  $ttl_range   The time range in seconds. May be something like '5-600' or '200'.
+	 * @param  string  $ttl_range   The time range in seconds. May be something like '0', '200' or '15-600:15'.
 	 * @return integer The ttl in seconds.
 	 * @since  1.0.0
 	 */
@@ -475,17 +463,18 @@ class Cache {
 		$ttls = explode( '-', $ttl_range );
 		if ( 1 === count( $ttls ) ) {
 			return (int) $ttls[0];
-		} else {
-			return (int) min( (int) $ttls[0], (int) $ttls[1] );
 		}
+		if ( false !== strpos( $ttls[1], ':' ) ) {
+			$steps   = explode( ':', $ttls[1] );
+			$ttls[1] = $steps[0];
+		}
+		return (int) min( (int) $ttls[0], (int) $ttls[1] );
 	}
 
 	/**
 	 * Get the maximum value of a ttl time range.
 	 *
-	 * This function accepts generic car "*" for transients.
-	 *
-	 * @param  string  $ttl_range   The time range in seconds. May be something like '5-600' or '200'.
+	 * @param  string  $ttl_range   The time range in seconds. May be something like '0', '200' or '15-600:15'.
 	 * @return integer The ttl in seconds.
 	 * @since  1.0.0
 	 */
@@ -496,9 +485,36 @@ class Cache {
 		$ttls = explode( '-', $ttl_range );
 		if ( 1 === count( $ttls ) ) {
 			return (int) $ttls[0];
-		} else {
-			return (int) max( (int) $ttls[0], (int) $ttls[1] );
 		}
+		if ( false !== strpos( $ttls[1], ':' ) ) {
+			$steps   = explode( ':', $ttls[1] );
+			$ttls[1] = $steps[0];
+		}
+		return (int) max( (int) $ttls[0], (int) $ttls[1] );
+	}
+
+	/**
+	 * Get the step of a ttl time range.
+	 *
+	 * @param  string  $ttl_range   The time range in seconds. May be something like '0', '200' or '15-600:15'.
+	 * @return integer The ttl in seconds.
+	 * @since  1.0.0
+	 */
+	public static function get_step( $ttl_range ) {
+		if ( ! is_string( $ttl_range) ) {
+			return 0;
+		}
+		$ttls = explode( '-', $ttl_range );
+		if ( 1 === count( $ttls ) ) {
+			return 0;
+		}
+		if ( false !== strpos( $ttls[1], ':' ) ) {
+			$steps = explode( ':', $ttls[1] );
+			if ( 2 === count( $ttls ) ) {
+				return $steps[1];
+			}
+		}
+		return 1;
 	}
 
 	/**
@@ -511,10 +527,11 @@ class Cache {
 	 * @since  1.0.0
 	 */
 	public static function get_med( $ttl_range ) {
-		$min = self::get_min( $ttl_range );
-		$max = self::get_max( $ttl_range );
-		$med = $max - ( ( $max - $min ) / 2 );
-		return (int) round( $med );
+		$min    = self::get_min( $ttl_range );
+		$max    = self::get_max( $ttl_range );
+		$step   = self::get_step( $ttl_range );
+		$factor = $step * (int) round( ( $max - $min ) / ( 2 * $step ) );
+		return $min + (int) round( $factor );
 	}
 
 	/**
@@ -553,9 +570,7 @@ class Cache {
 		$result['miss']['count'] = $miss_count;
 		$result['miss']['time'] = $miss_time;
 		$result['miss']['size'] = $miss_size;
-		if ( wp_using_ext_object_cache() ) {
-			$result['type'] = 'object_cache';
-		} elseif ( self::$apcu_available ) {
+		if ( self::$apcu_available ) {
 			$result['type'] = 'apcu';
 		} else {
 			$result['type'] = 'db_transient';
@@ -584,12 +599,7 @@ class Cache {
 	 * @since 1.0.0
 	 */
 	public static function debug_info() {
-		if ( wp_using_ext_object_cache() ) {
-			$result['product'] = [
-				'label' => 'Product',
-				'value' => 'External manager',
-			];
-		} elseif ( self::$apcu_available ) {
+		if ( self::$apcu_available ) {
 			$result['product'] = [
 				'label' => 'Product',
 				'value' => 'APCu',

@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased - will be 1.1.4]
 ### Changed
 - In sessions list (tools), clicking on the user name now redirects to its profile edit page.
+- Full compatibility with PHP 7.4.
+- Automatic switching between memory and transient when a cache plugin is installed without a properly configured Redis / Memcached.
 ### Fixed
 - When a session is already expired, the time detail in sessions list may be blank.
 
