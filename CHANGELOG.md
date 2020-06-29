@@ -3,7 +3,7 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased - will be 1.1.4]
+## [1.1.4] - 2020-06-29
 ### Changed
 - In sessions list (tools), clicking on the user name now redirects to its profile edit page.
 - Full compatibility with PHP 7.4.
