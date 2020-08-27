@@ -43,7 +43,6 @@ class Session {
 	 */
 	private $user_id = 0;
 
-
 	/**
 	 * The current user.
 	 *
@@ -91,6 +90,16 @@ class Session {
 	 * @since 1.0.0
 	 */
 	public function __construct( $user = null ) {
+		$this->load_user( $user );
+	}
+
+	/**
+	 * Create an instance.
+	 *
+	 * @param mixed $user  Optional, the user or user ID.
+	 * @since 1.0.0
+	 */
+	private function load_user( $user = null ) {
 		if ( ! isset( $user ) ) {
 			$this->user_id = get_current_user_id();
 		} else {
@@ -153,12 +162,8 @@ class Session {
 	 * @return int New duration of the expiration period in seconds.
 	 * @since 1.0.0
 	 */
-	public function cookie_expiration( $expiration, $user_id, $remember ) {
-		// TODO debug / test / message
-		if ( ! isset( $this->user ) || $user_id !== $this->user_id ) {
-			return $expiration;
-		}
-		if ( ! array_key_exists( $this->token, $this->sessions ) ) {
+	public function cookie_expiration( $expiration, $user_id = null, $remember = false ) {
+		if ( ! isset( $this->user ) || ( isset( $user_id ) && $user_id !== $this->user_id ) ) {
 			return $expiration;
 		}
 		$role = '';
@@ -172,7 +177,7 @@ class Session {
 		if ( ! array_key_exists( $role, $settings ) ) {
 			return $expiration;
 		}
-		return $settings[ $role ][ $remember ? 'cookie_rttl' : 'cookie_ttl' ] * HOUR_IN_SECONDS;
+		return (int) $settings[ $role ][ $remember ? 'cookie-rttl' : 'cookie-ttl' ] * HOUR_IN_SECONDS;
 	}
 
 	/**
@@ -473,24 +478,27 @@ class Session {
 	/**
 	 * Enforce sessions limitation if needed.
 	 *
-	 * @param array  $user      Local User information.
-	 * @param object $user_data WordPress.com User Login information.
+	 * @param \WP_User|false|null $user     Local User information.
+	 * @param object $user_data             WordPress.com User Login information.
 	 * @since 1.0.0
 	 */
 	public function jetpack_sso_handle_login( $user, $user_data ) {
-		$this->limit_logins( $user, '', '' );
+		$this->load_user( $user );
+		$this->init_if_needed();
+		$this->limit_logins( $user, '', '', true );
 	}
 
 	/**
 	 * Enforce sessions limitation if needed.
 	 *
-	 * @param mixed   $user     WP_User if the user is authenticated, WP_Error or null otherwise.
-	 * @param string  $username Username or email address.
-	 * @param string  $password User password.
+	 * @param mixed   $user         WP_User if the user is authenticated, WP_Error or null otherwise.
+	 * @param string  $username     Username or email address.
+	 * @param string  $password     User password.
+	 * @param boolean $force_403    Optional. Force a 403 error if needed (in place of 'default' method).
 	 * @return mixed WP_User if the user is allowed, WP_Error or null otherwise.
 	 * @since 1.0.0
 	 */
-	public function limit_logins( $user, $username, $password ) {
+	public function limit_logins( $user, $username, $password, $force_403 = false ) {
 		if ( -1 === (int) Option::network_get( 'rolemode' ) ) {
 			return $user;
 		}
@@ -582,6 +590,9 @@ class Session {
 						$this->die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_bad_ip_message', __( 'You\'re not allowed to initiate a new session from your current IP address.', 'sessions' ) ), 403 );
 					}
 					if ( 'allow' !== $result ) {
+						if ( $force_403 && 'default' === $method ) {
+							$method = 'forced_403';
+						}
 						switch ( $method ) {
 							case 'override':
 								if ( '' !== $result ) {
@@ -753,6 +764,19 @@ class Session {
 	}
 
 	/**
+	 * Initialize properties if needed.
+	 *
+	 * @since    1.0.0
+	 */
+	public function init_if_needed() {
+		if ( $this->is_needed() ) {
+			$this->token = Hash::simple_hash( wp_get_session_token(), false );
+			$this->set_idle();
+			$this->set_ip();
+		}
+	}
+
+	/**
 	 * Initialize static properties.
 	 *
 	 * @since    1.0.0
@@ -761,12 +785,8 @@ class Session {
 		if ( ! isset( self::$instance ) ) {
 			self::$instance = new static();
 		}
-		if ( self::$instance->is_needed() ) {
-			self::$instance->token = Hash::simple_hash( wp_get_session_token(), false );
-			self::$instance->set_idle();
-			self::$instance->set_ip();
-			add_filter( 'auth_cookie_expiration', [ self::$instance, 'cookie_expiration' ], PHP_INT_MAX, 3 );
-		}
+		self::$instance->init_if_needed();
+		add_filter( 'auth_cookie_expiration', [ self::$instance, 'cookie_expiration' ], PHP_INT_MAX, 3 );
 		add_filter( 'authenticate', [ self::$instance, 'limit_logins' ], PHP_INT_MAX, 3 );
 		add_filter( 'jetpack_sso_handle_login', [ self::$instance, 'jetpack_sso_handle_login' ], PHP_INT_MAX, 2 );
 	}
@@ -808,6 +828,9 @@ class Session {
 		$result = get_user_meta( $user_id, 'session_tokens', true );
 		if ( ! is_array( $result ) && is_string( $result ) ) {
 			$result = maybe_unserialize( $result );
+		}
+		if ( ! is_array( $result ) ) {
+			$result = [];
 		}
 		return $result;
 	}

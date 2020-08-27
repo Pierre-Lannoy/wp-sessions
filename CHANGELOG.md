@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased - will be 1.2.0]
 ### Added
 - Compatibility with WordPress 5.5.
+- Enhanced compatibility with Jetpack SSO.
+- Support for data feeds - reserved for future use.
+### Changed
+- The positions of PerfOps menus are pushed lower to avoid collision with other plugins (thanks to [Loïc Antignac](https://github.com/webaxones)).
+### Fixed
+- There's a PHP warning when an admin log in for the first time.
+- While connecting via SSO, cookie durations may be wrongly applied.
+### Removed
+- Support for the "Block and send a WordPress error" method when Jetpack SSO is used (because Jetpack SSO can't handle it).
 
 ## [1.1.4] - 2020-06-29
 ### Changed
