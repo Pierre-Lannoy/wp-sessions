@@ -601,13 +601,168 @@ class Analytics {
 	}
 
 	/**
+	 * Query all kpis in statistics table.
+	 *
+	 * @param   array   $args   Optional. The needed args.
+	 * @return array  The KPIs ready to send.
+	 * @since    1.0.0
+	 */
+	public static function get_status_kpi_collection( $args = [] ) {
+		$result['meta'] = [
+			'plugin' => POSE_PRODUCT_NAME . ' ' . POSE_VERSION,
+			'period' => date( 'Y-m-d' ),
+		];
+		$result['data'] = [];
+		$kpi            = new static( 'summary', date( 'Y-m-d' ), date( 'Y-m-d' ), false );
+		foreach ( [ 'session', 'cleaned', 'login', 'turnover', 'spam', 'user' ] as $query ) {
+			$data = $kpi->query_kpi( $query, false );
+
+			switch ( $query ) {
+				case 'session':
+					$val                       = Conversion::number_shorten( $data['kpi-main-session'], 0, true );
+					$result['data']['session'] = [
+						'name'        => esc_html_x( 'Sessions', 'Noun - Active sessions.', 'sessions' ),
+						'short'       => esc_html_x( 'Ses.', 'Noun - Short (max 4 char) - Active sessions.', 'sessions' ),
+						'description' => esc_html__( 'Number of active sessions.', 'sessions' ),
+						'dimension'   => 'none',
+						'ratio'       => null,
+						'variation'   => [
+							'raw'      => round( $data['kpi-index-session'] / 100, 6 ),
+							'percent'  => round( $data['kpi-index-session'], 2 ),
+							'permille' => round( $data['kpi-index-session'] * 10, 2 ),
+						],
+						'value'       => [
+							'raw'   => $data['kpi-main-session'],
+							'human' => $val['value'] . $val['abbreviation'],
+						],
+					];
+					break;
+				case 'cleaned':
+					$val                       = Conversion::number_shorten( $data['kpi-main-cleaned'], 0, true );
+					$result['data']['cleaned'] = [
+						'name'        => esc_html_x( 'Cleaned', 'Noun - Cleaned sessions.', 'sessions' ),
+						'short'       => esc_html_x( 'Cl.', 'Noun - Short (max 4 char) - Cleaned sessions.', 'sessions' ),
+						'description' => esc_html__( 'Number of cleaned sessions (idle, expired or overridden).', 'sessions' ),
+						'dimension'   => 'none',
+						'ratio'       => null,
+						'variation'   => [
+							'raw'      => round( $data['kpi-index-cleaned'] / 100, 6 ),
+							'percent'  => round( $data['kpi-index-cleaned'], 2 ),
+							'permille' => round( $data['kpi-index-cleaned'] * 10, 2 ),
+						],
+						'value'       => [
+							'raw'   => $data['kpi-main-cleaned'],
+							'human' => $val['value'] . $val['abbreviation'],
+						],
+					];
+					break;
+				case 'login':
+					$val                     = Conversion::number_shorten( $data['kpi-bottom-login'], 0, true );
+					$result['data']['login'] = [
+						'name'        => esc_html_x( 'Logins', 'Noun - Successful logins.', 'sessions' ),
+						'short'       => esc_html_x( 'Log.', 'Noun - Short (max 4 char) - Successful logins.', 'sessions' ),
+						'description' => esc_html__( 'Successful logins.', 'sessions' ),
+						'dimension'   => 'none',
+						'ratio'       => [
+							'raw'      => round( $data['kpi-main-login'] / 100, 6 ),
+							'percent'  => round( $data['kpi-main-login'], 2 ),
+							'permille' => round( $data['kpi-main-login'] * 10, 2 ),
+						],
+						'variation'   => [
+							'raw'      => round( $data['kpi-index-login'] / 100, 6 ),
+							'percent'  => round( $data['kpi-index-login'], 2 ),
+							'permille' => round( $data['kpi-index-login'] * 10, 2 ),
+						],
+						'value'       => [
+							'raw'   => $data['kpi-bottom-login'],
+							'human' => $val['value'] . $val['abbreviation'],
+						],
+					];
+					break;
+				case 'turnover':
+					$val                        = Conversion::number_shorten( $data['kpi-bottom-turnover'], 0, true );
+					$result['data']['turnover'] = [
+						'name'        => esc_html_x( 'Moves', 'Noun - Moving users.', 'sessions' ),
+						'short'       => esc_html_x( 'Mov.', 'Noun - Short (max 4 char) - Moving users.', 'sessions' ),
+						'description' => esc_html__( 'Moving users (registered or deleted).', 'sessions' ),
+						'dimension'   => 'none',
+						'ratio'       => [
+							'raw'      => round( $data['kpi-main-turnover'] / 100, 6 ),
+							'percent'  => round( $data['kpi-main-turnover'], 2 ),
+							'permille' => round( $data['kpi-main-turnover'] * 10, 2 ),
+						],
+						'variation'   => [
+							'raw'      => round( $data['kpi-index-turnover'] / 100, 6 ),
+							'percent'  => round( $data['kpi-index-turnover'], 2 ),
+							'permille' => round( $data['kpi-index-turnover'] * 10, 2 ),
+						],
+						'value'       => [
+							'raw'   => $data['kpi-bottom-turnover'],
+							'human' => $val['value'] . $val['abbreviation'],
+						],
+					];
+					break;
+				case 'user':
+					$val                    = Conversion::number_shorten( $data['kpi-bottom-user'], 0, true );
+					$result['data']['user'] = [
+						'name'        => esc_html_x( 'Users', 'Noun - Active users.', 'sessions' ),
+						'short'       => esc_html_x( 'Usr.', 'Noun - Short (max 4 char) - Active users.', 'sessions' ),
+						'description' => esc_html__( 'Active users.', 'sessions' ),
+						'dimension'   => 'none',
+						'ratio'       => [
+							'raw'      => round( $data['kpi-main-user'] / 100, 6 ),
+							'percent'  => round( $data['kpi-main-user'], 2 ),
+							'permille' => round( $data['kpi-main-user'] * 10, 2 ),
+						],
+						'variation'   => [
+							'raw'      => round( $data['kpi-index-user'] / 100, 6 ),
+							'percent'  => round( $data['kpi-index-user'], 2 ),
+							'permille' => round( $data['kpi-index-user'] * 10, 2 ),
+						],
+						'value'       => [
+							'raw'   => $data['kpi-bottom-user'],
+							'human' => $val['value'] . $val['abbreviation'],
+						],
+					];
+					break;
+				case 'spam':
+					$val                    = Conversion::number_shorten( $data['kpi-bottom-spam'], 0, true );
+					$result['data']['spam'] = [
+						'name'        => esc_html_x( 'Spams', 'Noun - Users marked as spam.', 'sessions' ),
+						'short'       => esc_html_x( 'Spm.', 'Noun - Short (max 4 char) - Users marked as spam.', 'sessions' ),
+						'description' => esc_html__( 'Users marked as spam.', 'sessions' ),
+						'dimension'   => 'none',
+						'ratio'       => [
+							'raw'      => round( $data['kpi-main-spam'] / 100, 6 ),
+							'percent'  => round( $data['kpi-main-spam'], 2 ),
+							'permille' => round( $data['kpi-main-spam'] * 10, 2 ),
+						],
+						'variation'   => [
+							'raw'      => round( $data['kpi-index-spam'] / 100, 6 ),
+							'percent'  => round( $data['kpi-index-spam'], 2 ),
+							'permille' => round( $data['kpi-index-spam'] * 10, 2 ),
+						],
+						'value'       => [
+							'raw'   => $data['kpi-bottom-spam'],
+							'human' => $val['value'] . $val['abbreviation'],
+						],
+					];
+					break;
+			}
+		}
+		$result['assets'] = [];
+		return $result;
+	}
+
+	/**
 	 * Query statistics table.
 	 *
-	 * @param   mixed $queried The query params.
+	 * @param   mixed       $queried The query params.
+	 * @param   boolean     $chart   Optional, return the chart if true, only the data if false;
 	 * @return array  The result of the query, ready to encode.
 	 * @since    1.0.0
 	 */
-	private function query_kpi( $queried ) {
+	public function query_kpi( $queried, $chart = true ) {
 		$result = [];
 		$data   = Schema::get_grouped_kpi( $this->filter, '', ! $this->is_today );
 		$pdata  = Schema::get_grouped_kpi( $this->previous );
@@ -633,8 +788,18 @@ class Analytics {
 					}
 					break;
 			}
-			$current                          = (int) ceil( $current );
-			$previous                         = (int) ceil( $previous );
+			$current  = (int) ceil( $current );
+			$previous = (int) ceil( $previous );
+			if ( ! $chart ) {
+				$result[ 'kpi-main-' . $queried ] = (int) $current;
+				if ( 0 !== $current && 0 !== $previous ) {
+					$result[ 'kpi-index-' . $queried ] = round( 100 * ( $current - $previous ) / $previous, 4 );
+				} else {
+					$result[ 'kpi-index-' . $queried ] = null;
+				}
+				$result[ 'kpi-bottom-' . $queried ] = null;
+				return $result;
+			}
 			$result[ 'kpi-main-' . $queried ] = Conversion::number_shorten( (int) $current, 1, false, '&nbsp;' );
 			if ( 0 !== $current && 0 !== $previous ) {
 				$percent = round( 100 * ( $current - $previous ) / $previous, 1 );
@@ -656,6 +821,7 @@ class Analytics {
 			$pdata_value = 0.0;
 			$current     = 0.0;
 			$previous    = 0.0;
+			$val         = null;
 			switch ( $queried ) {
 				case 'login':
 					foreach ( $data as $row ) {
@@ -727,15 +893,19 @@ class Analytics {
 					break;
 			}
 			if ( 0.0 !== $base_value && 0.0 !== $data_value ) {
-				$current                          = 100 * $data_value / $base_value;
-				$result[ 'kpi-main-' . $queried ] = round( $current, 1 ) . '&nbsp;%';
+				$current = 100 * $data_value / $base_value;
+				if ( 1 > $current && 'fragmentation' === $queried ) {
+					$result[ 'kpi-main-' . $queried ] = round( $current, $chart ? 2 : 4 );
+				} else {
+					$result[ 'kpi-main-' . $queried ] = round( $current, $chart ? 1 : 4 );
+				}
 			} else {
 				if ( 0.0 !== $data_value ) {
-					$result[ 'kpi-main-' . $queried ] = '100&nbsp;%';
+					$result[ 'kpi-main-' . $queried ] = 100;
 				} elseif ( 0.0 !== $base_value ) {
-					$result[ 'kpi-main-' . $queried ] = '0&nbsp;%';
+					$result[ 'kpi-main-' . $queried ] = 0;
 				} else {
-					$result[ 'kpi-main-' . $queried ] = '-';
+					$result[ 'kpi-main-' . $queried ] = null;
 				}
 			}
 			if ( 0.0 !== $pbase_value && 0.0 !== $pdata_value ) {
@@ -744,6 +914,20 @@ class Analytics {
 				if ( 0.0 !== $pdata_value ) {
 					$previous = 100.0;
 				}
+			}
+			if ( 0.0 !== $current && 0.0 !== $previous ) {
+				$result[ 'kpi-index-' . $queried ] = round( 100 * ( $current - $previous ) / $previous, 4 );
+			} else {
+				$result[ 'kpi-index-' . $queried ] = null;
+			}
+			if ( ! $chart ) {
+				$result[ 'kpi-bottom-' . $queried ] = $val;
+				return $result;
+			}
+			if ( isset( $result[ 'kpi-main-' . $queried ] ) ) {
+				$result[ 'kpi-main-' . $queried ] = $result[ 'kpi-main-' . $queried ] . '&nbsp;%';
+			} else {
+				$result[ 'kpi-main-' . $queried ] = '-';
 			}
 			if ( 0.0 !== $current && 0.0 !== $previous ) {
 				$percent = round( 100 * ( $current - $previous ) / $previous, 1 );

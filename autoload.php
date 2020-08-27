@@ -21,6 +21,8 @@ spl_autoload_register(
 			}
 			if ( strpos( $class, 'POSessions\Plugin\Feature\\' ) === 0 ) {
 				$filepath = POSE_INCLUDES_DIR . 'features/';
+			} elseif ( strpos( $class, 'POSessions\Plugin\Integration\\' ) === 0 ) {
+				$filepath = POSE_INCLUDES_DIR . 'integrations/';
 			} elseif ( strpos( $class, 'POSessions\Plugin\\' ) === 0 ) {
 				$filepath = POSE_INCLUDES_DIR . 'plugin/';
 			} elseif ( strpos( $class, 'POSessions\API\\' ) === 0 ) {
