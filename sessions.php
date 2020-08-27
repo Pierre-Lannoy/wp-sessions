@@ -10,7 +10,7 @@
  * Plugin Name:       Sessions
  * Plugin URI:        https://github.com/Pierre-Lannoy/wp-sessions
  * Description:       Powerful sessions manager for WordPress with sessions limiter and full analytics reporting capabilities.
- * Version:           1.1.4
+ * Version:           1.2.0
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Pierre Lannoy

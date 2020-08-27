@@ -3,7 +3,7 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased - will be 1.2.0]
+## [1.2.0] - 2020-08-27
 ### Added
 - Compatibility with WordPress 5.5.
 - Enhanced compatibility with Jetpack SSO.
@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - The positions of PerfOps menus are pushed lower to avoid collision with other plugins (thanks to [Loïc Antignac](https://github.com/webaxones)).
 ### Fixed
 - There's a PHP warning when an admin log in for the first time.
-- While connecting via SSO, cookie durations may be wrongly applied.
+- While connecting via SSO, cookie durations may be wrongly computed.
 ### Removed
 - Support for the "Block and send a WordPress error" method when Jetpack SSO is used (because Jetpack SSO can't handle it).
 
