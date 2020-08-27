@@ -894,11 +894,7 @@ class Analytics {
 			}
 			if ( 0.0 !== $base_value && 0.0 !== $data_value ) {
 				$current = 100 * $data_value / $base_value;
-				if ( 1 > $current && 'fragmentation' === $queried ) {
-					$result[ 'kpi-main-' . $queried ] = round( $current, $chart ? 2 : 4 );
-				} else {
-					$result[ 'kpi-main-' . $queried ] = round( $current, $chart ? 1 : 4 );
-				}
+				$result[ 'kpi-main-' . $queried ] = round( $current, $chart ? 1 : 4 );
 			} else {
 				if ( 0.0 !== $data_value ) {
 					$result[ 'kpi-main-' . $queried ] = 100;
