@@ -202,6 +202,21 @@ class Capture {
 	 * @since    1.0.0
 	 */
 	public static function auth_cookie_expired( $cookie_elements ) {
+		// Don't allow too much iterations in case Decalog WordPress processor try to use get_current_user_id() and then restarts auth_cookie_expired hook.
+		try {
+			$cpt = 0;
+			// phpcs:ignore
+			foreach ( debug_backtrace( 0, 256 ) as $t ) {
+				if ( array_key_exists( 'function', $t ) && ( false !== strpos( $t['function'], 'auth_cookie_expired' ) ) ) {
+					$cpt++;
+				}
+				if ( 1 < $cpt ++ ) {
+					return;
+				}
+			}
+		} catch ( \Throwable $t ) {
+			return;
+		}
 		self::$forced ++;
 		Logger::info( 'Session cookie is expired.' );
 	}
