@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased - Will be 1.2.1]
 ### Added
 - New failsafe for `auth_cookie_expired` hook to avoid infinite loops.
+### Changed
+- Improved layout for language indicator.
 
 ## [1.2.0] - 2020-08-27
 ### Added
