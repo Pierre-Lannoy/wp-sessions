@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - New failsafe for `auth_cookie_expired` hook to avoid infinite loops.
 ### Changed
 - Improved layout for language indicator.
+- If GeoIP support is not done via [IP Locator](https://wordpress.org/plugins/ip-locator/), the flags are now correctly downgraded to emojis.
 
 ## [1.2.0] - 2020-08-27
 ### Added
