@@ -9,7 +9,6 @@
 
 namespace POSessions\Plugin;
 
-use Parsedown;
 use POSessions\System\Nag;
 use POSessions\System\Option;
 use Exception;
