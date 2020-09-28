@@ -4,25 +4,33 @@ All notable changes to **Sessions** are documented in this *changelog*.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased - Will be 1.2.1]
+
 ### Added
 - New failsafe for `auth_cookie_expired` hook to avoid infinite loops.
+
 ### Changed
 - Improved layout for language indicator.
 - If GeoIP support is not done via [IP Locator](https://wordpress.org/plugins/ip-locator/), the flags are now correctly downgraded to emojis.
 - Admin notices are now set to "don't display" by default.
+- Improved changelog readability.
+
 ### Fixed
 - With Firefox, some links are unclickable in the Control Center (thanks to [Emil1](https://wordpress.org/support/users/milouze/)).
 
 ## [1.2.0] - 2020-08-27
+
 ### Added
 - Compatibility with WordPress 5.5.
 - Enhanced compatibility with Jetpack SSO.
 - Support for data feeds - reserved for future use.
+
 ### Changed
 - The positions of PerfOps menus are pushed lower to avoid collision with other plugins (thanks to [Loïc Antignac](https://github.com/webaxones)).
+
 ### Fixed
 - There's a PHP warning when an admin log in for the first time.
 - While connecting via SSO, cookie durations may be wrongly computed.
+
 ### Removed
 - Support for the "Block and send a WordPress error" method when Jetpack SSO is used (because Jetpack SSO can't handle it).
 
@@ -31,10 +39,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - In sessions list (tools), clicking on the user name now redirects to its profile edit page.
 - Full compatibility with PHP 7.4.
 - Automatic switching between memory and transient when a cache plugin is installed without a properly configured Redis / Memcached.
+
 ### Fixed
 - When a session is already expired, the time detail in sessions list may be blank.
 
 ## [1.1.3] - 2020-05-22
+
 ### Changed
 - KPI for active sessions is now a ratio.
 - Better consistency between KPI and chart for active sessions.
@@ -42,15 +52,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Better precision for cleaned sessions breakdown.
 
 ## [1.1.2] - 2020-05-15
+
 ### Changed
 - Supports now Wordfence alerting system inconsistency.
+
 ### Fixed
 - When used for the first time, settings checkboxes may remain checked after being unchecked.
 - When Wordfence locks out an account, a warning maybe wrongly sent to [DecaLog](https://wordpress.org/plugins/decalog/).
 
 ## [1.1.1] - 2020-05-05
+
 ### Changed
 - Expired sessions cookies are now counted as cleaned sessions.
+
 ### Fixed
 - There's an error while activating the plugin when the server is Microsoft IIS with Windows 10.
 - The counted deleted user may be wrong in KPIs.
@@ -58,6 +72,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - With Microsoft Edge, some layouts may be ugly.
 
 ## [1.1.0] - 2020-04-12
+
 ### Added
 - It's now possible to set the maximum number of IP addresses per user.
 - It's now possible to override the (weak) WordPress IP detection (this setting is strongly recommended).
@@ -68,15 +83,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Full integration with [IP Locator](https://wordpress.org/plugins/ip-locator/).
 - Integration with Wordfence.
 - Partial compatibility with miniOrange SAML SSO.
+
 ### Changed
 - Active sessions deleted by an admin are now counted as cleaned sessions.
 - In site health "info" tab, the boolean are now clearly displayed.
 - Better display of KPIs when there's no (or not yet) data to compute.
+
 ### Fixed
 - Some typos in the settings screen.
+
 ### Removed
 - Dependency to "Geolocation IP Detection" plugin. Nevertheless, this plugin can be used as a fallback solution.
 - Flagiconcss as library. If there's no other way, flags will be rendered as emoji.
 
 ## [1.0.0] - 2020-03-24
-### Initial release
+
+Initial release

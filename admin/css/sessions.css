@@ -32,6 +32,15 @@
     transition: opacity 1.4s ease-in;
 }
 
+.markdown ul{
+    list-style: disc;
+    margin-left: 20px;
+}
+
+.markdown h3 {
+    margin: 40px 0 0 0;
+}
+
 @media (min-width: 783px) {
     .widefat.fixed.scripts .column-hit{
         width: 10%;
