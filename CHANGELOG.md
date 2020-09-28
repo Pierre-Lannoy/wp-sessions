@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 - New failsafe for `auth_cookie_expired` hook to avoid infinite loops.
+- New Site Health "info" section about shared memory.
 
 ### Changed
 - Improved layout for language indicator.
