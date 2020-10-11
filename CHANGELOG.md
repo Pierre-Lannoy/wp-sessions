@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - The integrated markdown parser is now [Markdown](https://github.com/cebe/markdown) from Carsten Brandt.
 
 ### Fixed
+- The remote IP can be wrongly detected when behind some types of reverse-proxies.
 - With Firefox, some links are unclickable in the Control Center (thanks to [Emil1](https://wordpress.org/support/users/milouze/)).
 
 ### Removed
