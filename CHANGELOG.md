@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 - The remote IP can be wrongly detected when behind some types of reverse-proxies.
+- In admin dashboard, the statistics link is visible even if analytics features are not activated.
 - With Firefox, some links are unclickable in the Control Center (thanks to [Emil1](https://wordpress.org/support/users/milouze/)).
 
 ### Removed
