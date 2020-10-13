@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Improved IP detection  (thanks to [Ludovic Riaudel](https://github.com/lriaudel)).
 - Improved changelog readability.
 - The integrated markdown parser is now [Markdown](https://github.com/cebe/markdown) from Carsten Brandt.
+- Prepares PerfOps menus to future 5.6 version of WordPress.
 
 ### Fixed
 - The remote IP can be wrongly detected when behind some types of reverse-proxies.

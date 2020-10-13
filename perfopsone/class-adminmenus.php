@@ -51,27 +51,27 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 				if ( ! in_array( 'perfopsone-' . $menu, self::$slugs, true ) ) {
 					switch ( $menu ) {
 						case 'analytics':
-							add_menu_page( esc_html__( 'Dashboard', 'sessions' ), sprintf( esc_html__( '%s Analytics', 'sessions' ), 'PerfOps' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_analytics_page' ], 'dashicons-chart-bar', 6666 );
+							add_menu_page( esc_html__( 'Dashboard', 'sessions' ), sprintf( esc_html__( '%s Analytics', 'sessions' ), 'PerfOps' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_analytics_page' ], 'dashicons-chart-bar', 210874 );
 							add_submenu_page( 'perfopsone-' . $menu, esc_html__( 'Dashboard', 'sessions' ), __( 'Dashboard', 'sessions' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_analytics_page' ], 0 );
 							break;
 						case 'tools':
-							add_menu_page( esc_html__( 'Available Tools', 'sessions' ), sprintf( esc_html__( '%s Tools', 'sessions' ), 'PerfOps' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_tools_page' ], 'dashicons-admin-tools', 6666 );
+							add_menu_page( esc_html__( 'Available Tools', 'sessions' ), sprintf( esc_html__( '%s Tools', 'sessions' ), 'PerfOps' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_tools_page' ], 'dashicons-admin-tools', 210876 );
 							add_submenu_page( 'perfopsone-' . $menu, esc_html__( 'Available Tools', 'sessions' ), __( 'Available Tools', 'sessions' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_tools_page' ], 0 );
 							break;
 						case 'insights':
-							add_menu_page( esc_html__( 'Available Reports', 'sessions' ), sprintf( esc_html__( '%s Insights', 'sessions' ), 'PerfOps' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_insights_page' ], 'dashicons-lightbulb', 6666 );
+							add_menu_page( esc_html__( 'Available Reports', 'sessions' ), sprintf( esc_html__( '%s Insights', 'sessions' ), 'PerfOps' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_insights_page' ], 'dashicons-lightbulb', 210875 );
 							add_submenu_page( 'perfopsone-' . $menu, esc_html__( 'Available Reports', 'sessions' ), __( 'Available Reports', 'sessions' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_insights_page' ], 0 );
 							break;
 						case 'records':
-							add_menu_page( esc_html__( 'Available Catalogues', 'sessions' ), sprintf( esc_html__( '%s Records', 'sessions' ), 'PerfOps' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_records_page' ], 'dashicons-book', 6666 );
+							add_menu_page( esc_html__( 'Available Catalogues', 'sessions' ), sprintf( esc_html__( '%s Records', 'sessions' ), 'PerfOps' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_records_page' ], 'dashicons-book', 210873 );
 							add_submenu_page( 'perfopsone-' . $menu, esc_html__( 'Available Catalogues', 'sessions' ), __( 'Available Catalogues', 'sessions' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_records_page' ], 0 );
 							break;
 						case 'settings':
-							add_menu_page( esc_html__( 'Control Center', 'sessions' ), sprintf( esc_html__( '%s Settings', 'sessions' ), 'PerfOps' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_settings_page' ], 'dashicons-admin-settings', 6666 );
+							add_menu_page( esc_html__( 'Control Center', 'sessions' ), sprintf( esc_html__( '%s Settings', 'sessions' ), 'PerfOps' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_settings_page' ], 'dashicons-admin-settings', 210871 );
 							add_submenu_page( 'perfopsone-' . $menu, esc_html__( 'Control Center', 'sessions' ), __( 'Control Center', 'sessions' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_settings_page' ], 0 );
 							break;
 						case 'consoles':
-							add_menu_page( esc_html__( 'Available Consoles', 'sessions' ), sprintf( esc_html__( '%s Consoles', 'sessions' ), 'PerfOps' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_consoles_page' ], 'dashicons-embed-generic', 6666 );
+							add_menu_page( esc_html__( 'Available Consoles', 'sessions' ), sprintf( esc_html__( '%s Consoles', 'sessions' ), 'PerfOps' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_consoles_page' ], 'dashicons-embed-generic', 210872 );
 							add_submenu_page( 'perfopsone-' . $menu, esc_html__( 'Available Consoles', 'sessions' ), __( 'Available Consoles', 'sessions' ), 'manage_options', 'perfopsone-' . $menu, [ self::class, 'get_consoles_page' ], 0 );
 							break;
 					}
@@ -82,7 +82,7 @@ if ( ! class_exists( 'PerfOpsOne\AdminMenus' ) ) {
 						self::$slugs[]          = $submenu['slug'];
 						self::$menus[ $menu ][] = $submenu;
 						if ( $submenu['activated'] ) {
-							$hook_suffix = add_submenu_page( 'perfopsone-' . $menu, $submenu['page_title'], $submenu['menu_title'], $submenu['capability'], $submenu['slug'], $submenu['callback'], $submenu['position'] );
+							$hook_suffix = add_submenu_page( 'perfopsone-' . $menu, $submenu['page_title'], $submenu['menu_title'], $submenu['capability'], $submenu['slug'], $submenu['callback'] );
 							if ( isset( $submenu['post_callback'] ) && is_callable( $submenu['post_callback'] ) && $hook_suffix ) {
 								call_user_func( $submenu['post_callback'], $hook_suffix );
 							}
