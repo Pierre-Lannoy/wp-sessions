@@ -460,9 +460,9 @@ class Sessions_Admin {
 	public function plugin_features_section_callback() {
 		$form   = new Form();
 		$mode   = [];
-		$mode[] = [ -1, esc_html__( 'Disabled (don\'t limit sessions by roles)', 'sessions' ) ];
-		$mode[] = [ 0, esc_html__( 'Enabled - permissive mode (useful when adjusting settings)', 'sessions' ) ];
-		$mode[] = [ 1, esc_html__( 'Enabled - strict mode (useful in production, when all settings are ok)', 'sessions' ) ];
+		$mode[] = [ -1, esc_html__( 'Disabled - Don\'t limit application sessions usage by roles', 'sessions' ) ];
+		$mode[] = [ 0, esc_html__( 'Enabled - Cumulative privileges', 'sessions' ) ];
+		$mode[] = [ 1, esc_html__( 'Enabled - Least privileges', 'sessions' ) ];
 		add_settings_field(
 			'pose_plugin_features_rolemode',
 			esc_html__( 'Settings by roles', 'sessions' ),
@@ -473,7 +473,7 @@ class Sessions_Admin {
 				'list'        => $mode,
 				'id'          => 'pose_plugin_features_rolemode',
 				'value'       => Option::network_get( 'rolemode' ),
-				'description' => esc_html__( 'Operation mode of this feature.', 'sessions' ),
+				'description' => esc_html__( 'Operation mode of sessions limiter.', 'sessions' ) . '<br/><em>' . esc_html__( 'Note: administrators having other roles are not affected by the privileges computation; this privileges computation only applies on non-administrator users having multiple roles.', 'sessions' ) . '</em>',
 				'full_width'  => false,
 				'enabled'     => true,
 			]

@@ -489,6 +489,99 @@ class Session {
 	}
 
 	/**
+	 * Computes privileges for a set of roles.
+	 *
+	 * @param array     $roles  The set of roles for which the privileges must be computed.
+	 * @return array    The privileges.
+	 * @since 2.0.0
+	 */
+	private function get_privileges_for_roles( $roles ) {
+		$result   = [];
+		$roles    = [];
+		$modes    = [];
+		$method   = 'block';
+		$settings = Option::roles_get();
+
+		$allow = 'none';
+		$maxip = 0;
+		foreach ( $roles as $role ) {
+			// Allowed IP type
+			switch ( $settings[ $role ]['block'] ) {
+				case 'none':
+					$allow = 'all';
+					break;
+				case 'external':
+					if ( 'local' === $allow ) {
+						$allow = 'all';
+					} elseif ( 'none' === $allow ) {
+						$allow = 'external';
+					}
+					break;
+				case 'local':
+					if ( 'external' === $allow ) {
+						$allow = 'all';
+					} elseif ( 'none' === $allow ) {
+						$allow = 'local';
+					}
+					break;
+			}
+			if ( 0 === (int) Option::network_get( 'rolemode' ) ) { // Cumulative privileges.
+
+				if ( array_key_exists( $role, $settings ) ) {
+					if ( 'none' === $settings[ $role ]['limit'] ) {
+						$mode  = 'none';
+						$l = PHP_INT_MAX;
+					} else {
+						foreach ( LimiterTypes::$selector_names as $key => $name ) {
+							if ( 0 === strpos( $settings[ $role ]['limit'], $key ) ) {
+								$mode  = $key;
+								$limit = (int) substr( $settings[ $role ]['limit'], strlen( $key ) + 1 );
+								break;
+							}
+						}
+					}
+				}
+			} else { // Least privileges.
+			}
+
+		}
+		if ( 'none' === $allow ) {
+			Logger::critical( sprintf( 'Misconfiguration: user ID %s not allowed to connect from private or public IP ranges. Temporarily set to "allow=all". Please fix it!', $user->ID ), 666 );
+			$allow = 'all';
+		}
+		$modes['allow'] = $allow;
+		if ( 0 === $maxip ) {
+			Logger::critical( sprintf( 'Misconfiguration: user ID %s not allowed to connect because ip-quota is set to 0. Temporarily set to "ip-quota=max". Please fix it!', $user->ID ), 666 );
+			$maxip = PHP_INT_MAX;
+		}
+		$result['roles']  = $roles;
+		$result['modes']  = $modes;
+		$result['method'] = $method;
+		return $result;
+	}
+
+	/**
+	 * Computes privileges for a user.
+	 *
+	 * @param integer   $user_id         The user for who the privileges must be computed.
+	 * @return array    The privileges.
+	 * @since 2.0.0
+	 */
+	public function get_privileges_for_user( $user_id ) {
+		if ( Role::SUPER_ADMIN === Role::admin_type( $user_id ) || Role::SINGLE_ADMIN === Role::admin_type( $user_id ) || Role::LOCAL_ADMIN === Role::admin_type( $user_id ) ) {
+			$roles[] = 'administrator';
+		} else {
+			foreach ( Role::get_all() as $key => $detail ) {
+				if ( in_array( $key, $this->user->roles, true ) ) {
+					$roles[] = $key;
+					break;
+				}
+			}
+		}
+		return $this->get_privileges_for_roles( $roles );
+	}
+
+	/**
 	 * Enforce sessions limitation if needed.
 	 *
 	 * @param mixed   $user         WP_User if the user is authenticated, WP_Error or null otherwise.
@@ -520,7 +613,12 @@ class Session {
 					break;
 				}
 			}
+
+
+
+
 			$settings = Option::roles_get();
+
 			if ( array_key_exists( $role, $settings ) ) {
 				$method = $settings[ $role ]['method'];
 				$mode   = '';
