@@ -21,7 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Prepares PerfOps menus to future 5.6 version of WordPress.
 
 ### Fixed
-- [SEC001] User must be wrongly detected in XML-RPC or Rest API calls.
+- [SEC001] User may be wrongly detected in XML-RPC or Rest API calls.
 - The remote IP can be wrongly detected when behind some types of reverse-proxies.
 - In admin dashboard, the statistics link is visible even if analytics features are not activated.
 - With Firefox, some links are unclickable in the Control Center (thanks to [Emil1](https://wordpress.org/support/users/milouze/)).
