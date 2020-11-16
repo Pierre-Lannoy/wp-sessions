@@ -1029,7 +1029,7 @@ class Analytics {
 				break;
 			case 'session':
 				$icon  = Feather\Icons::get_base64( 'activity', 'none', '#73879C' );
-				$title = esc_html_x( 'Active Sessions', 'Noun - Percentage of mobile hits.', 'sessions' );
+				$title = esc_html_x( 'Active Sessions', 'Noun - Number of active sessions.', 'sessions' );
 				$help  = esc_html__( 'Number of active sessions.', 'sessions' );
 				break;
 			case 'cleaned':
