@@ -885,7 +885,7 @@ class Analytics {
 					}
 					$val = (int) $data_value;
 					if ( 0 === $val ) {
-						$txt = esc_html__( 'no spam users', 'sessions' );
+						$txt = esc_html__( 'no active users', 'sessions' );
 					} else {
 						$txt = sprintf( esc_html( _n( '%s active user', '%s active users', (int) ( $val / $this->duration ), 'sessions' ) ), Conversion::number_shorten( $val / $this->duration, 2, false, '&nbsp;' ) );
 					}
