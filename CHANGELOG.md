@@ -27,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - With Firefox, some links are unclickable in the Control Center (thanks to [Emil1](https://wordpress.org/support/users/milouze/)).
 - When site is in english and a user choose another language for herself/himself, menu may be stuck in english.
 - Some graph labels are wrong.
+- The analytics page contains unclosed HTML tags.
 
 ### Removed
 - Parsedown as integrated markdown parser.

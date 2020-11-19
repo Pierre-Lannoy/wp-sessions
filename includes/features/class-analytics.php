@@ -518,7 +518,6 @@ class Analytics {
 			$result .= ' new Chartist.Bar("#pose-chart-turnover", turnover_data' . $uuid . ', turnover_option' . $uuid . ');';
 			$result .= '});';
 			$result .= '</script>';
-			$result .= '<div class="pose-multichart-handler">';
 			$result .= '<div class="pose-multichart-item" id="pose-chart-session">';
 			$result .= '</div>';
 			$result .= '<script>';
@@ -559,7 +558,6 @@ class Analytics {
 			$result .= ' new Chartist.Bar("#pose-chart-log", log_data' . $uuid . ', log_option' . $uuid . ');';
 			$result .= '});';
 			$result .= '</script>';
-			$result .= '<div class="pose-multichart-handler">';
 			$result .= '<div class="pose-multichart-item" id="pose-chart-password">';
 			$result .= '</div>';
 			$result .= '<script>';
