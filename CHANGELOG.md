@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Improvement in the way roles are detected.
 - Improved layout for language indicator.
 - If GeoIP support is not done via [IP Locator](https://wordpress.org/plugins/ip-locator/), the flags are now correctly downgraded to emojis.
+- Anonymous proxies, satellite providers and private networks are now fully detected when [IP Locator](https://wordpress.org/plugins/ip-locator/) is installed.
 - Admin notices are now set to "don't display" by default.
 - Improved IP detection  (thanks to [Ludovic Riaudel](https://github.com/lriaudel)).
 - Improved changelog readability.
