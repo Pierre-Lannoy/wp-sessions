@@ -166,18 +166,7 @@ class Session {
 		if ( ! isset( $this->user ) || ( isset( $user_id ) && $user_id !== $this->user_id ) ) {
 			return $expiration;
 		}
-		$role = '';
-		foreach ( Role::get_all() as $key => $detail ) {
-			if ( in_array( $key, $this->user->roles, true ) ) {
-				$role = $key;
-				break;
-			}
-		}
-		$settings = Option::roles_get();
-		if ( ! array_key_exists( $role, $settings ) ) {
-			return $expiration;
-		}
-		return (int) $settings[ $role ][ $remember ? 'cookie-rttl' : 'cookie-ttl' ] * HOUR_IN_SECONDS;
+		return (int) $this->get_privileges_for_user()['modes'][ $remember ? 'rttl' : 'ttl' ] * HOUR_IN_SECONDS;
 	}
 
 	/**
@@ -188,7 +177,7 @@ class Session {
 	 * @since 1.0.0
 	 */
 	private function verify_ip_range( $block ) {
-		if ( ! in_array( $block, [ 'none', 'external', 'local' ], true ) ) {
+		if ( ! in_array( $block, [ 'none', 'external', 'local', 'all' ], true ) ) {
 			Logger::warning( 'IP range limitation set to "Allow For All".', 202 );
 			return 'allow';
 		}
@@ -229,6 +218,9 @@ class Session {
 	 * @since 1.0.0
 	 */
 	private function verify_per_user_limit( $limit ) {
+		if ( 0 === $limit ) {
+			return 'allow';
+		}
 		if ( is_array( $this->sessions ) && $limit > count( $this->sessions ) ) {
 			return 'allow';
 		}
@@ -260,6 +252,9 @@ class Session {
 	 * @since 1.0.0
 	 */
 	private function verify_per_ip_limit( $limit ) {
+		if ( 0 === $limit ) {
+			return 'allow';
+		}
 		if ( ! is_array( $this->sessions ) ) {
 			return 'allow';
 		}
@@ -302,6 +297,9 @@ class Session {
 	 * @since 1.0.0
 	 */
 	private function verify_per_country_limit( $limit ) {
+		if ( 0 === $limit ) {
+			return 'allow';
+		}
 		if ( ! is_array( $this->sessions ) ) {
 			return 'allow';
 		}
@@ -429,6 +427,9 @@ class Session {
 	 * @since 1.0.0
 	 */
 	private function verify_per_device_limit( $selector, $limit ) {
+		if ( 0 === $limit ) {
+			return 'allow';
+		}
 		if ( ! is_array( $this->sessions ) ) {
 			return 'allow';
 		}
@@ -496,79 +497,211 @@ class Session {
 	 * @since 2.0.0
 	 */
 	private function get_privileges_for_roles( $roles ) {
-		$result   = [];
-		$roles    = [];
-		$modes    = [];
-		$method   = 'block';
-		$settings = Option::roles_get();
-
-		$allow = 'none';
-		$maxip = 0;
-		foreach ( $roles as $role ) {
-			// Allowed IP type
-			switch ( $settings[ $role ]['block'] ) {
-				case 'none':
-					$allow = 'all';
-					break;
-				case 'external':
-					if ( 'local' === $allow ) {
-						$allow = 'all';
-					} elseif ( 'none' === $allow ) {
-						$allow = 'external';
-					}
-					break;
-				case 'local':
-					if ( 'external' === $allow ) {
-						$allow = 'all';
-					} elseif ( 'none' === $allow ) {
-						$allow = 'local';
-					}
-					break;
-			}
-			if ( 0 === (int) Option::network_get( 'rolemode' ) ) { // Cumulative privileges.
-
-				if ( array_key_exists( $role, $settings ) ) {
-					if ( 'none' === $settings[ $role ]['limit'] ) {
-						$mode  = 'none';
-						$l = PHP_INT_MAX;
-					} else {
-						foreach ( LimiterTypes::$selector_names as $key => $name ) {
-							if ( 0 === strpos( $settings[ $role ]['limit'], $key ) ) {
-								$mode  = $key;
-								$limit = (int) substr( $settings[ $role ]['limit'], strlen( $key ) + 1 );
-								break;
+		$result         = [];
+		$settings       = Option::roles_get();
+		$methods        = [ 'block', 'default', 'override' ];
+		$block_none     = false;
+		$block_external = false;
+		$block_local    = false;
+		$limits         = [];
+		if ( 0 === (int) Option::network_get( 'rolemode' ) ) { // Cumulative privileges.
+			$idle   = -1;
+			$maxip  = -1;
+			$ttl    = 0;
+			$rttl   = 0;
+			$method = '';
+			foreach ( $roles as $role ) {
+				// Blocked IP ranges
+				switch ( $settings[ $role ]['block'] ) {
+					case 'none':
+						$block_none = true;
+						break;
+					case 'external':
+						$block_external = true;
+						break;
+					case 'local':
+						$block_local = true;
+						break;
+				}
+				// Limits
+				if ( 'none' === $settings[ $role ]['limit'] ) {
+					$limits['none'] = true;
+				} else {
+					foreach ( [ 'user', 'country', 'ip', 'device-class', 'device-type', 'device-client', 'device-browser', 'device-os' ] as $type ) {
+						if ( 0 === strpos( $settings[ $role ]['limit'], $type . '-' ) ) {
+							$value = (int) substr( $settings[ $role ]['limit'], strlen( $type ) + 1 );
+							if ( array_key_exists( $type, $limits ) ) {
+								if ( $limits[ $type ] < $value ) {
+									$limits[ $type ] = $value;
+								}
+							} else {
+								$limits[ $type ] = $value;
 							}
 						}
 					}
 				}
-			} else { // Least privileges.
+				// Method
+				if ( '' === $method ) {
+					$method = $settings[ $role ]['method'];
+				} else {
+					$current = array_search( $method, $methods, true );
+					$new     = array_search( $settings[ $role ]['method'], $methods, true );
+					if ( false !== $new && false !== $current && $new > $current ) {
+						$method = $settings[ $role ]['method'];
+					}
+				}
+				// Max idle days
+				if ( 0 === $settings[ $role ]['idle'] ) {
+					$idle = 0;
+				} elseif ( $settings[ $role ]['idle'] > $idle && 0 !== $idle ) {
+					$idle = $settings[ $role ]['idle'];
+				}
+				// Max number of IPs
+				if ( 0 !== $maxip ) {
+					if ( 0 === $settings[ $role ]['maxip'] ) {
+						$maxip = 0;
+					} elseif ( $settings[ $role ]['maxip'] > $maxip ) {
+						$maxip = $settings[ $role ]['maxip'];
+					}
+				}
+				// Cookie TTL
+				if ( $settings[ $role ]['cookie-ttl'] > $ttl ) {
+					$ttl = $settings[ $role ]['cookie-ttl'];
+				}
+				// Cookie R-TTL
+				if ( $settings[ $role ]['cookie-rttl'] > $rttl ) {
+					$rttl = $settings[ $role ]['cookie-rttl'];
+				}
 			}
-
+		} else { // Least privileges.
+			$idle   = PHP_INT_MAX;
+			$maxip  = PHP_INT_MAX;
+			$ttl    = PHP_INT_MAX;
+			$rttl   = PHP_INT_MAX;
+			$method = '';
+			foreach ( $roles as $role ) {
+				// Blocked IP ranges
+				switch ( $settings[ $role ]['block'] ) {
+					case 'none':
+						$block_none = true;
+						break;
+					case 'external':
+						$block_external = true;
+						break;
+					case 'local':
+						$block_local = true;
+						break;
+				}
+				// Limits
+				if ( 'none' === $settings[ $role ]['limit'] ) {
+					$limits['none'] = true;
+				} else {
+					foreach ( [ 'user', 'country', 'ip', 'device-class', 'device-type', 'device-client', 'device-browser', 'device-os' ] as $type ) {
+						if ( 0 === strpos( $settings[ $role ]['limit'], $type . '-' ) ) {
+							$value = (int) substr( $settings[ $role ]['limit'], strlen( $type ) + 1 );
+							if ( array_key_exists( $type, $limits ) ) {
+								if ( $limits[ $type ] > $value ) {
+									$limits[ $type ] = $value;
+								}
+							} else {
+								$limits[ $type ] = $value;
+							}
+						}
+					}
+				}
+				// Method
+				if ( '' === $method ) {
+					$method = $settings[ $role ]['method'];
+				} else {
+					$current = array_search( $method, $methods, true );
+					$new     = array_search( $settings[ $role ]['method'], $methods, true );
+					if ( false !== $new && false !== $current && $new < $current ) {
+						$method = $settings[ $role ]['method'];
+					}
+				}
+				// Max idle days
+				if ( $settings[ $role ]['idle'] < $idle && 0 !== $settings[ $role ]['idle'] ) {
+					$idle = $settings[ $role ]['idle'];
+				} elseif ( 0 === $settings[ $role ]['idle'] && PHP_INT_MAX === $idle ) {
+					$idle = 0;
+				}
+				// Max number of IPs
+				if ( 0 === $settings[ $role ]['maxip'] ) {
+					$settings[ $role ]['maxip'] = PHP_INT_MAX;
+				}
+				if ( $settings[ $role ]['maxip'] < $maxip ) {
+					$maxip = $settings[ $role ]['maxip'];
+				}
+				// Cookie TTL
+				if ( $settings[ $role ]['cookie-ttl'] < $ttl ) {
+					$ttl = $settings[ $role ]['cookie-ttl'];
+				}
+				// Cookie R-TTL
+				if ( $settings[ $role ]['cookie-rttl'] < $rttl ) {
+					$rttl = $settings[ $role ]['cookie-rttl'];
+				}
+			}
 		}
-		if ( 'none' === $allow ) {
-			Logger::critical( sprintf( 'Misconfiguration: user ID %s not allowed to connect from private or public IP ranges. Temporarily set to "allow=all". Please fix it!', $user->ID ), 666 );
-			$allow = 'all';
+		// Blocked IP range computation
+		if ( 0 === (int) Option::network_get( 'rolemode' ) ) { // Cumulative privileges.
+			if ( ( $block_external && $block_local ) || $block_none ) {
+				$block = 'none';
+			} elseif ( $block_external ) {
+				$block = 'external';
+			}
+			elseif ( $block_local ) {
+				$block = 'local';
+			} else {
+				$block = 'none';
+			}
+		} else { // Least privileges.
+			if ( $block_external && $block_local ) {
+				$block = 'all';
+			} elseif ( $block_external ) {
+				$block = 'external';
+			}
+			elseif ( $block_local ) {
+				$block = 'local';
+			} else {
+				$block = 'none';
+			}
 		}
-		$modes['allow'] = $allow;
-		if ( 0 === $maxip ) {
-			Logger::critical( sprintf( 'Misconfiguration: user ID %s not allowed to connect because ip-quota is set to 0. Temporarily set to "ip-quota=max". Please fix it!', $user->ID ), 666 );
-			$maxip = PHP_INT_MAX;
+		// Limits computation
+		if ( 0 === (int) Option::network_get( 'rolemode' ) ) { // Cumulative privileges.
+			if ( array_key_exists( 'none', $limits ) && $limits['none'] ) {
+				$limits = [];
+			}
+		} else { // Least privileges.
+			if ( array_key_exists( 'none', $limits ) && $limits['none'] && 1 === count( $limits ) ) {
+				$limits = [];
+			}
 		}
-		$result['roles']  = $roles;
-		$result['modes']  = $modes;
-		$result['method'] = $method;
+		if ( array_key_exists( 'none', $limits ) ) {
+			unset( $limits['none'] );
+		}
+		// Max number of IPs
+		if ( PHP_INT_MAX !== $maxip && -1 !== $maxip ) {
+			$limits['ip'] = $maxip;
+		}
+		$modes['block']  = $block;
+		$modes['limits'] = $limits;
+		$modes['method'] = $method;
+		$modes['idle']   = $idle;
+		$modes['ttl']    = $ttl;
+		$modes['rttl']   = $rttl;
+		$result['roles'] = $roles;
+		$result['modes'] = $modes;
 		return $result;
 	}
 
 	/**
 	 * Computes privileges for a user.
 	 *
-	 * @param integer   $user_id         The user for who the privileges must be computed.
 	 * @return array    The privileges.
 	 * @since 2.0.0
 	 */
-	public function get_privileges_for_user( $user_id ) {
-		if ( Role::SUPER_ADMIN === Role::admin_type( $user_id ) || Role::SINGLE_ADMIN === Role::admin_type( $user_id ) || Role::LOCAL_ADMIN === Role::admin_type( $user_id ) ) {
+	public function get_privileges_for_user() {
+		if ( Role::SUPER_ADMIN === Role::admin_type( $this->user_id ) || Role::SINGLE_ADMIN === Role::admin_type( $this->user_id ) || Role::LOCAL_ADMIN === Role::admin_type( $this->user_id ) ) {
 			$roles[] = 'administrator';
 		} else {
 			foreach ( Role::get_all() as $key => $detail ) {
@@ -607,61 +740,19 @@ class Session {
 					$this->ip[] = $ip;
 				}
 			}
-			foreach ( Role::get_all() as $key => $detail ) {
-				if ( in_array( $key, $this->user->roles, true ) ) {
-					$role = $key;
-					break;
-				}
-			}
-
-
-
-
-			$settings = Option::roles_get();
-
-			if ( array_key_exists( $role, $settings ) ) {
-				$method = $settings[ $role ]['method'];
-				$mode   = '';
-				$limit  = 0;
-				if ( 'none' === $settings[ $role ]['limit'] ) {
-					$mode  = 'none';
-					$limit = PHP_INT_MAX;
-				} else {
-					foreach ( LimiterTypes::$selector_names as $key => $name ) {
-						if ( 0 === strpos( $settings[ $role ]['limit'], $key ) ) {
-							$mode  = $key;
-							$limit = (int) substr( $settings[ $role ]['limit'], strlen( $key ) + 1 );
-							break;
-						}
-					}
-				}
-				if ( '' === $mode || 0 === $limit ) {
-					if ( 1 === (int) Option::network_get( 'rolemode' ) ) {
-						Logger::alert( sprintf( 'No session policy found for %s.', User::get_user_string( $this->user_id ) ), 500 );
-						$this->die( __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'internal_error_message', __( 'Something went wrong, it is not possible to continue.', 'sessions' ) ), 500 );
-					} else {
-						Logger::critical( sprintf( 'No session policy found for %s.', User::get_user_string( $this->user_id ) ), 202 );
-					}
-				} else {
-					if ( ! LimiterTypes::is_selector_available( $mode ) ) {
-						Logger::critical( sprintf( 'No matching session policy for %s.', User::get_user_string( $this->user_id ) ), 202 );
-						Logger::warning( sprintf( 'Session policy for %1%s downgraded from "%2$s" to "No limit".', User::get_user_string( $this->user_id ), sprintf( '%d session(s) per user and per %s', User::get_user_string( $this->user_id ), str_replace( '-', ' ', $mode ) ) ), 202 );
-						$mode = 'none';
-					}
-					$result = $this->verify_ip_range( $settings[ $role ]['block'] );
-					if ( 'allow' === $result ) {
-						$result = $this->verify_ip_max( (int) $settings[ $role ]['maxip'] );
-					}
-					if ( 'allow' === $result ) {
-						switch ( $mode ) {
-							case 'none':
-								$result = 'allow';
-								break;
+			$privileges = $this->get_privileges_for_user()['modes'];
+			$result     = $this->verify_ip_range( $privileges['block'] );
+			$mode       = 'unknown';
+			if ( 'allow' === $result ) {
+				foreach ( $privileges['limits'] as $key => $limit ) {
+					$limit = (int) $limit;
+					if ( 0 < $limit ) {
+						switch ( $key ) {
 							case 'user':
 								$result = $this->verify_per_user_limit( $limit );
 								break;
 							case 'ip':
-								$result = $this->verify_per_ip_limit( $limit );
+								$result = $this->verify_ip_max( $limit );
 								break;
 							case 'country':
 								$result = $this->verify_per_country_limit( $limit );
@@ -671,49 +762,45 @@ class Session {
 							case 'device-client':
 							case 'device-browser':
 							case 'device-os':
-								$result = $this->verify_per_device_limit( $mode, $limit );
+								$result = $this->verify_per_device_limit( $key, $limit );
 								break;
-							default:
-								if ( 1 === (int) Option::network_get( 'rolemode' ) ) {
-									Logger::alert( 'Unknown session policy.', 501 );
-									$this->die( __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'internal_error_message', __( 'Something went wrong, it is not possible to continue.', 'sessions' ) ), 501 );
-								} else {
-									Logger::critical( 'Unknown session policy.', 202 );
-									$result = 'allow';
-									Logger::debug( sprintf( 'New session allowed for %s.', User::get_user_string( $this->user_id ) ), 200 );
-								}
 						}
-					} else {
-						Logger::warning( sprintf( 'New session not allowed for %s. Reason: IP range or max used IP.', User::get_user_string( $this->user_id ) ), 403 );
-						$this->die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_bad_ip_message', __( 'You\'re not allowed to initiate a new session from your current IP address.', 'sessions' ) ), 403 );
 					}
 					if ( 'allow' !== $result ) {
-						if ( $force_403 && 'default' === $method ) {
-							$method = 'forced_403';
-						}
-						switch ( $method ) {
-							case 'override':
-								if ( '' !== $result ) {
-									if ( array_key_exists( $result, $this->sessions) ) {
-										unset( $this->sessions[ $result ] );
-										do_action( 'sessions_force_terminate', $this->user_id );
-										self::set_user_sessions( $this->sessions, $this->user_id );
-										Logger::notice( sprintf( 'Session overridden for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( 'device-', ' ', $mode ) ) );
-									}
-								}
-								break;
-							case 'default':
-								Logger::warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( 'device-', ' ', $mode ) ), 403 );
-								Capture::login_block( $this->user_id, true );
-								return new \WP_Error( '403', __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ) );
-							default:
-								Logger::warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), str_replace( 'device-', ' ', $mode ) ), 403 );
-								$this->die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ), 403 );
-						}
-					} else {
-						Logger::debug( sprintf( 'New session allowed for %s.', User::get_user_string( $this->user_id ) ), 200 );
+						$mode = $key;
+						break;
 					}
 				}
+			} else {
+				Logger::warning( sprintf( 'New session not allowed on this IP range for %s.', User::get_user_string( $this->user_id ) ), 403 );
+				$this->die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_bad_ip_message', __( 'You\'re not allowed to initiate a new session from your current IP address.', 'sessions' ) ), 403 );
+			}
+			if ( 'allow' !== $result ) {
+				$method = $privileges['method'];
+				if ( $force_403 && 'default' === $method ) {
+					$method = 'forced_403';
+				}
+				switch ( $method ) {
+					case 'override':
+						if ( '' !== $result ) {
+							if ( array_key_exists( $result, $this->sessions ) ) {
+								unset( $this->sessions[ $result ] );
+								do_action( 'sessions_force_terminate', $this->user_id );
+								self::set_user_sessions( $this->sessions, $this->user_id );
+								Logger::notice( sprintf( 'Session overridden for %s. Reason: %s.', User::get_user_string( $this->user_id ), $mode ) );
+							}
+						}
+						break;
+					case 'default':
+						Logger::warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), $mode ), 403 );
+						Capture::login_block( $this->user_id, true );
+						return new \WP_Error( '403', __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ) );
+					default:
+						Logger::warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), $mode ), 403 );
+						$this->die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ), 403 );
+				}
+			} else {
+				Logger::debug( sprintf( 'New session allowed for %s.', User::get_user_string( $this->user_id ) ), 200 );
 			}
 		}
 		return $user;
@@ -732,25 +819,15 @@ class Session {
 		if ( ! array_key_exists( $this->token, $this->sessions ) ) {
 			return false;
 		}
-		$role = '';
-		foreach ( Role::get_all() as $key => $detail ) {
-			if ( in_array( $key, $this->user->roles, true ) ) {
-				$role = $key;
-				break;
-			}
-		}
-		$settings = Option::roles_get();
-		if ( ! array_key_exists( $role, $settings ) ) {
-			return false;
-		}
-		if ( 0 === (int) $settings[ $role ]['idle'] ) {
+		$privileges = $this->get_privileges_for_user()['modes'];
+		if ( 0 === (int) $privileges['idle'] ) {
 			if ( array_key_exists( 'session_idle', $this->sessions[ $this->token ] ) ) {
 				unset( $this->sessions[ $this->token ]['session_idle'] );
 				self::set_user_sessions( $this->sessions, $this->user_id );
 			}
 			return false;
 		}
-		$this->sessions[ $this->token ]['session_idle'] = time() + (int) $settings[ $role ]['idle'] * HOUR_IN_SECONDS;
+		$this->sessions[ $this->token ]['session_idle'] = time() + (int) $privileges['idle'] * HOUR_IN_SECONDS;
 		self::set_user_sessions( $this->sessions, $this->user_id );
 		return true;
 	}
@@ -783,65 +860,43 @@ class Session {
 	 * @since 1.0.0
 	 */
 	public function get_limits_as_text() {
-		$result = '';
-		$role   = '';
-		foreach ( Role::get_all() as $key => $detail ) {
-			if ( in_array( $key, $this->user->roles, true ) ) {
-				$role = $key;
+		$privileges = $this->get_privileges_for_user()['modes'];
+		$result     = '';
+		$restrict   = [];
+		switch ( $privileges['block'] ) {
+			case 'external':
+				$result .= esc_html__( 'Login allowed only from private IP ranges.', 'sessions' ) . ' ';
 				break;
+			case 'local':
+				$result .= esc_html__( 'Login allowed only from public IP ranges.', 'sessions' ) . ' ';
+				break;
+			case 'all':
+				return esc_html__( 'Login is not allowed.', 'sessions' );
+		}
+		foreach ( $privileges['limits'] as $key => $limit ) {
+			$limit = (int) $limit;
+			if ( 0 < $limit ) {
+				switch ( $key ) {
+					case 'user':
+						$restrict[] = esc_html( sprintf( _n( '%d concurrent session.', '%d concurrent sessions.', $limit, 'sessions' ), $limit ) );
+						break;
+					case 'ip':
+					case 'country':
+					case 'device-class':
+					case 'device-type':
+					case 'device-client':
+					case 'device-browser':
+					case 'device-os':
+						$restrict[] = esc_html( sprintf( _n( '%d concurrent session per %s.', '%d concurrent sessions per %s.', $limit, 'sessions' ), $limit, LimiterTypes::$selector_names[ $key ] ) );
+						break;
+				}
 			}
 		}
-		$settings = Option::roles_get();
-		if ( array_key_exists( $role, $settings ) ) {
-			if ( 'external' === $settings[ $role ]['block'] ) {
-				$result .= esc_html__( 'Login allowed only from private IP ranges.', 'sessions' );
-			} elseif ( 'local' === $settings[ $role ]['block'] ) {
-				$result .= esc_html__( 'Login allowed only from public IP ranges.', 'sessions' );
-			}
-			$method = $settings[ $role ]['method'];
-			$mode   = '';
-			$limit  = 0;
-			if ( 'none' === $settings[ $role ]['limit'] ) {
-				$mode = 'none';
-			} else {
-				foreach ( LimiterTypes::$selector_names as $key => $name ) {
-					if ( 0 === strpos( $settings[ $role ]['limit'], $key ) ) {
-						$mode  = $key;
-						$limit = (int) substr( $settings[ $role ]['limit'], strlen( $key ) + 1 );
-						break;
-					}
-				}
-			}
-			$r = '';
-			switch ( $mode ) {
-				case 'user':
-					$r = esc_html( sprintf( _n( '%d concurrent session.', '%d concurrent sessions.', $limit, 'sessions' ), $limit ) );
-					break;
-				case 'ip':
-				case 'country':
-				case 'device-class':
-				case 'device-type':
-				case 'device-client':
-				case 'device-browser':
-				case 'device-os':
-					$r = esc_html( sprintf( _n( '%d concurrent session per %s.', '%d concurrent sessions per %s.', $limit, 'sessions' ), $limit, LimiterTypes::$selector_names[ $mode ] ) );
-					break;
-			}
-			if ( '' !== $r ) {
-				if ( '' !== $result ) {
-					$result .= ' ';
-				}
-				$result .= $r;
-			}
-			if ( 0 !== (int) $settings[ $role ]['idle'] ) {
-				$r = esc_html( sprintf( _n( 'Sessions expire after %d hour of inactivity.', 'Sessions expire after %d hours of inactivity.', $settings[ $role ]['idle'], 'sessions' ), $settings[ $role ]['idle'] ) );
-				if ( '' !== $r ) {
-					if ( '' !== $result ) {
-						$result .= ' ';
-					}
-					$result .= $r;
-				}
-			}
+		if ( 0 < count( $restrict ) ) {
+			$result .= implode( ' ', $restrict ) . ' ';
+		}
+		if ( 0 !== (int) $privileges['idle'] ) {
+			$result .= esc_html( sprintf( _n( 'Sessions expire after %d hour of inactivity.', 'Sessions expire after %d hours of inactivity.', $privileges['idle'], 'sessions' ), $privileges['idle'] ) ) . ' ';
 		}
 		if ( '' === $result ) {
 			$result = esc_html__( 'No restrictions.', 'sessions' );

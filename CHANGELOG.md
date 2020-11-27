@@ -6,12 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased - Will be 2.0.0]
 
 ### Added
+- Privileges computation can be set as 'cumulative' or 'least' on sites using multiple roles per users. May be a breaking change, please verify your settings.
 - New failsafe for `auth_cookie_expired` hook to avoid infinite loops.
 - New Site Health "info" section about shared memory.
 - Compatibility with WordPress 5.6.
 
 ### Changed
 - The analytics dashboard now displays a warning if analytics features are not activated.
+- Improvement in privileges computation and enforcement.
 - Improvement in the way roles are detected.
 - Improved layout for language indicator.
 - If GeoIP support is not done via [IP Locator](https://wordpress.org/plugins/ip-locator/), the flags are now correctly downgraded to emojis.
@@ -20,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Improved IP detection  (thanks to [Ludovic Riaudel](https://github.com/lriaudel)).
 - Improved changelog readability.
 - The integrated markdown parser is now [Markdown](https://github.com/cebe/markdown) from Carsten Brandt.
-- Prepares PerfOps menus to future 5.6 version of WordPress.
+- Prepares PerfOps menus to 5.6 version of WordPress.
 
 ### Fixed
 - [SEC001] User may be wrongly detected in XML-RPC or Rest API calls.
