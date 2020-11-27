@@ -161,14 +161,6 @@ class Sessions extends \WP_List_Table {
 	private $bulk = [];
 
 	/**
-	 * The Role settings.
-	 *
-	 * @since    1.0.0
-	 * @var      array    $settings    The Role settings.
-	 */
-	private $settings = [];
-
-	/**
 	 * The Roles.
 	 *
 	 * @since    1.0.0
@@ -196,7 +188,6 @@ class Sessions extends \WP_List_Table {
 			array_push( $this->compat_fields, 'all_items' );
 		}
 		$this->available_devices = class_exists( 'PODeviceDetector\API\Device' );
-		$this->settings          = Option::roles_get();
 		$this->roles             = Role::get_all();
 		$this->process_args();
 		$this->process_action();
