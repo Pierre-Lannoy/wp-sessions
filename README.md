@@ -26,6 +26,15 @@ __Sessions__ can report the following main items and metrics:
 * login/logout breakdowns;
 * password resets;
 
+__Sessions__ supports a set of WP-CLI commands to:
+    
+* manage WordPress active sessions (list and kill) - see `wp help sessions active` for details;
+* toggle on/off main settings - see `wp help sessions settings` for details;
+* modify operations mode - see `wp help sessions mode` for details;
+* display passwords statistics - see `wp help sessions analytics` for details.
+
+For a full help on WP-CLI commands in Sessions, please [read this guide](WP-CLI.md).
+
 __Sessions__ is a free and open source plugin for WordPress. It integrates many other free and open source works (as-is or modified). Please, see 'about' tab in the plugin settings to see the details.
 
 ## Installation

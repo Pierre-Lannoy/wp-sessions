@@ -12,7 +12,7 @@ Powerful sessions manager for WordPress with sessions limiter and full analytics
 
 == Description ==
 
-**Sessions** is a powerful sessions manager for WordPress with a multi-criteria sessions limiter and full analytics reporting about logins, logouts and account creation.
+**Sessions** is a powerful sessions manager for WordPress with a multi-criteria sessions limiter and full analytics reporting about logins, logouts and account creation. It relies on the standard WordPress sessions manager and add it extra features and controls.
 
 You can limit concurrent sessions, on a per role basis for the following criteria:
 
@@ -33,6 +33,15 @@ You can also set a maximum number of IPs used for each user - useful to limit cr
 * moves distribution;
 * login/logout breakdowns;
 * password resets;
+
+**Sessions** supports a set of WP-CLI commands to:
+    
+* manage WordPress active sessions (list, kill) - see `wp help sessions active` for details;
+* toggle on/off main settings - see `wp help sessions settings` for details;
+* modify operations mode - see `wp help sessions mode` for details;
+* display passwords statistics - see `wp help sessions analytics` for details.
+
+For a full help on WP-CLI commands in Sessions, please [read this guide](https://github.com/Pierre-Lannoy/wp-sessions/blob/master/WP-CLI.md).
 
 **Sessions** is a free and open source plugin for WordPress. It integrates many other free and open source works (as-is or modified). Please, see 'about' tab in the plugin settings to see the details.
 
