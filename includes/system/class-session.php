@@ -11,12 +11,12 @@
 
 namespace POSessions\System;
 
+use POSessions\System\Environment;
 use POSessions\System\Role;
 use POSessions\System\Option;
 use POSessions\System\Logger;
 use POSessions\System\Hash;
 use POSessions\System\User;
-use POSessions\System\Environment;
 use POSessions\System\GeoIP;
 use POSessions\System\UserAgent;
 use POSessions\Plugin\Feature\Schema;
@@ -1061,30 +1061,49 @@ class Session {
 	/**
 	 * Delete all sessions.
 	 *
+	 * @param integer   $user_id    Optional. Delete only for this user.
 	 * @return int|bool False if it was not possible, otherwise the number of deleted meta.
 	 * @since    1.0.0
 	 */
-	public static function delete_all_sessions() {
-		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() ) {
+	public static function delete_all_sessions( $user_id = null) {
+		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() || 1 === Environment::exec_mode() ) {
 			$id = get_current_user_id();
-			if ( isset( $id ) && is_integer( $id ) && 0 < $id ) {
+			if ( ( isset( $id ) && is_integer( $id ) && 0 < $id ) || 1 === Environment::exec_mode() ) {
+				if ( isset( $user_id ) && is_integer( $user_id ) && 0 < $user_id ) {
+					$criteria = " AND user_id = '" . $user_id . "'";
+				} else {
+					$criteria = '';
+				}
+				$users    = 0;
+				$sessions = 0;
 				global $wpdb;
-				$count = $wpdb->query( "DELETE FROM $wpdb->usermeta WHERE meta_key='session_tokens' AND user_id <> '" . $id . "'" );
+				$sql = "SELECT COUNT(*) AS users, SUM( CAST( SUBSTRING(`meta_value`,3,POSITION('{' IN `meta_value`) - 4) AS UNSIGNED)) AS sessions FROM " . $wpdb->usermeta . " WHERE `meta_key`='session_tokens' AND `meta_value`<>'' AND `meta_value`<>'a:0:{}' AND user_id <> '" . $id . "'" . $criteria;
+				// phpcs:ignore
+				$query = $wpdb->get_results( $sql, ARRAY_A );
+				if ( is_array( $query ) && 0 < count( $query ) ) {
+					$users    = $query[0]['users'];
+					$sessions = $query[0]['sessions'];
+				}
+				$count = $wpdb->query( "DELETE FROM $wpdb->usermeta WHERE meta_key='session_tokens' AND user_id <> '" . $id . "'" . $criteria );
 				if ( false === $count ) {
 					Logger::warning( 'Unable to delete all sessions.' );
 					return $count;
 				} else {
-					$cpt = self::delete_remaining_sessions();
-					if ( 0 < $cpt ) {
-						$count += $cpt;
+					if ( isset( $user_id ) && is_integer( $user_id ) && 0 < $user_id ) {
+						$cpt = 0;
+					} else {
+						$cpt = self::delete_remaining_sessions();
 					}
-					if ( 0 === $count ) {
+					if ( 0 < $cpt ) {
+						$sessions += $cpt;
+					}
+					if ( 0 === $sessions ) {
 						Logger::notice( 'No sessions to delete.' );
 					} else {
-						do_action( 'sessions_force_admin_terminate', $count );
-						Logger::notice( sprintf( 'All sessions have been deleted (%d deleted meta).', $count ) );
+						do_action( 'sessions_force_admin_terminate', $sessions );
+						Logger::notice( sprintf( 'All sessions have been deleted (%d deleted meta).', $sessions ) );
 					}
-					return $count;
+					return $sessions;
 				}
 			} else {
 				Logger::alert( 'An unknown user attempted to delete all active sessions.' );

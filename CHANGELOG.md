@@ -6,7 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased - Will be 2.0.0]
 
 ### Added
-- Privileges computation can be set as 'cumulative' or 'least' on sites using multiple roles per users. May be a breaking change, please verify your settings.
+- [WP-CLI] New command to manage active sessions: see `wp help sessions active` for details.
+- [WP-CLI] New command to set role operation mode: see `wp help sessions mode` for details.
+- [WP-CLI] New command to toggle on/off main settings: see `wp help sessions settings` for details.
+- [WP-CLI] New command to display Sessions status: see `wp help sessions status` for details.
+- [WP-CLI] New command to display Sessions: see `wp help sessions analytics` for details.
+- Privileges computation can be set as 'cumulative' or 'least' on sites using multiple roles per users. May be a breaking change if you're in this case, please verify your settings.
 - New failsafe for `auth_cookie_expired` hook to avoid infinite loops.
 - New Site Health "info" section about shared memory.
 - Compatibility with WordPress 5.6.
@@ -27,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 - [SEC001] User may be wrongly detected in XML-RPC or Rest API calls.
 - The remote IP can be wrongly detected when behind some types of reverse-proxies.
+- The count of cleaned sessions may be wrong when "Delete All Sessions" is used.
 - In admin dashboard, the statistics link is visible even if analytics features are not activated.
 - With Firefox, some links are unclickable in the Control Center (thanks to [Emil1](https://wordpress.org/support/users/milouze/)).
 - When site is in english and a user choose another language for herself/himself, menu may be stuck in english.
