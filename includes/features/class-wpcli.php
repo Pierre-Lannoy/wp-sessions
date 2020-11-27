@@ -716,7 +716,7 @@ class Wpcli {
 
 }
 
-add_shortcode( 'pose-wpcli', [ 'KeysMaster\Plugin\Feature\Wpcli', 'sc_get_helpfile' ] );
+add_shortcode( 'pose-wpcli', [ 'POSessions\Plugin\Feature\Wpcli', 'sc_get_helpfile' ] );
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	\WP_CLI::add_command( 'sessions status', [ Wpcli::class, 'status' ] );
