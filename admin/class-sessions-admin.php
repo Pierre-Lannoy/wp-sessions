@@ -460,7 +460,7 @@ class Sessions_Admin {
 	public function plugin_features_section_callback() {
 		$form   = new Form();
 		$mode   = [];
-		$mode[] = [ -1, esc_html__( 'Disabled - Don\'t limit application sessions usage by roles', 'sessions' ) ];
+		$mode[] = [ -1, esc_html__( 'Disabled - Don\'t limit sessions usage by roles', 'sessions' ) ];
 		$mode[] = [ 0, esc_html__( 'Enabled - Cumulative privileges', 'sessions' ) ];
 		$mode[] = [ 1, esc_html__( 'Enabled - Least privileges', 'sessions' ) ];
 		add_settings_field(
