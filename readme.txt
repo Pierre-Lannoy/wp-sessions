@@ -3,8 +3,8 @@ Contributors: PierreLannoy
 Tags: authentication, login, protection, role, session
 Requires at least: 5.2
 Requires PHP: 7.2
-Tested up to: 5.5
-Stable tag: 1.2.0
+Tested up to: 5.6
+Stable tag: 2.0.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -39,7 +39,7 @@ You can also set a maximum number of IPs used for each user - useful to limit cr
 * manage WordPress active sessions (list, kill) - see `wp help sessions active` for details;
 * toggle on/off main settings - see `wp help sessions settings` for details;
 * modify operations mode - see `wp help sessions mode` for details;
-* display passwords statistics - see `wp help sessions analytics` for details.
+* display sessions and accounts statistics - see `wp help sessions analytics` for details.
 
 For a full help on WP-CLI commands in Sessions, please [read this guide](https://github.com/Pierre-Lannoy/wp-sessions/blob/master/WP-CLI.md).
 

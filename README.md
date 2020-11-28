@@ -31,7 +31,7 @@ __Sessions__ supports a set of WP-CLI commands to:
 * manage WordPress active sessions (list and kill) - see `wp help sessions active` for details;
 * toggle on/off main settings - see `wp help sessions settings` for details;
 * modify operations mode - see `wp help sessions mode` for details;
-* display passwords statistics - see `wp help sessions analytics` for details.
+* display sessions and accounts statistics - see `wp help sessions analytics` for details.
 
 For a full help on WP-CLI commands in Sessions, please [read this guide](WP-CLI.md).
 

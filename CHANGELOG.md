@@ -3,7 +3,7 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased - Will be 2.0.0]
+## [2.0.0] - 2020-11-28
 
 ### Added
 - [WP-CLI] New command to manage active sessions: see `wp help sessions active` for details.
@@ -27,7 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Improved IP detection  (thanks to [Ludovic Riaudel](https://github.com/lriaudel)).
 - Improved changelog readability.
 - The integrated markdown parser is now [Markdown](https://github.com/cebe/markdown) from Carsten Brandt.
-- Prepares PerfOps menus to 5.6 version of WordPress.
+- Prepares PerfOps menus to future versions.
 
 ### Fixed
 - [SEC001] User may be wrongly detected in XML-RPC or Rest API calls.
