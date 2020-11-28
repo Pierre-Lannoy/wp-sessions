@@ -12,7 +12,7 @@ You can limit concurrent sessions, on a per role basis for the following criteri
 
 * count per user;
 * count per IP adresses;
-* count per country (requires the free [GeoIP Detection](https://wordpress.org/plugins/geoip-detect/) plugin);
+* count per country (requires the free [IP Locator](https://wordpress.org/plugins/ip-locator/) plugin);
 * count per device classes and types, client types, browser or OS (requires the free [Device Detector](https://wordpress.org/plugins/device-detector/) plugin).
 
 For each roles defined on your site, you can also block login based on private/public IP ranges, and define idle times for sessions auto-termination.
