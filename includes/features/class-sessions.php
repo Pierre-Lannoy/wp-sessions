@@ -605,9 +605,15 @@ class Sessions extends \WP_List_Table {
 			$data,
 			function ( $a, $b ) {
 				if ( 'device' === $this->orderby || 'os' === $this->orderby || 'browser' === $this->orderby ) {
-					$result = strcmp( strtolower( $a[ $this->orderby ] ), strtolower( $b[ $this->orderby ] ) );
+					$result = 0;
+					if ( array_key_exists( $this->orderby, $a ) && array_key_exists( $this->orderby, $b ) ) {
+						$result = strcmp( strtolower( $a[ $this->orderby ] ), strtolower( $b[ $this->orderby ] ) );
+					}
 				} else {
-					$result = intval( $a[ $this->orderby ] ) < intval( $b[ $this->orderby ] ) ? 1 : -1;
+					$result = 0;
+					if ( array_key_exists( $this->orderby, $a ) && array_key_exists( $this->orderby, $b ) ) {
+						$result = intval( $a[ $this->orderby ] ) < intval( $b[ $this->orderby ] ) ? 1 : -1;
+					}
 				}
 				return ( 'asc' === $this->order ) ? -$result : $result;
 			}
