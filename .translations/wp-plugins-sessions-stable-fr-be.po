@@ -1,14 +1,14 @@
-# Translation of Plugins - Sessions - Stable (latest release) in French (France)
+# Translation of Plugins - Sessions - Stable (latest release) in French (Belgium)
 # This file is distributed under the same license as the Plugins - Sessions - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-11-28 15:56+0100\n"
+"PO-Revision-Date: 2020-11-28 15:58+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Poedit 2.4.1\n"
-"Language: fr\n"
+"Language: fr_BE\n"
 "Project-Id-Version: Plugins - Sessions - Stable (latest release)\n"
 "POT-Creation-Date: \n"
 "Last-Translator: \n"
@@ -265,7 +265,7 @@ msgstr "%s et contributeurs"
 
 #: includes/features/class-sessions.php:990
 msgid "Unable to delete all selected sessions. Please see events log."
-msgstr "Impossible de supprimer toutes les sessions sélectionnées. Veuillez consulter le journal des évènements."
+msgstr "Impossible de supprimer toutes les sessions sélectionnées. Veuillez consulter le registre des évènements."
 
 #: includes/features/class-sessions.php:983
 msgid "All selected sessions have been deleted."
@@ -273,7 +273,7 @@ msgstr "Toutes les sessions sélectionnées ont été supprimées."
 
 #: includes/features/class-sessions.php:975
 msgid "Unable to delete all sessions. Please see events log."
-msgstr "Impossible de supprimer toutes les sessions. Veuillez consulter le journal des évènements."
+msgstr "Impossible de supprimer toutes les sessions. Veuillez consulter le registre des évènements."
 
 #: includes/features/class-sessions.php:971
 #: includes/features/class-sessions.php:986
@@ -920,7 +920,7 @@ msgstr "affichage"
 
 #: includes/system/class-environment.php:193
 msgid "log"
-msgstr "journal"
+msgstr "registre"
 
 #: includes/plugin/class-updater.php:50
 msgid "See <a href=\"%s\">what's new</a>."
@@ -1065,7 +1065,7 @@ msgstr "Gérer"
 
 #: admin/partials/sessions-admin-settings-about.php:38
 msgid "Changelog"
-msgstr "Journal des modifications"
+msgstr "Historique des modifications"
 
 #: admin/partials/sessions-admin-settings-about.php:35
 msgid "Disclaimer"
@@ -1257,11 +1257,11 @@ msgstr "Votre site n’utilise aucun mécanisme de détection d’appareils. Pou
 
 #: admin/class-sessions-admin.php:356
 msgid "Logging"
-msgstr "Journalisation"
+msgstr "Enregistrement"
 
 #: admin/class-sessions-admin.php:352
 msgid "Your site does not use any logging plugin. To log all events triggered in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory."
-msgstr "Votre site n’utilise aucune extension de journalisation. Pour journaliser tous les évènements déclenchés par Sessions, je vous recommande d’installer l’excellent (et gratuit) %s. Mais ce n’est pas obligatoire."
+msgstr "Votre site n’utilise aucune extension d’enregistrement. Pour enregistrer tous les évènements déclenchés par Sessions, je vous recommande d’installer l’excellent (et gratuit) %s. Mais ce n’est pas obligatoire."
 
 #: admin/class-sessions-admin.php:349 admin/class-sessions-admin.php:367
 #: admin/class-sessions-admin.php:386

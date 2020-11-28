@@ -1,321 +1,526 @@
-# Translation of Plugins - Sessions - Stable (latest release) in French (France)
+# Translation of Plugins - Sessions - Stable (latest release) in French (Canada)
 # This file is distributed under the same license as the Plugins - Sessions - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-03-24 15:20+0100\n"
+"PO-Revision-Date: 2020-11-28 15:59+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Poedit 2.2.4\n"
-"Language: fr\n"
+"X-Generator: Poedit 2.4.1\n"
+"Language: fr_CA\n"
 "Project-Id-Version: Plugins - Sessions - Stable (latest release)\n"
 "POT-Creation-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
 
+#: perfopsone/class-adminmenus.php:74
+msgid "%s Consoles"
+msgstr ""
+
+#: perfopsone/class-adminmenus.php:74 perfopsone/class-adminmenus.php:75
+msgid "Available Consoles"
+msgstr ""
+
+#: includes/system/class-session.php:874
+msgid "Login is not allowed."
+msgstr ""
+
+#: includes/system/class-markdown.php:46
+msgid "Sorry, unable to find or read the specified file."
+msgstr ""
+
+#: includes/system/class-sitehealth.php:321
+msgid "You should consider using shared memory (PHP shmop) to allow inter-process communication."
+msgstr ""
+
+#: includes/system/class-sitehealth.php:315
+msgid "You should allow inter-process communication"
+msgstr ""
+
+#: includes/system/class-sitehealth.php:309
+msgid "Your site can use shared memory to allow inter-process communication. That's great."
+msgstr ""
+
+#: includes/system/class-sitehealth.php:303
+msgid "Your site can use shared memory"
+msgstr ""
+
+#: includes/system/class-sitehealth.php:286
+msgid "Shared Memory Test"
+msgstr ""
+
+#: includes/features/class-analytics.php:1030
+msgctxt "Noun - Number of active sessions."
+msgid "Active Sessions"
+msgstr ""
+
+#: includes/features/class-analytics.php:886
+msgid "no active users"
+msgstr ""
+
+#: admin/class-sessions-admin.php:476
+msgid "Note: administrators having other roles are not affected by the privileges computation; this privileges computation only applies on non-administrator users having multiple roles."
+msgstr ""
+
+#: admin/class-sessions-admin.php:476
+msgid "Operation mode of sessions limiter."
+msgstr ""
+
+#: admin/class-sessions-admin.php:465
+msgid "Enabled - Least privileges"
+msgstr ""
+
+#: admin/class-sessions-admin.php:464
+msgid "Enabled - Cumulative privileges"
+msgstr ""
+
+#: admin/class-sessions-admin.php:463
+msgid "Disabled - Don't limit application sessions usage by roles"
+msgstr ""
+
+#: includes/integrations/class-databeam.php:52
+msgid "In multisite environments, this source is available for all network sites."
+msgstr ""
+
+#: includes/integrations/class-databeam.php:51
+msgid "Just add this and use it as source in your favorite visualizers and publishers."
+msgstr ""
+
+#: includes/integrations/class-databeam.php:50
+msgid "Allows to integrate, as a DataBeam source, all KPIs related to users' sessions."
+msgstr ""
+
+#: includes/integrations/class-databeam.php:49
+msgid "KPIs"
+msgstr ""
+
+#: includes/features/class-analytics.php:731
+msgid "Users marked as spam."
+msgstr ""
+
+#: includes/features/class-analytics.php:730
+msgctxt "Noun - Short (max 4 char) - Users marked as spam."
+msgid "Spm."
+msgstr ""
+
+#: includes/features/class-analytics.php:729
+msgctxt "Noun - Users marked as spam."
+msgid "Spams"
+msgstr ""
+
+#: includes/features/class-analytics.php:708
+msgid "Active users."
+msgstr ""
+
+#: includes/features/class-analytics.php:707
+msgctxt "Noun - Short (max 4 char) - Active users."
+msgid "Usr."
+msgstr ""
+
+#: includes/features/class-analytics.php:706
+msgctxt "Noun - Active users."
+msgid "Users"
+msgstr ""
+
+#: includes/features/class-analytics.php:685
+msgid "Moving users (registered or deleted)."
+msgstr ""
+
+#: includes/features/class-analytics.php:684
+msgctxt "Noun - Short (max 4 char) - Moving users."
+msgid "Mov."
+msgstr ""
+
+#: includes/features/class-analytics.php:683
+msgctxt "Noun - Moving users."
+msgid "Moves"
+msgstr ""
+
+#: includes/features/class-analytics.php:662
+msgid "Successful logins."
+msgstr ""
+
+#: includes/features/class-analytics.php:661
+msgctxt "Noun - Short (max 4 char) - Successful logins."
+msgid "Log."
+msgstr ""
+
+#: includes/features/class-analytics.php:660
+msgctxt "Noun - Successful logins."
+msgid "Logins"
+msgstr ""
+
+#: includes/features/class-analytics.php:642
+msgctxt "Noun - Short (max 4 char) - Cleaned sessions."
+msgid "Cl."
+msgstr ""
+
+#: includes/features/class-analytics.php:641
+msgctxt "Noun - Cleaned sessions."
+msgid "Cleaned"
+msgstr ""
+
+#: includes/features/class-analytics.php:623
+msgctxt "Noun - Short (max 4 char) - Active sessions."
+msgid "Ses."
+msgstr ""
+
+#: includes/features/class-analytics.php:622
+msgctxt "Noun - Active sessions."
+msgid "Sessions"
+msgstr ""
+
+#: includes/features/class-sessions.php:419
+#: includes/features/class-sessions.php:447
+msgid "Now"
+msgstr ""
+
+#: includes/features/class-analytics.php:1041
+msgid "Ratio of active users."
+msgstr ""
+
+#: includes/features/class-analytics.php:888
+msgid "%s active user"
+msgid_plural "%s active users"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/partials/sessions-admin-tools-lines.php:17
+msgid "Number of sessions to display"
+msgstr ""
+
+#: admin/class-sessions-admin.php:635
+msgid "Maximal number of IP per user. Requires IP follow-up to be activated - see \"Options\" tab."
+msgstr ""
+
+#: admin/class-sessions-admin.php:596
+msgid "%d IP address"
+msgid_plural "%d IP addresses"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/class-sessions-admin.php:593
+msgid "Unlimited"
+msgstr ""
+
+#: admin/class-sessions-admin.php:508
+msgid "If checked, Sessions will refresh IPs when a session is resumed (recommended)."
+msgstr ""
+
+#: admin/class-sessions-admin.php:500
+msgid "IP follow-up"
+msgstr ""
+
+#: admin/class-sessions-admin.php:492
+msgid "If checked, Sessions will improve IP detection used for tokens (recommended)."
+msgstr ""
+
+#: admin/class-sessions-admin.php:489
+msgid "Override WordPress"
+msgstr ""
+
+#: admin/class-sessions-admin.php:484
+msgid "IP detection"
+msgstr "Détection d’IP"
+
 #. translators: as in the sentence "Product W version X by author Y (license
 #. Z)"
-#: includes/libraries/class-libraries.php:218
+#: includes/libraries/class-libraries.php:207
 msgid "<a href=\"%1$s\">%2$s %3$s</a>%4$s by %5$s (%6$s)"
 msgstr "<a href=\"%1$s\">%2$s %3$s</a>%4$s par %5$s (%6$s)"
 
-#: includes/libraries/class-libraries.php:142
+#: includes/libraries/class-libraries.php:131
 msgid "unknown license"
 msgstr "licence inconnue"
 
-#: includes/libraries/class-libraries.php:139
+#: includes/libraries/class-libraries.php:128
 msgid "LGPL-3.0 license"
 msgstr "Licence LGPL-3.0"
 
-#: includes/libraries/class-libraries.php:136
+#: includes/libraries/class-libraries.php:125
 msgid "GPL-3.0 license"
 msgstr "Licence GPL-3.0"
 
-#: includes/libraries/class-libraries.php:133
+#: includes/libraries/class-libraries.php:122
 msgid "GPL-2.0 license"
 msgstr "Licence GPL-2.0"
 
-#: includes/libraries/class-libraries.php:130
+#: includes/libraries/class-libraries.php:119
 msgid "Apache license, version 2.0"
 msgstr "Licence Apache, version 2.0"
 
-#: includes/libraries/class-libraries.php:127
+#: includes/libraries/class-libraries.php:116
 msgid "MIT license"
 msgstr "Licence MIT"
 
 #: includes/libraries/class-libraries.php:67
 #: includes/libraries/class-libraries.php:78
-#: includes/libraries/class-libraries.php:90
-#: includes/libraries/class-libraries.php:186
-#: includes/libraries/class-libraries.php:194
-#: includes/libraries/class-libraries.php:201
-#: includes/libraries/class-libraries.php:208
+#: includes/libraries/class-libraries.php:175
+#: includes/libraries/class-libraries.php:183
+#: includes/libraries/class-libraries.php:190
+#: includes/libraries/class-libraries.php:197
 msgid "%s & contributors"
 msgstr "%s et contributeurs"
 
-#: includes/features/class-sessions.php:996
+#: includes/features/class-sessions.php:990
 msgid "Unable to delete all selected sessions. Please see events log."
 msgstr "Impossible de supprimer toutes les sessions sélectionnées. Veuillez consulter le registre des évènements."
 
-#: includes/features/class-sessions.php:989
+#: includes/features/class-sessions.php:983
 msgid "All selected sessions have been deleted."
 msgstr "Toutes les sessions sélectionnées ont été supprimées."
 
-#: includes/features/class-sessions.php:981
+#: includes/features/class-sessions.php:975
 msgid "Unable to delete all sessions. Please see events log."
 msgstr "Impossible de supprimer toutes les sessions. Veuillez consulter le registre des évènements."
 
-#: includes/features/class-sessions.php:977
-#: includes/features/class-sessions.php:992
+#: includes/features/class-sessions.php:971
+#: includes/features/class-sessions.php:986
 msgid "No sessions to delete."
 msgstr "Aucune session à supprimer."
 
-#: includes/features/class-sessions.php:974
+#: includes/features/class-sessions.php:968
 msgid "All sessions have been deleted."
 msgstr "Toutes les sessions ont été supprimées."
 
-#: includes/features/class-sessions.php:828
+#: includes/features/class-sessions.php:822
 msgid "Select All"
 msgstr "Tout sélectionner"
 
-#: includes/features/class-sessions.php:798
+#: includes/features/class-sessions.php:792
 msgid "Last page"
 msgstr "Dernière page"
 
-#: includes/features/class-sessions.php:788
+#: includes/features/class-sessions.php:782
 msgid "Next page"
 msgstr "Page suivante"
 
-#: includes/features/class-sessions.php:781
+#: includes/features/class-sessions.php:775
 msgctxt "paging"
 msgid "%1$s of %2$s"
 msgstr "%1$s sur %2$s"
 
-#: includes/features/class-sessions.php:770
-#: includes/features/class-sessions.php:774
+#: includes/features/class-sessions.php:764
+#: includes/features/class-sessions.php:768
 msgid "Current Page"
 msgstr "Page actuelle"
 
-#: includes/features/class-sessions.php:764
+#: includes/features/class-sessions.php:758
 msgid "Previous page"
 msgstr "Page précédente"
 
-#: includes/features/class-sessions.php:754
+#: includes/features/class-sessions.php:748
 msgid "First page"
 msgstr "Première page"
 
-#: includes/features/class-sessions.php:722
+#: includes/features/class-sessions.php:716
 msgid "%s item"
 msgid_plural "%s items"
 msgstr[0] "%s élément"
 msgstr[1] "%s éléments"
 
-#: includes/features/class-sessions.php:695
+#: includes/features/class-sessions.php:689
 msgid "Display %d sessions per page"
 msgstr "Afficher %d sessions par page"
 
-#: includes/features/class-sessions.php:644
+#: includes/features/class-sessions.php:638
 msgid "Add as filter"
 msgstr "Ajouter comme filtre"
 
-#: includes/features/class-sessions.php:638
+#: includes/features/class-sessions.php:632
 msgid "Remove this filter"
 msgstr "Supprimer ce filtre"
 
-#: includes/features/class-sessions.php:548
+#: includes/features/class-sessions.php:542
 msgid "Delete session(s)"
 msgstr "Supprimer les sessions"
 
-#: includes/features/class-sessions.php:501
+#: includes/features/class-sessions.php:495
 msgid "Standard exp."
 msgstr "Exp. standard"
 
-#: includes/features/class-sessions.php:500
+#: includes/features/class-sessions.php:494
 msgid "Idle exp."
 msgstr "Exp. d’inactivité"
 
-#: includes/features/class-sessions.php:499
+#: includes/features/class-sessions.php:493
 msgid "Login"
 msgstr "Connexion"
 
-#: includes/features/class-sessions.php:498
+#: includes/features/class-sessions.php:492
 msgid "Client"
 msgstr "Client"
 
-#: includes/features/class-sessions.php:497
+#: includes/features/class-sessions.php:491
 msgid "OS"
 msgstr "OS"
 
-#: includes/features/class-sessions.php:496
+#: includes/features/class-sessions.php:490
 msgid "Device"
 msgstr "Appareil"
 
-#: includes/features/class-sessions.php:495
+#: includes/features/class-sessions.php:489
 msgid "Remote IP"
 msgstr "IP distante"
 
-#: includes/features/class-sessions.php:494
+#: includes/features/class-sessions.php:488
 msgid "Session"
 msgstr "Session"
 
-#: includes/features/class-sessions.php:428
-#: includes/features/class-sessions.php:446
+#: includes/features/class-sessions.php:426
+#: includes/features/class-sessions.php:431
+#: includes/features/class-sessions.php:454
+#: includes/features/class-sessions.php:459
 msgid "%d days"
 msgstr "%d jours"
 
-#: includes/features/class-sessions.php:426
-#: includes/features/class-sessions.php:428
-#: includes/features/class-sessions.php:444
-#: includes/features/class-sessions.php:446
+#: includes/features/class-sessions.php:429
+#: includes/features/class-sessions.php:431
+#: includes/features/class-sessions.php:457
+#: includes/features/class-sessions.php:459
 msgid "In %s"
 msgstr "Dans %s"
 
-#: includes/features/class-sessions.php:225
+#: includes/features/class-wpcli.php:662
+#: includes/features/class-sessions.php:224
 msgid "Generic"
 msgstr "Générique"
 
-#: includes/features/class-analytics.php:1057
+#: includes/features/class-analytics.php:1244
 msgid "Last Month"
 msgstr "Mois dernier"
 
-#: includes/features/class-analytics.php:1056
+#: includes/features/class-analytics.php:1243
 msgid "This Month"
 msgstr "Mois en cours"
 
-#: includes/features/class-analytics.php:1055
+#: includes/features/class-analytics.php:1242
 msgid "Yesterday"
 msgstr "Hier"
 
-#: includes/features/class-analytics.php:1054
+#: includes/features/class-analytics.php:1241
 msgid "Today"
 msgstr "Aujourd’hui"
 
-#: includes/features/class-analytics.php:1052
+#: includes/features/class-analytics.php:1239
 msgid "Cancel"
 msgstr "Annuler"
 
-#: includes/features/class-analytics.php:1052
+#: includes/features/class-analytics.php:1239
 msgid "Custom Range"
 msgstr "Personnalisé"
 
-#: includes/features/class-analytics.php:910
+#: includes/features/class-analytics.php:1097
 msgid "Cleaned Sessions"
 msgstr "Sessions nettoyées"
 
-#: includes/features/class-analytics.php:890
+#: includes/features/class-analytics.php:1077
 msgid "Logins"
 msgstr "Connexions"
 
-#: includes/features/class-analytics.php:864
+#: includes/features/class-analytics.php:1051
 msgid "Ratio of users marked as spam."
 msgstr "Ratio d’utilisateurs marqués comme indésirables."
 
-#: includes/features/class-analytics.php:863
+#: includes/features/class-analytics.php:1050
 msgctxt "Noun - Ratio of users marked as spam."
 msgid "Spam"
 msgstr "Indésirable"
 
-#: includes/features/class-analytics.php:859
+#: includes/features/class-analytics.php:1046
 msgid "Ratio of moving users (registered or deleted)."
 msgstr "Ratio des mouvements utilisateurs (inscrits ou supprimés)."
 
-#: includes/features/class-analytics.php:858
+#: includes/features/class-analytics.php:1045
 msgctxt "Noun - Users turnover."
 msgid "Turnover"
 msgstr "Turnover"
 
-#: includes/features/class-analytics.php:854
-msgid "Percentage of active users."
-msgstr "Pourcentage d’utilisateurs actifs."
-
-#: includes/features/class-analytics.php:853
+#: includes/features/class-analytics.php:1040
 msgctxt "Noun - Percentage of active users."
 msgid "Active Users"
 msgstr "Utilisateurs actifs"
 
-#: includes/features/class-analytics.php:849
+#: includes/features/class-analytics.php:643
+#: includes/features/class-analytics.php:1036
 msgid "Number of cleaned sessions (idle, expired or overridden)."
 msgstr "Nombre de sessions nettoyées (inactives, périmées ou écrasées)."
 
-#: includes/features/class-analytics.php:848
+#: includes/features/class-analytics.php:1035
 msgctxt "Noun - Number of cleaned sessions."
 msgid "Cleaned Sessions"
 msgstr "Sessions nettoyées"
 
-#: includes/features/class-analytics.php:844
+#: includes/features/class-analytics.php:624
+#: includes/features/class-analytics.php:1031
 msgid "Number of active sessions."
 msgstr "Nombre de sessions en cours."
 
-#: includes/features/class-analytics.php:843
-msgctxt "Noun - Percentage of mobile hits."
-msgid "Active Sessions"
-msgstr "Sessions en cours"
-
-#: includes/features/class-analytics.php:839
+#: includes/features/class-analytics.php:1026
 msgid "Ratio of successful logins."
 msgstr "Ratio de connexions réussies."
 
-#: includes/features/class-analytics.php:838
+#: includes/features/class-analytics.php:1025
 msgctxt "Noun - Number of successful logins."
 msgid "Login Success"
 msgstr "Connexion réussie"
 
-#: includes/features/class-analytics.php:811
+#: includes/features/class-analytics.php:998
 msgid "Metrics Variations"
 msgstr "Variations des métriques"
 
-#: includes/features/class-analytics.php:803
+#: includes/features/class-analytics.php:990
 msgid "Password resets."
 msgstr "Réinitialisations de mots de passe."
 
-#: includes/features/class-analytics.php:802
+#: includes/features/class-analytics.php:989
 msgid "Login / logout breakdown."
 msgstr "Répartition des connexions et déconnexions."
 
-#: includes/features/class-analytics.php:801
+#: includes/features/class-analytics.php:988
 msgid "Moves distribution."
 msgstr "Distribution des mouvements."
 
-#: includes/features/class-analytics.php:800
+#: includes/features/class-analytics.php:987
 msgid "Sessions variation."
 msgstr "Variation de session."
 
-#: includes/features/class-analytics.php:799
+#: includes/features/class-analytics.php:986
 msgid "Users variation."
 msgstr "Variation des utilisateurs."
 
-#: includes/features/class-analytics.php:762
+#: includes/features/class-analytics.php:949
 msgid "Main Summary"
 msgstr "Résumé principal"
 
-#: includes/features/class-analytics.php:715
+#: includes/features/class-analytics.php:871
 msgid "%s spam user"
 msgid_plural "%s spam users"
 msgstr[0] "%s utilisateur indésirable"
 msgstr[1] "%s utilisateurs indésirables"
 
-#: includes/features/class-analytics.php:713
+#: includes/features/class-analytics.php:869
 msgid "no spam users"
 msgstr "aucun utilisateur indésirable"
 
-#: includes/features/class-analytics.php:698
+#: includes/features/class-analytics.php:854
 msgid "%s move"
 msgid_plural "%s moves"
 msgstr[0] "%s mouvement"
 msgstr[1] "%s mouvements"
 
-#: includes/features/class-analytics.php:696
+#: includes/features/class-analytics.php:852
 msgid "no moves"
 msgstr "aucun mouvement"
 
-#: includes/features/class-analytics.php:681
+#: includes/features/class-analytics.php:837
 msgid "%s successful login"
 msgid_plural "%s successful logins"
 msgstr[0] "%s connexion réussie"
 msgstr[1] "%s connexions réussies"
 
-#: includes/features/class-analytics.php:679
+#: includes/features/class-analytics.php:835
 msgid "no successful login"
 msgstr "aucune connexion réussie"
 
@@ -380,7 +585,7 @@ msgid "Legit Users"
 msgstr "Utilisateurs légitimes"
 
 #: includes/features/class-analytics.php:282
-#: includes/features/class-analytics.php:941
+#: includes/features/class-analytics.php:1128
 msgid "No Data"
 msgstr "Aucune donnée"
 
@@ -506,86 +711,81 @@ msgctxt "Abbreviation - Stands for \"thousand\"."
 msgid "K"
 msgstr "K"
 
-#: includes/system/class-session.php:681
+#: includes/system/class-session.php:902
 msgid "No restrictions."
 msgstr "Aucune restriction."
 
-#: includes/system/class-session.php:671
+#: includes/system/class-session.php:899
 msgid "Sessions expire after %d hour of inactivity."
 msgid_plural "Sessions expire after %d hours of inactivity."
 msgstr[0] "Les sessions expirent en cas d’inactivité supérieure à %d heure."
 msgstr[1] "Les sessions expirent en cas d’inactivité supérieure à %d heures."
 
-#: includes/system/class-session.php:661
+#: includes/system/class-session.php:890
 msgid "%d concurrent session per %s."
 msgid_plural "%d concurrent sessions per %s."
 msgstr[0] "%d session simultanée par %s."
 msgstr[1] "%d sessions simultanées par %s."
 
-#: includes/system/class-session.php:652
+#: includes/system/class-session.php:881
 msgid "%d concurrent session."
 msgid_plural "%d concurrent sessions."
 msgstr[0] "%d session simultanée."
 msgstr[1] "%d sessions simultanées."
 
-#: includes/system/class-session.php:633
+#: includes/system/class-session.php:871
 msgid "Login allowed only from public IP ranges."
 msgstr "Connexion autorisée uniquement à partir de plages d’IP publiques."
 
-#: includes/system/class-session.php:631
+#: includes/system/class-session.php:868
 msgid "Login allowed only from private IP ranges."
 msgstr "Connexion autorisée uniquement à partir de plages d’IP privées."
 
-#: includes/system/class-session.php:563 includes/system/class-session.php:566
+#: includes/system/class-session.php:797 includes/system/class-session.php:800
 msgid "You're not allowed to initiate a new session because your maximum number of active sessions has been reached."
 msgstr "Vous n’êtes pas autorisé à ouvrir une nouvelle session parce que votre nombre maximum de sessions en cours a été atteint."
 
-#: includes/system/class-session.php:546
+#: includes/system/class-session.php:776
 msgid "You're not allowed to initiate a new session from your current IP address."
 msgstr "Vous n’avez pas le droit d’ouvrir une nouvelle session à partir de votre adresse IP actuelle."
 
-#: includes/system/class-session.php:546 includes/system/class-session.php:566
+#: includes/system/class-session.php:776 includes/system/class-session.php:800
 msgid "<strong>FORBIDDEN</strong>: "
 msgstr "<strong>INTERDIT</strong>: "
 
-#: includes/system/class-session.php:502 includes/system/class-session.php:537
-msgid "Something went wrong, it is not possible to continue."
-msgstr "Désolé, quelque chose s’est mal passé. Veuillez réessayer."
-
-#: includes/system/class-session.php:502 includes/system/class-session.php:537
-#: includes/system/class-session.php:563
+#: includes/system/class-session.php:797
 msgid "<strong>ERROR</strong>: "
 msgstr "<strong>ERREUR</strong>: "
 
-#: includes/system/class-date.php:128
+#: includes/system/class-date.php:131
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "heure"
 msgstr[1] "heures"
 
-#: includes/system/class-date.php:127
+#: includes/system/class-date.php:130
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minute"
 msgstr[1] "minutes"
 
-#: includes/system/class-date.php:126
+#: includes/system/class-date.php:129
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "seconde"
 msgstr[1] "secondes"
 
-#: includes/system/class-date.php:122
+#: includes/system/class-date.php:125
 msgctxt "Unit abbreviation - Stands for \"hour\"."
 msgid "hr"
 msgstr "h."
 
-#: includes/system/class-date.php:121
+#: includes/system/class-date.php:124
 msgctxt "Unit abbreviation - Stands for \"minute\"."
 msgid "min"
 msgstr "min"
 
-#: includes/system/class-date.php:120
+#: includes/system/class-date.php:123
 msgctxt "Unit abbreviation - Stands for \"second\"."
 msgid "sec"
 msgstr "sec"
@@ -598,127 +798,129 @@ msgstr "dans %s"
 msgid "currently"
 msgstr "actuellement"
 
-#: includes/system/class-date.php:70 includes/system/class-date.php:85
+#: includes/features/class-sessions.php:424
+#: includes/features/class-sessions.php:426
+#: includes/features/class-sessions.php:452
+#: includes/features/class-sessions.php:454 includes/system/class-date.php:70
+#: includes/system/class-date.php:85
 msgid "%s ago"
 msgstr "il y a %s"
 
-#: includes/system/class-sitehealth.php:320
+#: includes/system/class-sitehealth.php:375
 msgid "You should consider using PHP Intl extension. It would improve localization features on your site."
 msgstr "Vous devriez envisager d’utiliser l’extension PHP Intl. Cela permettrait d’améliorer les fonctionnalités de traduction sur votre site."
 
-#: includes/system/class-sitehealth.php:314
+#: includes/system/class-sitehealth.php:369
 msgid "You should use Intl extension"
 msgstr "Vous devriez utiliser l’extension Intl"
 
-#: includes/system/class-sitehealth.php:308
+#: includes/system/class-sitehealth.php:363
 msgid "Your site uses PHP Intl extension to improve localization features. That's great."
 msgstr "Votre site utilise l’extension PHP Intl pour améliorer les fonctionnalités de traduction. C’est super."
 
-#: includes/system/class-sitehealth.php:305
-#: includes/system/class-sitehealth.php:317
+#: includes/system/class-sitehealth.php:360
+#: includes/system/class-sitehealth.php:372
 msgid "Internationalization"
 msgstr "Internationalisation"
 
-#: includes/system/class-sitehealth.php:302
+#: includes/system/class-sitehealth.php:357
 msgid "Your site uses Intl extension"
 msgstr "Votre site utilise l’extension Intl"
 
-#: includes/system/class-sitehealth.php:285
+#: includes/system/class-sitehealth.php:340
 msgid "I18n Extension Test"
 msgstr "Test d’extension I18n"
 
-#: includes/system/class-sitehealth.php:266
+#: includes/system/class-sitehealth.php:267
 msgid "You should consider using OPcache. It would improve PHP performance of your site."
 msgstr "Vous devriez envisager d’utiliser OPcache. Cela permettrait d’améliorer les performances PHP de votre site."
 
-#: includes/system/class-sitehealth.php:260
+#: includes/system/class-sitehealth.php:261
 msgid "You should use OPcache"
 msgstr "Vous devriez utiliser OPcache"
 
-#: includes/system/class-sitehealth.php:254
+#: includes/system/class-sitehealth.php:255
 msgid "Your site uses OPcache to improve PHP performance. That's great."
 msgstr "Votre site utilise OPcache pour améliorer les performances de PHP. C’est super."
 
-#: includes/system/class-sitehealth.php:248
+#: includes/system/class-sitehealth.php:249
 msgid "Your site uses OPcache"
 msgstr "Votre site utilise OPcache"
 
-#: includes/system/class-sitehealth.php:231
+#: includes/system/class-sitehealth.php:232
 msgid "OPcache Test"
 msgstr "Test OPcache"
 
-#: includes/system/class-sitehealth.php:212
+#: includes/system/class-sitehealth.php:213
 msgid "Your site uses a dedicated object caching mechanism. That's great."
 msgstr "Votre site utilise un mécanisme dédié de mise cache d’objets. C'est super."
 
-#: includes/system/class-sitehealth.php:206
+#: includes/system/class-sitehealth.php:207
 msgid "Your site uses object caching"
 msgstr "Votre site utilise la mise en cache d’objets"
 
-#: includes/system/class-sitehealth.php:200
+#: includes/system/class-sitehealth.php:201
 msgid "Your site uses APCu, but only a few plugins know how to take advantage of it."
 msgstr "Votre site utilise APCu, mais seules quelques extensions savent comment en profiter."
 
-#: includes/system/class-sitehealth.php:194
+#: includes/system/class-sitehealth.php:195
 msgid "You should improve object caching"
 msgstr "Vous devriez améliorer la mise en cache d’objets"
 
-#: includes/system/class-sitehealth.php:188
-#: includes/system/class-sitehealth.php:200
+#: includes/system/class-sitehealth.php:189
+#: includes/system/class-sitehealth.php:201
 msgid "You should consider using a dedicated object caching mechanism, like Memcached or Redis, to improve your site's speed."
 msgstr "Vous devriez envisager d’utiliser un mécanisme dédié de mise en cache d’objets, comme Memcached ou Redis, pour améliorer la vitesse de votre site."
 
-#: includes/system/class-sitehealth.php:188
+#: includes/system/class-sitehealth.php:189
 msgid "Your site uses database transient."
 msgstr "Votre site utilise des Transients stockés en base de données."
 
-#: includes/system/class-sitehealth.php:185
-#: includes/system/class-sitehealth.php:197
-#: includes/system/class-sitehealth.php:209
-#: includes/system/class-sitehealth.php:251
-#: includes/system/class-sitehealth.php:263
+#: includes/system/class-sitehealth.php:186
+#: includes/system/class-sitehealth.php:198
+#: includes/system/class-sitehealth.php:210
+#: includes/system/class-sitehealth.php:252
+#: includes/system/class-sitehealth.php:264
+#: includes/system/class-sitehealth.php:306
+#: includes/system/class-sitehealth.php:318
 msgid "Performance"
 msgstr "Performance"
 
-#: includes/system/class-sitehealth.php:182
+#: includes/system/class-sitehealth.php:183
 msgid "You should use object caching"
 msgstr "Vous devriez utiliser la mise en cache d’objets"
 
-#: includes/system/class-sitehealth.php:164
+#: includes/system/class-sitehealth.php:165
 msgid "Object Cache Test"
 msgstr "Test de cache objet"
 
-#: includes/system/class-sitehealth.php:147
+#: includes/system/class-sitehealth.php:148
 msgid "Plugin diagnostic information"
 msgstr "Informations de diagnostique de l’extension"
 
-#: includes/system/class-sitehealth.php:130
+#: includes/system/class-sitehealth.php:131
 msgid "OPcache settings and status"
 msgstr "Paramètres et état OPcache"
 
-#: includes/system/class-sitehealth.php:122
+#: includes/system/class-sitehealth.php:123
 msgid "Object cache"
 msgstr "Cache objet"
 
-#: includes/system/class-environment.php:248
+#: includes/system/class-environment.php:204
 msgid "Debug disabled"
 msgstr "Débogage désactivé"
 
-#: includes/system/class-environment.php:248
+#: includes/system/class-environment.php:204
 msgid "Debug enabled"
 msgstr "Débogage activé"
 
-#: includes/system/class-environment.php:242
+#: includes/system/class-environment.php:198
 msgid "display"
 msgstr "affichage"
 
-#: includes/system/class-environment.php:237
+#: includes/system/class-environment.php:193
 msgid "log"
 msgstr "registre"
-
-#: includes/plugin/class-updater.php:97
-msgid "Sorry, unable to find or read changelog file."
-msgstr "Désolé, il est impossible de trouver ou de lire l’historique des modifications."
 
 #: includes/plugin/class-updater.php:50
 msgid "See <a href=\"%s\">what's new</a>."
@@ -732,55 +934,55 @@ msgstr "%1$s a été correctement mis à jour de la version %2$s à la version %
 msgid "%1$s has been correctly installed."
 msgstr "%1$s a été correctement installé."
 
-#: perfopsone/class-adminmenus.php:379
+#: perfopsone/class-adminmenus.php:406
 msgid "Requires at least PHP %1$s%2$s and WordPress %3$s%4$s."
 msgstr "Nécessite au moins PHP %1$s%2$s et WordPress %3$s%4$s."
 
-#: perfopsone/class-adminmenus.php:370
+#: perfopsone/class-adminmenus.php:397
 msgid "contribution"
 msgstr "contribution"
 
-#: perfopsone/class-adminmenus.php:369
+#: perfopsone/class-adminmenus.php:396
 msgid "support"
 msgstr "assistance"
 
-#: perfopsone/class-adminmenus.php:368
+#: perfopsone/class-adminmenus.php:395
 msgid "about"
 msgstr "à propos"
 
-#: perfopsone/class-adminmenus.php:367
+#: perfopsone/class-adminmenus.php:394
 msgid "settings"
 msgstr "réglages"
 
-#: perfopsone/class-adminmenus.php:241
+#: perfopsone/class-adminmenus.php:268
 msgid "No review yet."
 msgstr "Pas encore d’avis."
 
-#: perfopsone/class-adminmenus.php:238
+#: perfopsone/class-adminmenus.php:265
 msgid "%s reviews."
 msgstr "%s avis."
 
-#: perfopsone/class-adminmenus.php:233
+#: perfopsone/class-adminmenus.php:260
 msgid "%s downloads."
 msgstr "%s téléchargements."
 
-#: perfopsone/class-adminmenus.php:228
+#: perfopsone/class-adminmenus.php:255
 msgid "%s+ installs."
 msgstr "%s+ installations."
 
-#: perfopsone/class-adminmenus.php:211 perfopsone/class-adminmenus.php:218
+#: perfopsone/class-adminmenus.php:238 perfopsone/class-adminmenus.php:245
 msgid "need update"
 msgstr "nécessite une mise à jour"
 
-#: perfopsone/class-adminmenus.php:209 perfopsone/class-adminmenus.php:216
+#: perfopsone/class-adminmenus.php:236 perfopsone/class-adminmenus.php:243
 msgid "OK"
 msgstr "OK"
 
-#: perfopsone/class-adminmenus.php:203
+#: perfopsone/class-adminmenus.php:230
 msgid "Need to be updated to %s."
 msgstr "Nécessite d’être mis à jour vers %s."
 
-#: perfopsone/class-adminmenus.php:108
+#: perfopsone/class-adminmenus.php:112
 msgid "This analytics feature is currently disabled. Click here to activate it."
 msgstr "Cette fonctionnalité d’analyse est actuellement désactivée. Cliquez ici pour l’activer."
 
@@ -841,13 +1043,9 @@ msgid "Delete All Sessions"
 msgstr "Supprimer toutes les sessions"
 
 #: admin/partials/sessions-admin-tools-lines.php:23
-#: includes/features/class-analytics.php:1052
+#: includes/features/class-analytics.php:1239
 msgid "Apply"
 msgstr "Appliquer"
-
-#: admin/partials/sessions-admin-tools-lines.php:17
-msgid "Number of posts to display"
-msgstr "Nombre de contenus à afficher"
 
 #: admin/partials/sessions-admin-user-profile.php:40
 msgid "Active sessions"
@@ -867,7 +1065,7 @@ msgstr "Gérer"
 
 #: admin/partials/sessions-admin-settings-about.php:38
 msgid "Changelog"
-msgstr "Historique des modifications"
+msgstr "Historique des changements"
 
 #: admin/partials/sessions-admin-settings-about.php:35
 msgid "Disclaimer"
@@ -889,236 +1087,220 @@ msgstr "Cette version de %s est une « release candidate ». Bien que prête p
 msgid "This version of %s is not production-ready. It is a development preview. Use it at your own risk!"
 msgstr "Cette version de %s n’est pas destinée à être mise en production. Il s’agit d’une « development preview ». Utilisez-la à vos risques et périls !"
 
-#: admin/class-sessions-admin.php:657
+#: admin/class-sessions-admin.php:715
 msgid "\"Remember Me\" cookie duration."
 msgstr "Durée du cookie « Se souvenir de moi »."
 
-#: admin/class-sessions-admin.php:641
+#: admin/class-sessions-admin.php:699
 msgid "Standard cookie duration."
 msgstr "Durée standard du cookie."
 
-#: admin/class-sessions-admin.php:625
+#: admin/class-sessions-admin.php:683
 msgid "Idle sessions supervision."
 msgstr "Supervision des sessions inactives."
 
-#: admin/class-sessions-admin.php:609
+#: admin/class-sessions-admin.php:667
 msgid "Method to be used when the maximal number of sessions is reached."
 msgstr "Méthode à utiliser lorsque le nombre maximal de sessions est atteint."
 
-#: admin/class-sessions-admin.php:593
+#: admin/class-sessions-admin.php:651
 msgid "Maximal number of sessions for users."
 msgstr "Nombre maximal de sessions pour les utilisateurs."
 
-#: admin/class-sessions-admin.php:577
+#: admin/class-sessions-admin.php:619
 msgid "Allowed logins."
 msgstr "Connexions autorisées."
 
-#: admin/class-sessions-admin.php:563
+#: admin/class-sessions-admin.php:605
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d semaine"
 msgstr[1] "%d semaines"
 
-#: admin/class-sessions-admin.php:559
+#: admin/class-sessions-admin.php:601
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d jour"
 msgstr[1] "%d jours"
 
-#: admin/class-sessions-admin.php:554
+#: admin/class-sessions-admin.php:590
 msgid "Terminate a session when idle for more than %d hour"
 msgid_plural "Terminate a session when idle for more than %d hours"
 msgstr[0] "Mettre fin à la session en cas d’inactivité supérieure à %d heure"
 msgstr[1] "Mettre fin à la session en cas d’inactivité supérieure à %d heures"
 
-#: admin/class-sessions-admin.php:551
+#: admin/class-sessions-admin.php:587
 msgid "Never terminate an idle session"
 msgstr "Ne jamais mettre fin à une session inactive"
 
-#: admin/class-sessions-admin.php:549
+#: admin/class-sessions-admin.php:585
 msgid "Block and send a WordPress error"
 msgstr "Bloquer et renvoyer une erreur WordPress"
 
 #. translators: please, do not translate the string [HTTP 403 / Forbidden] as
 #. it is a standard HTTP header.
-#: admin/class-sessions-admin.php:548
+#: admin/class-sessions-admin.php:584
 msgid "Block and send a \"HTTP 403 / Forbidden\" error"
 msgstr "Bloquer et renvoyer une erreur « HTTP 403 / Forbidden »"
 
-#: admin/class-sessions-admin.php:546
+#: admin/class-sessions-admin.php:582
 msgid "Override oldest session"
 msgstr "Écraser la session la plus ancienne"
 
-#: admin/class-sessions-admin.php:544
+#: admin/class-sessions-admin.php:580
 msgid "Allow only from public IP ranges"
 msgstr "Autoriser uniquement à partir de plages d’IP publiques"
 
-#: admin/class-sessions-admin.php:543
+#: admin/class-sessions-admin.php:579
 msgid "Allow only from private IP ranges"
 msgstr "Autoriser uniquement à partir de plages d’IP privées"
 
-#: admin/class-sessions-admin.php:542
+#: admin/class-sessions-admin.php:578
 msgid "Allow from everywhere"
 msgstr "Autoriser de partout"
 
-#: admin/class-sessions-admin.php:527
+#: admin/class-sessions-admin.php:563
 msgid "%d session per user and per %s"
 msgid_plural "%d sessions per user and per %s"
 msgstr[0] "%d session par utilisateur et par %s"
 msgstr[1] "%d sessions par utilisateur et par %s"
 
-#: admin/class-sessions-admin.php:524
+#: admin/class-sessions-admin.php:560
 msgid "%d session per user"
 msgid_plural "%d sessions per user"
 msgstr[0] "%d session par utilisateur"
 msgstr[1] "%d sessions par utilisateur"
 
-#: admin/class-sessions-admin.php:520
+#: admin/class-sessions-admin.php:556
 msgid "No limit"
 msgstr "Pas de limitation"
 
-#: admin/class-sessions-admin.php:504
+#: admin/class-sessions-admin.php:540
 msgid "Maximum age of data to keep for statistics."
 msgstr "Âge maximum des données à conserver pour les statistiques."
 
-#: admin/class-sessions-admin.php:496
+#: admin/class-sessions-admin.php:532
 msgid "Historical data"
 msgstr "Données d’historiques"
 
-#: admin/class-sessions-admin.php:488
+#: admin/class-sessions-admin.php:524
 msgid "If checked, Sessions will store statistics about accounts and sessions."
 msgstr "Si coché, Sessions enregistrera des statistiques au sujet des comptes et sessions."
 
-#: admin/class-sessions-admin.php:485
+#: admin/class-sessions-admin.php:505 admin/class-sessions-admin.php:521
 msgid "Activated"
 msgstr "Activé"
 
-#: admin/class-sessions-admin.php:480
+#: admin/class-sessions-admin.php:516
 msgid "Analytics"
 msgstr "Analyse de données"
 
-#: admin/class-sessions-admin.php:472
-msgid "Operation mode of this feature."
-msgstr "Mode de fonctionnement de cette fonctionnalité."
-
-#: admin/class-sessions-admin.php:464
+#: admin/class-sessions-admin.php:468
 msgid "Settings by roles"
 msgstr "Réglages par rôle"
 
-#: admin/class-sessions-admin.php:461
-msgid "Enabled - strict mode (useful in production, when all settings are ok)"
-msgstr "Activé - mode strict (utile en production, lorsque tous les paramètres sont validés)"
-
-#: admin/class-sessions-admin.php:460
-msgid "Enabled - permissive mode (useful when adjusting settings)"
-msgstr "Activé - mode permissif (utile lors de l’ajustement des réglages)"
-
-#: admin/class-sessions-admin.php:459
-msgid "Disabled (don't limit sessions by roles)"
-msgstr "Désactivé (ne pas limiter les sessions par rôle)"
-
-#: admin/class-sessions-admin.php:446
+#: admin/class-sessions-admin.php:450
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d an"
 msgstr[1] "%d ans"
 
-#: admin/class-sessions-admin.php:442
+#: admin/class-sessions-admin.php:446
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d mois"
 msgstr[1] "%d mois"
 
-#: admin/class-sessions-admin.php:424
+#: admin/class-sessions-admin.php:428
 msgid "Note: Sessions respects DISABLE_NAG_NOTICES flag."
 msgstr "Note : Sessions respecte l’indicateur DISABLE_NAG_NOTICES."
 
-#: admin/class-sessions-admin.php:424
+#: admin/class-sessions-admin.php:428
 msgid "Allows Sessions to display admin notices throughout the admin dashboard."
 msgstr "Autoriser Sessions à afficher les avis d’administration dans le Tableau de bord."
 
-#: admin/class-sessions-admin.php:421
+#: admin/class-sessions-admin.php:425
 msgid "Display"
 msgstr "Affichage"
 
-#: admin/class-sessions-admin.php:416
+#: admin/class-sessions-admin.php:420
 msgid "Admin notices"
 msgstr "Avis d’administration"
 
-#: admin/class-sessions-admin.php:408
+#: admin/class-sessions-admin.php:412
 msgid "If checked, Sessions will use a public CDN (jsDelivr) to serve scripts and stylesheets."
 msgstr "Si coché, Sessions utilisera un CDN public (jsDelivr) pour la distribution des scripts et des feuilles de style."
 
-#: admin/class-sessions-admin.php:405
+#: admin/class-sessions-admin.php:409
 msgid "Use public CDN"
 msgstr "Utiliser un CDN public"
 
-#: admin/class-sessions-admin.php:400
+#: admin/class-sessions-admin.php:404
 msgid "Resources"
 msgstr "Ressources"
 
-#: admin/class-sessions-admin.php:389
+#: admin/class-sessions-admin.php:393
 msgid "IP information"
 msgstr "Informations IP"
 
-#: admin/class-sessions-admin.php:385
+#: admin/class-sessions-admin.php:389
 msgid "Your site does not use any IP geographic information plugin. To allow country differentiation in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory."
 msgstr "Votre site n’utilise aucune extension de géolocalisation d’IP. Pour profiter de la différenciation par pays dans Sessions, je vous recommande d’installer l’excellent (et gratuit) %s. Mais ce n’est pas obligatoire."
 
-#: admin/class-sessions-admin.php:370
+#: admin/class-sessions-admin.php:374
 msgid "Device detection"
 msgstr "Détection d’appareil"
 
-#: admin/class-sessions-admin.php:366
+#: admin/class-sessions-admin.php:370
 msgid "Your site does not use any device detection mechanism. To allow device differentiation in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory."
 msgstr "Votre site n’utilise aucun mécanisme de détection d’appareils. Pour permettre la différenciation de l’appareil dans Sessions, je vous recommande d’installer l’excellent (et gratuit) %s. Mais ce n’est pas obligatoire."
 
-#: admin/class-sessions-admin.php:352
+#: admin/class-sessions-admin.php:356
 msgid "Logging"
 msgstr "Enregistrement"
 
-#: admin/class-sessions-admin.php:348
+#: admin/class-sessions-admin.php:352
 msgid "Your site does not use any logging plugin. To log all events triggered in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory."
 msgstr "Votre site n’utilise aucune extension d’enregistrement. Pour enregistrer tous les évènements déclenchés par Sessions, je vous recommande d’installer l’excellent (et gratuit) %s. Mais ce n’est pas obligatoire."
 
-#: admin/class-sessions-admin.php:345 admin/class-sessions-admin.php:363
-#: admin/class-sessions-admin.php:382
+#: admin/class-sessions-admin.php:349 admin/class-sessions-admin.php:367
+#: admin/class-sessions-admin.php:386
 msgid "Your site is currently using %s."
 msgstr "Votre site utilise actuellement %s."
 
-#: admin/class-sessions-admin.php:328
+#: admin/class-sessions-admin.php:332
 msgid "Plugin settings have not been reset to defaults. Please try again."
 msgstr "Les réglages n’ont pas été réinitialisés à leurs valeurs par défaut. Veuillez réessayer."
 
-#: admin/class-sessions-admin.php:323
+#: admin/class-sessions-admin.php:327
 msgid "Plugin settings have been reset to defaults."
 msgstr "Le réglages ont été réinitialisées aux valeurs par défaut."
 
-#: admin/class-sessions-admin.php:280 admin/class-sessions-admin.php:306
+#: admin/class-sessions-admin.php:282 admin/class-sessions-admin.php:310
 msgid "Plugin settings have not been saved. Please try again."
 msgstr "Les réglages n’ont pas été mis à jour. Veuillez réessayer."
 
-#: admin/class-sessions-admin.php:275
+#: admin/class-sessions-admin.php:277
 msgid "For immediate implementation for all accounts, you must delete all active sessions."
 msgstr "Pour une prise en compte immédiate pour tous les comptes, vous devez supprimer toutes les sessions en cours."
 
-#: admin/class-sessions-admin.php:274
+#: admin/class-sessions-admin.php:276
 msgid "Note these settings will only affect new sessions."
 msgstr "Notez que ces réglages n’affecteront que les nouvelles sessions."
 
-#: admin/class-sessions-admin.php:273 admin/class-sessions-admin.php:301
+#: admin/class-sessions-admin.php:275 admin/class-sessions-admin.php:305
 msgid "Plugin settings have been saved."
 msgstr "Les réglages ont été mis à jour."
 
-#: admin/class-sessions-admin.php:193
+#: admin/class-sessions-admin.php:195
 msgid "GitHub repository"
 msgstr "dépôt GitHub"
 
-#: admin/class-sessions-admin.php:192
+#: admin/class-sessions-admin.php:194
 msgid "Support"
 msgstr "Assistance"
 
-#: admin/class-sessions-admin.php:178
+#: admin/class-sessions-admin.php:179
 msgid "Statistics"
 msgstr "Statistiques"
 

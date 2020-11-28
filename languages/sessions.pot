@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Sessions\n"
-"POT-Creation-Date: 2020-11-05 18:17+0100\n"
+"POT-Creation-Date: 2020-11-28 15:47+0100\n"
 "PO-Revision-Date: 2019-07-08 14:07+0200\n"
 "Last-Translator: Pierre Lannoy <pierre@lannoy.fr>\n"
 "Language-Team: Pierre Lannoy <pierre@lannoy.fr>\n"
@@ -439,7 +439,7 @@ msgid "Number of sessions to display"
 msgstr ""
 
 #: admin/partials/sessions-admin-tools-lines.php:23
-#: includes/features/class-analytics.php:1241
+#: includes/features/class-analytics.php:1239
 msgid "Apply"
 msgstr ""
 
@@ -493,7 +493,7 @@ msgid "Other"
 msgstr ""
 
 #: includes/features/class-analytics.php:282
-#: includes/features/class-analytics.php:1130
+#: includes/features/class-analytics.php:1128
 msgid "No Data"
 msgstr ""
 
@@ -557,236 +557,239 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-#: includes/features/class-analytics.php:624
+#: includes/features/class-analytics.php:622
 msgctxt "Noun - Active sessions."
 msgid "Sessions"
 msgstr ""
 
-#: includes/features/class-analytics.php:625
+#: includes/features/class-analytics.php:623
 msgctxt "Noun - Short (max 4 char) - Active sessions."
 msgid "Ses."
 msgstr ""
 
-#: includes/features/class-analytics.php:626
-#: includes/features/class-analytics.php:1033
+#: includes/features/class-analytics.php:624
+#: includes/features/class-analytics.php:1031
 msgid "Number of active sessions."
 msgstr ""
 
-#: includes/features/class-analytics.php:643
+#: includes/features/class-analytics.php:641
 msgctxt "Noun - Cleaned sessions."
 msgid "Cleaned"
 msgstr ""
 
-#: includes/features/class-analytics.php:644
+#: includes/features/class-analytics.php:642
 msgctxt "Noun - Short (max 4 char) - Cleaned sessions."
 msgid "Cl."
 msgstr ""
 
-#: includes/features/class-analytics.php:645
-#: includes/features/class-analytics.php:1038
+#: includes/features/class-analytics.php:643
+#: includes/features/class-analytics.php:1036
 msgid "Number of cleaned sessions (idle, expired or overridden)."
 msgstr ""
 
-#: includes/features/class-analytics.php:662
+#: includes/features/class-analytics.php:660
 msgctxt "Noun - Successful logins."
 msgid "Logins"
 msgstr ""
 
-#: includes/features/class-analytics.php:663
+#: includes/features/class-analytics.php:661
 msgctxt "Noun - Short (max 4 char) - Successful logins."
 msgid "Log."
 msgstr ""
 
-#: includes/features/class-analytics.php:664
+#: includes/features/class-analytics.php:662
 msgid "Successful logins."
 msgstr ""
 
-#: includes/features/class-analytics.php:685
+#: includes/features/class-analytics.php:683
 msgctxt "Noun - Moving users."
 msgid "Moves"
 msgstr ""
 
-#: includes/features/class-analytics.php:686
+#: includes/features/class-analytics.php:684
 msgctxt "Noun - Short (max 4 char) - Moving users."
 msgid "Mov."
 msgstr ""
 
-#: includes/features/class-analytics.php:687
+#: includes/features/class-analytics.php:685
 msgid "Moving users (registered or deleted)."
 msgstr ""
 
-#: includes/features/class-analytics.php:708
+#: includes/features/class-analytics.php:706
 msgctxt "Noun - Active users."
 msgid "Users"
 msgstr ""
 
-#: includes/features/class-analytics.php:709
+#: includes/features/class-analytics.php:707
 msgctxt "Noun - Short (max 4 char) - Active users."
 msgid "Usr."
 msgstr ""
 
-#: includes/features/class-analytics.php:710
+#: includes/features/class-analytics.php:708
 msgid "Active users."
 msgstr ""
 
-#: includes/features/class-analytics.php:731
+#: includes/features/class-analytics.php:729
 msgctxt "Noun - Users marked as spam."
 msgid "Spams"
 msgstr ""
 
-#: includes/features/class-analytics.php:732
+#: includes/features/class-analytics.php:730
 msgctxt "Noun - Short (max 4 char) - Users marked as spam."
 msgid "Spm."
 msgstr ""
 
-#: includes/features/class-analytics.php:733
+#: includes/features/class-analytics.php:731
 msgid "Users marked as spam."
 msgstr ""
 
-#: includes/features/class-analytics.php:837
+#: includes/features/class-analytics.php:835
 msgid "no successful login"
 msgstr ""
 
-#: includes/features/class-analytics.php:839
+#: includes/features/class-analytics.php:837
 #, php-format
 msgid "%s successful login"
 msgid_plural "%s successful logins"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/features/class-analytics.php:854
+#: includes/features/class-analytics.php:852
 msgid "no moves"
 msgstr ""
 
-#: includes/features/class-analytics.php:856
+#: includes/features/class-analytics.php:854
 #, php-format
 msgid "%s move"
 msgid_plural "%s moves"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/features/class-analytics.php:871
-#: includes/features/class-analytics.php:888
+#: includes/features/class-analytics.php:869
 msgid "no spam users"
 msgstr ""
 
-#: includes/features/class-analytics.php:873
+#: includes/features/class-analytics.php:871
 #, php-format
 msgid "%s spam user"
 msgid_plural "%s spam users"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/features/class-analytics.php:890
+#: includes/features/class-analytics.php:886
+msgid "no active users"
+msgstr ""
+
+#: includes/features/class-analytics.php:888
 #, php-format
 msgid "%s active user"
 msgid_plural "%s active users"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/features/class-analytics.php:951
+#: includes/features/class-analytics.php:949
 msgid "Main Summary"
 msgstr ""
 
-#: includes/features/class-analytics.php:988
+#: includes/features/class-analytics.php:986
 msgid "Users variation."
 msgstr ""
 
-#: includes/features/class-analytics.php:989
+#: includes/features/class-analytics.php:987
 msgid "Sessions variation."
 msgstr ""
 
-#: includes/features/class-analytics.php:990
+#: includes/features/class-analytics.php:988
 msgid "Moves distribution."
 msgstr ""
 
-#: includes/features/class-analytics.php:991
+#: includes/features/class-analytics.php:989
 msgid "Login / logout breakdown."
 msgstr ""
 
-#: includes/features/class-analytics.php:992
+#: includes/features/class-analytics.php:990
 msgid "Password resets."
 msgstr ""
 
-#: includes/features/class-analytics.php:1000
+#: includes/features/class-analytics.php:998
 msgid "Metrics Variations"
 msgstr ""
 
-#: includes/features/class-analytics.php:1027
+#: includes/features/class-analytics.php:1025
 msgctxt "Noun - Number of successful logins."
 msgid "Login Success"
 msgstr ""
 
-#: includes/features/class-analytics.php:1028
+#: includes/features/class-analytics.php:1026
 msgid "Ratio of successful logins."
 msgstr ""
 
-#: includes/features/class-analytics.php:1032
-msgctxt "Noun - Percentage of mobile hits."
+#: includes/features/class-analytics.php:1030
+msgctxt "Noun - Number of active sessions."
 msgid "Active Sessions"
 msgstr ""
 
-#: includes/features/class-analytics.php:1037
+#: includes/features/class-analytics.php:1035
 msgctxt "Noun - Number of cleaned sessions."
 msgid "Cleaned Sessions"
 msgstr ""
 
-#: includes/features/class-analytics.php:1042
+#: includes/features/class-analytics.php:1040
 msgctxt "Noun - Percentage of active users."
 msgid "Active Users"
 msgstr ""
 
-#: includes/features/class-analytics.php:1043
+#: includes/features/class-analytics.php:1041
 msgid "Ratio of active users."
 msgstr ""
 
-#: includes/features/class-analytics.php:1047
+#: includes/features/class-analytics.php:1045
 msgctxt "Noun - Users turnover."
 msgid "Turnover"
 msgstr ""
 
-#: includes/features/class-analytics.php:1048
+#: includes/features/class-analytics.php:1046
 msgid "Ratio of moving users (registered or deleted)."
 msgstr ""
 
-#: includes/features/class-analytics.php:1052
+#: includes/features/class-analytics.php:1050
 msgctxt "Noun - Ratio of users marked as spam."
 msgid "Spam"
 msgstr ""
 
-#: includes/features/class-analytics.php:1053
+#: includes/features/class-analytics.php:1051
 msgid "Ratio of users marked as spam."
 msgstr ""
 
-#: includes/features/class-analytics.php:1079
+#: includes/features/class-analytics.php:1077
 msgid "Logins"
 msgstr ""
 
-#: includes/features/class-analytics.php:1099
+#: includes/features/class-analytics.php:1097
 msgid "Cleaned Sessions"
 msgstr ""
 
-#: includes/features/class-analytics.php:1241
+#: includes/features/class-analytics.php:1239
 msgid "Custom Range"
 msgstr ""
 
-#: includes/features/class-analytics.php:1241
+#: includes/features/class-analytics.php:1239
 msgid "Cancel"
 msgstr ""
 
-#: includes/features/class-analytics.php:1243
+#: includes/features/class-analytics.php:1241
 msgid "Today"
 msgstr ""
 
-#: includes/features/class-analytics.php:1244
+#: includes/features/class-analytics.php:1242
 msgid "Yesterday"
 msgstr ""
 
-#: includes/features/class-analytics.php:1245
+#: includes/features/class-analytics.php:1243
 msgid "This Month"
 msgstr ""
 
-#: includes/features/class-analytics.php:1246
+#: includes/features/class-analytics.php:1244
 msgid "Last Month"
 msgstr ""
 
@@ -818,145 +821,146 @@ msgstr ""
 msgid "operating system"
 msgstr ""
 
-#: includes/features/class-sessions.php:233
+#: includes/features/class-sessions.php:224
+#: includes/features/class-wpcli.php:662
 msgid "Generic"
 msgstr ""
 
-#: includes/features/class-sessions.php:428
-#: includes/features/class-sessions.php:456
+#: includes/features/class-sessions.php:419
+#: includes/features/class-sessions.php:447
 msgid "Now"
 msgstr ""
 
-#: includes/features/class-sessions.php:433
-#: includes/features/class-sessions.php:435
-#: includes/features/class-sessions.php:461
-#: includes/features/class-sessions.php:463 includes/system/class-date.php:70
+#: includes/features/class-sessions.php:424
+#: includes/features/class-sessions.php:426
+#: includes/features/class-sessions.php:452
+#: includes/features/class-sessions.php:454 includes/system/class-date.php:70
 #: includes/system/class-date.php:85
 #, php-format
 msgid "%s ago"
 msgstr ""
 
-#: includes/features/class-sessions.php:435
-#: includes/features/class-sessions.php:440
-#: includes/features/class-sessions.php:463
-#: includes/features/class-sessions.php:468
+#: includes/features/class-sessions.php:426
+#: includes/features/class-sessions.php:431
+#: includes/features/class-sessions.php:454
+#: includes/features/class-sessions.php:459
 #, php-format
 msgid "%d days"
 msgstr ""
 
-#: includes/features/class-sessions.php:438
-#: includes/features/class-sessions.php:440
-#: includes/features/class-sessions.php:466
-#: includes/features/class-sessions.php:468
+#: includes/features/class-sessions.php:429
+#: includes/features/class-sessions.php:431
+#: includes/features/class-sessions.php:457
+#: includes/features/class-sessions.php:459
 #, php-format
 msgid "In %s"
 msgstr ""
 
-#: includes/features/class-sessions.php:497
+#: includes/features/class-sessions.php:488
 msgid "Session"
 msgstr ""
 
-#: includes/features/class-sessions.php:498
+#: includes/features/class-sessions.php:489
 msgid "Remote IP"
 msgstr ""
 
-#: includes/features/class-sessions.php:499
+#: includes/features/class-sessions.php:490
 msgid "Device"
 msgstr ""
 
-#: includes/features/class-sessions.php:500
+#: includes/features/class-sessions.php:491
 msgid "OS"
 msgstr ""
 
-#: includes/features/class-sessions.php:501
+#: includes/features/class-sessions.php:492
 msgid "Client"
 msgstr ""
 
-#: includes/features/class-sessions.php:502
+#: includes/features/class-sessions.php:493
 msgid "Login"
 msgstr ""
 
-#: includes/features/class-sessions.php:503
+#: includes/features/class-sessions.php:494
 msgid "Idle exp."
 msgstr ""
 
-#: includes/features/class-sessions.php:504
+#: includes/features/class-sessions.php:495
 msgid "Standard exp."
 msgstr ""
 
-#: includes/features/class-sessions.php:551
+#: includes/features/class-sessions.php:542
 msgid "Delete session(s)"
 msgstr ""
 
-#: includes/features/class-sessions.php:641
+#: includes/features/class-sessions.php:638
 msgid "Remove this filter"
 msgstr ""
 
-#: includes/features/class-sessions.php:647
+#: includes/features/class-sessions.php:644
 msgid "Add as filter"
 msgstr ""
 
-#: includes/features/class-sessions.php:698
+#: includes/features/class-sessions.php:695
 #, php-format
 msgid "Display %d sessions per page"
 msgstr ""
 
-#: includes/features/class-sessions.php:725
+#: includes/features/class-sessions.php:722
 #, php-format
 msgid "%s item"
 msgid_plural "%s items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/features/class-sessions.php:757
+#: includes/features/class-sessions.php:754
 msgid "First page"
 msgstr ""
 
-#: includes/features/class-sessions.php:767
+#: includes/features/class-sessions.php:764
 msgid "Previous page"
 msgstr ""
 
-#: includes/features/class-sessions.php:773
-#: includes/features/class-sessions.php:777
+#: includes/features/class-sessions.php:770
+#: includes/features/class-sessions.php:774
 msgid "Current Page"
 msgstr ""
 
-#: includes/features/class-sessions.php:784
+#: includes/features/class-sessions.php:781
 #, php-format
 msgctxt "paging"
 msgid "%1$s of %2$s"
 msgstr ""
 
-#: includes/features/class-sessions.php:791
+#: includes/features/class-sessions.php:788
 msgid "Next page"
 msgstr ""
 
-#: includes/features/class-sessions.php:801
+#: includes/features/class-sessions.php:798
 msgid "Last page"
 msgstr ""
 
-#: includes/features/class-sessions.php:831
+#: includes/features/class-sessions.php:828
 msgid "Select All"
 msgstr ""
 
-#: includes/features/class-sessions.php:977
+#: includes/features/class-sessions.php:974
 msgid "All sessions have been deleted."
 msgstr ""
 
-#: includes/features/class-sessions.php:980
-#: includes/features/class-sessions.php:995
+#: includes/features/class-sessions.php:977
+#: includes/features/class-sessions.php:992
 msgid "No sessions to delete."
 msgstr ""
 
-#: includes/features/class-sessions.php:984
+#: includes/features/class-sessions.php:981
 msgid "Unable to delete all sessions. Please see events log."
 msgstr ""
 
-#: includes/features/class-sessions.php:992
+#: includes/features/class-sessions.php:989
 msgid "All selected sessions have been deleted."
 msgstr ""
 
-#: includes/features/class-sessions.php:999
+#: includes/features/class-sessions.php:996
 msgid "Unable to delete all selected sessions. Please see events log."
 msgstr ""
 
@@ -1163,64 +1167,61 @@ msgstr ""
 msgid "Sorry, unable to find or read the specified file."
 msgstr ""
 
-#: includes/system/class-session.php:641
-#: includes/system/class-session.php:679
-#: includes/system/class-session.php:708
-msgid "<strong>ERROR</strong>: "
-msgstr ""
-
-#: includes/system/class-session.php:641
-#: includes/system/class-session.php:679
-msgid "Something went wrong, it is not possible to continue."
-msgstr ""
-
-#: includes/system/class-session.php:688
-#: includes/system/class-session.php:711
+#: includes/system/class-session.php:776
+#: includes/system/class-session.php:800
 msgid "<strong>FORBIDDEN</strong>: "
 msgstr ""
 
-#: includes/system/class-session.php:688
+#: includes/system/class-session.php:776
 msgid ""
 "You're not allowed to initiate a new session from your current IP address."
 msgstr ""
 
-#: includes/system/class-session.php:708
-#: includes/system/class-session.php:711
+#: includes/system/class-session.php:797
+msgid "<strong>ERROR</strong>: "
+msgstr ""
+
+#: includes/system/class-session.php:797
+#: includes/system/class-session.php:800
 msgid ""
 "You're not allowed to initiate a new session because your maximum number "
 "of active sessions has been reached."
 msgstr ""
 
-#: includes/system/class-session.php:797
+#: includes/system/class-session.php:868
 msgid "Login allowed only from private IP ranges."
 msgstr ""
 
-#: includes/system/class-session.php:799
+#: includes/system/class-session.php:871
 msgid "Login allowed only from public IP ranges."
 msgstr ""
 
-#: includes/system/class-session.php:818
+#: includes/system/class-session.php:874
+msgid "Login is not allowed."
+msgstr ""
+
+#: includes/system/class-session.php:881
 #, php-format
 msgid "%d concurrent session."
 msgid_plural "%d concurrent sessions."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/system/class-session.php:827
+#: includes/system/class-session.php:890
 #, php-format
 msgid "%d concurrent session per %s."
 msgid_plural "%d concurrent sessions per %s."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/system/class-session.php:837
+#: includes/system/class-session.php:899
 #, php-format
 msgid "Sessions expire after %d hour of inactivity."
 msgid_plural "Sessions expire after %d hours of inactivity."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/system/class-session.php:847
+#: includes/system/class-session.php:902
 msgid "No restrictions."
 msgstr ""
 

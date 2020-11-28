@@ -1,14 +1,14 @@
-# Translation of Plugins - Sessions - Stable Readme (latest release) in French (France)
+# Translation of Plugins - Sessions - Stable Readme (latest release) in French (Belgium)
 # This file is distributed under the same license as the Plugins - Sessions - Stable Readme (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-11-28 16:04+0100\n"
+"PO-Revision-Date: 2020-11-28 16:05+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Poedit 2.4.1\n"
-"Language: fr\n"
+"Language: fr_BE\n"
 "Project-Id-Version: Plugins - Sessions - Stable Readme (latest release)\n"
 "POT-Creation-Date: \n"
 "Last-Translator: \n"
@@ -248,4 +248,4 @@ msgstr "Gestion des sessions actives"
 
 #. Found in changelog paragraph.
 msgid "Please, see <a href=\"https://github.com/Pierre-Lannoy/wp-sessions/blob/master/CHANGELOG.md\">full changelog</a> on GitHub."
-msgstr "Merci de consulter le <a href=\"https://github.com/Pierre-Lannoy/wp-sessions/blob/master/CHANGELOG.md\">journal des modifications</a> sur GitHub."
+msgstr "Merci de consulter l’<a href=\"https://github.com/Pierre-Lannoy/wp-sessions/blob/master/CHANGELOG.md\">historique des modifications</a> sur GitHub."
