@@ -913,7 +913,7 @@ class Session {
 		if ( Option::network_get( 'forceip' ) ) {
 			$_SERVER['REMOTE_ADDR'] = IP::get_current();
 		}
-		add_action( 'init', [ self::class, 'initialize' ], PHP_INT_MAX );
+		add_action( 'set_current_user', [ self::class, 'initialize' ], PHP_INT_MAX );
 	}
 
 	/**

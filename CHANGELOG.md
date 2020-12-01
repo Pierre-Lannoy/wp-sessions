@@ -3,7 +3,10 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased - will be 2.0.1]
+## [Unreleased - will be 2.1.0]
+
+### Added
+- Compatibility with LifterLMS (thanks to [vadimfish](https://wordpress.org/support/users/vadimfish/)).
 
 ### Fixed
 - Sorting sessions by "idle" field may produce errors.
@@ -29,7 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - If GeoIP support is not done via [IP Locator](https://wordpress.org/plugins/ip-locator/), the flags are now correctly downgraded to emojis.
 - Anonymous proxies, satellite providers and private networks are now fully detected when [IP Locator](https://wordpress.org/plugins/ip-locator/) is installed.
 - Admin notices are now set to "don't display" by default.
-- Improved IP detection  (thanks to [Ludovic Riaudel](https://github.com/lriaudel)).
+- Improved IP detection (thanks to [Ludovic Riaudel](https://github.com/lriaudel)).
 - Improved changelog readability.
 - The integrated markdown parser is now [Markdown](https://github.com/cebe/markdown) from Carsten Brandt.
 - Prepares PerfOps menus to future versions.
