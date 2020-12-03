@@ -3,13 +3,16 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased - will be 2.1.0]
+## [2.1.0] - 2020-12-03
 
 ### Added
-- Compatibility with LifterLMS (thanks to [vadimfish](https://wordpress.org/support/users/vadimfish/)).
+- Compatibility with WPS Hide Login.
+- Compatibility with Loginizer.
+- Compatibility with LifterLMS.
 
 ### Fixed
 - Sorting sessions by "idle" field may produce errors.
+- Limiter may fail to limit with some early-initializer plugins (thanks to [vadimfish](https://wordpress.org/support/users/vadimfish/)).
 
 ## [2.0.0] - 2020-11-28
 

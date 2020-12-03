@@ -913,6 +913,7 @@ class Session {
 		if ( Option::network_get( 'forceip' ) ) {
 			$_SERVER['REMOTE_ADDR'] = IP::get_current();
 		}
+		add_action( 'init', [ self::class, 'initialize' ], PHP_INT_MAX );
 		add_action( 'set_current_user', [ self::class, 'initialize' ], PHP_INT_MAX );
 	}
 
@@ -937,11 +938,11 @@ class Session {
 	public static function initialize() {
 		if ( ! isset( self::$instance ) ) {
 			self::$instance = new static();
+			self::$instance->init_if_needed();
+			add_filter( 'auth_cookie_expiration', [ self::$instance, 'cookie_expiration' ], PHP_INT_MAX, 3 );
+			add_filter( 'authenticate', [ self::$instance, 'limit_logins' ], PHP_INT_MAX, 3 );
+			add_filter( 'jetpack_sso_handle_login', [ self::$instance, 'jetpack_sso_handle_login' ], PHP_INT_MAX, 2 );
 		}
-		self::$instance->init_if_needed();
-		add_filter( 'auth_cookie_expiration', [ self::$instance, 'cookie_expiration' ], PHP_INT_MAX, 3 );
-		add_filter( 'authenticate', [ self::$instance, 'limit_logins' ], PHP_INT_MAX, 3 );
-		add_filter( 'jetpack_sso_handle_login', [ self::$instance, 'jetpack_sso_handle_login' ], PHP_INT_MAX, 2 );
 	}
 
 	/**
