@@ -11,7 +11,6 @@
 
 namespace POSessions\Plugin\Feature;
 
-use Decalog\Plugin\Feature\Log;
 use POSessions\System\Option;
 use POSessions\System\Database;
 use POSessions\System\Environment;
