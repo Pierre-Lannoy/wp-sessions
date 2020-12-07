@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Sessions - Stable Readme (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-11-28 16:05+0100\n"
+"PO-Revision-Date: 2020-12-07 17:19+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -56,15 +56,15 @@ msgstr "Cette extension peut traiter des données à caractère personnel (DCP).
 
 #. Found in description paragraph.
 msgid "This plugin doesn't set any cookie in the user's browser."
-msgstr "Cette extension ne dépose pas de cookie dans le navigateur de l’utilisateur."
+msgstr "Cette extension ne dépose pas de cookie dans le navigateur de l’utilisatrice ou de l’utilisateur."
 
 #. Found in description paragraph.
 msgid "This plugin, as any piece of software, is neither compliant nor non-compliant with privacy laws and regulations. It is your responsibility to use it - by activating the corresponding options or services - with respect for the personal data of your users and applicable laws."
-msgstr "Cette extension, comme tout autre logiciel, n’est ni conforme ni non conforme aux lois et règlements sur la protection de la vie privée. Il est de votre responsabilité de l’utiliser - en activant les options ou services correspondants - dans le respect des données personnelles de vos utilisateurs et des lois applicables."
+msgstr "Cette extension, comme tout autre logiciel, n’est ni conforme ni non conforme aux lois et règlements sur la protection de la vie privée. Il est de votre responsabilité de l’utiliser - en activant les options ou services correspondants - dans le respect des données personnelles de vos utilisatrices et utilisateurs ainsi que des lois applicables."
 
 #. Found in description paragraph.
 msgid "You can also set a maximum number of IPs used for each user - useful to limit credential sharing between many people."
-msgstr "Vous pouvez également fixer un nombre maximum d’adresses IP utilisées par chaque utilisateur, ce qui permet de limiter le partage d’identifiants entre plusieurs personnes."
+msgstr "Vous pouvez également fixer un nombre maximum d’adresses IP utilisées par chaque compte, ce qui permet de limiter le partage d’identifiants entre plusieurs personnes."
 
 #. Found in description header.
 msgid "Privacy"
@@ -192,7 +192,7 @@ msgstr "distribution des mouvements ;"
 
 #. Found in description list item.
 msgid "users and sessions variations;"
-msgstr "variations des utilisateurs et sessions ;"
+msgstr "variations des comptes et sessions ;"
 
 #. Found in description list item.
 msgid "active and cleaned sessions details;"
@@ -200,7 +200,7 @@ msgstr "détail sur les sessions actives ou nettoyées ;"
 
 #. Found in description list item.
 msgid "KPIs: login success, active sessions, cleaned sessions, active users, turnover and spam sessions;"
-msgstr "KPIs : connexions réussies, sessions actives, sessions nettoyées, utilisateurs actifs, turnover et sessions indésirables ;"
+msgstr "KPIs : connexions réussies, sessions actives, sessions nettoyées, comptes actifs, turnover et sessions indésirables ;"
 
 #. Found in description list item.
 msgid "count per device classes and types, client types, browser or OS (requires the free <a href=\"https://wordpress.org/plugins/device-detector/\">Device Detector</a> plugin)."
@@ -216,7 +216,7 @@ msgstr "décompte par adresse IP ;"
 
 #. Found in description list item.
 msgid "count per user;"
-msgstr "décompte par utilisateur ;"
+msgstr "décompte par compte ;"
 
 #. Found in description header.
 msgid "Donation"
@@ -228,7 +228,7 @@ msgstr "Assistance"
 
 #. Screenshot description.
 msgid "Embedded Details In User Profile"
-msgstr "Détails embarqués dans le profil utilisateur"
+msgstr "Détails embarqués dans la page du compte"
 
 #. Screenshot description.
 msgid "Plugin Options"

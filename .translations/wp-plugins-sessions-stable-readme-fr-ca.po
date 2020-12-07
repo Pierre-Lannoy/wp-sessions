@@ -1,8 +1,8 @@
-# Translation of Plugins - Sessions - Stable Readme (latest release) in French (Canada)
+# Translation of Plugins - Sessions - Stable Readme (latest release) in French (Belgium)
 # This file is distributed under the same license as the Plugins - Sessions - Stable Readme (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-11-28 16:05+0100\n"
+"PO-Revision-Date: 2020-12-07 17:26+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,207 +16,207 @@ msgstr ""
 
 #. Short description.
 msgid "Powerful sessions manager for WordPress with sessions limiter and full analytics reporting capabilities."
-msgstr ""
+msgstr "Gestionnaire performant de sessions WordPress intégrant un limiteur de sessions et des capacités complètes de rapports analytiques."
 
 #. Plugin name.
 msgid "Sessions"
-msgstr ""
+msgstr "Sessions"
 
 #. Found in description paragraph.
 msgid "For a full help on WP-CLI commands in Sessions, please <a href=\"https://github.com/Pierre-Lannoy/wp-sessions/blob/master/WP-CLI.md\">read this guide</a>."
-msgstr ""
+msgstr "Pour obtenir une aide complète sur les commandes WP-CLI dans Sessions, veuillez <a href=\"https://github.com/Pierre-Lannoy/wp-sessions/blob/master/WP-CLI.md\">lire ce guide</a>."
 
 #. Found in description paragraph.
 msgid "<strong>Sessions</strong> supports a set of WP-CLI commands to:"
-msgstr ""
+msgstr "<strong>Sessions</strong> prend en charge un ensemble de commandes WP-CLI pour :"
 
 #. Found in description paragraph.
 msgid "<strong>Sessions</strong> is a powerful sessions manager for WordPress with a multi-criteria sessions limiter and full analytics reporting about logins, logouts and account creation. It relies on the standard WordPress sessions manager and add it extra features and controls."
-msgstr ""
+msgstr "<strong>Sessions</strong> est un puissant gestionnaire de sessions pour WordPress avec un limiteur de sessions multicritères et des rapports d’analyse complets sur les connexions, déconnexions et créations de comptes. Il s’appuie sur le gestionnaire de sessions standard de WordPress et lui ajoute des fonctionnalités et des contrôles supplémentaires."
 
 #. Found in description list item.
 msgid "display sessions and accounts statistics - see <code>wp help sessions analytics</code> for details."
-msgstr ""
+msgstr "afficher les statistiques de sessions et de comptes - voir <code>wp help sessions analytics</code> pour plus de détails."
 
 #. Found in description list item.
 msgid "modify operations mode - see <code>wp help sessions mode</code> for details;"
-msgstr ""
+msgstr "modifier le mode de fonctionnement - voir <code>wp help sessions mode</code> pour plus de détails ;"
 
 #. Found in description list item.
 msgid "toggle on/off main settings - see <code>wp help sessions settings</code> for details;"
-msgstr ""
+msgstr "activer ou désactiver les réglages principaux - voir <code>wp help sessions settings</code> pour plus de détails ;"
 
 #. Found in description list item.
 msgid "manage WordPress active sessions (list, kill) - see <code>wp help sessions active</code> for details;"
-msgstr ""
+msgstr "gérer les sessions actives WordPress (lister, supprimer) - voir <code>wp help sessions active</code> pour plus de détails ;"
 
 #. Found in description paragraph.
 msgid "This plugin may handle personally identifiable information (PII). If the GDPR or CCPA or similar regulation applies to your case, you must adapt your processes (consent management, security measure, treatment register, etc.)."
-msgstr ""
+msgstr "Cette extension peut traiter des données à caractère personnel (DCP). Si le RGPD ou le CCPA ou un règlement similaire s’applique à votre cas, vous devez adapter vos processus (gestion du consentement, mesure de sécurité, registre des traitements, etc.)."
 
 #. Found in description paragraph.
 msgid "This plugin doesn't set any cookie in the user's browser."
-msgstr ""
+msgstr "Cette extension ne dépose pas de témoin dans le fureteur de l’utilisatrice ou de l’utilisateur."
 
 #. Found in description paragraph.
 msgid "This plugin, as any piece of software, is neither compliant nor non-compliant with privacy laws and regulations. It is your responsibility to use it - by activating the corresponding options or services - with respect for the personal data of your users and applicable laws."
-msgstr ""
+msgstr "Cette extension, comme tout autre logiciel, n’est ni conforme ni non conforme aux lois et règlements sur la protection de la vie privée. Il est de votre responsabilité de l’utiliser - en activant les options ou services correspondants - dans le respect des données personnelles de vos utilisatrices et utilisateurs ainsi que des lois applicables."
 
 #. Found in description paragraph.
 msgid "You can also set a maximum number of IPs used for each user - useful to limit credential sharing between many people."
-msgstr ""
+msgstr "Vous pouvez également fixer un nombre maximum d’adresses IP utilisées par chaque compte, ce qui permet de limiter le partage d’identifiants entre plusieurs personnes."
 
 #. Found in description header.
 msgid "Privacy"
-msgstr ""
+msgstr "Confidentialité"
 
 #. Found in faq paragraph.
 msgid "You can report bugs and suggest ideas via the <a href=\"https://github.com/Pierre-Lannoy/wp-sessions/issues\">GitHub issue tracker</a> of the plugin."
-msgstr ""
+msgstr "Vous pouvez signaler des bogues et suggérer des améliorations via le <a href=\"https://github.com/Pierre-Lannoy/wp-sessions/issues\">suivi d’incidents GitHub</a> de l’extension."
 
 #. Found in faq paragraph.
 msgid "Support is provided via the official <a href=\"https://wordpress.org/support/plugin/sessions/\">WordPress page</a>."
-msgstr ""
+msgstr "L’assistance est proposée via la page officielle <a href=\"https://wordpress.org/support/plugin/sessions/\">d’assistance</a>."
 
 #. Found in faq paragraph.
 msgid "Yes. It is designed to work on multisite too. Network Admins can use all the plugin features. Sites Admins have no access to the plugin features."
-msgstr ""
+msgstr "Oui. Cette extension est conçue pour fonctionner sur un multisite aussi. Les administrateurs du réseau peuvent configurer l’extension et avoir accès à toutes fonctionnalités. Les administrateurs de sites n’ont, eux, accès à aucune fonctionnalité."
 
 #. Found in faq paragraph.
 msgid "You need at least <strong>WordPress 5.2</strong> and <strong>PHP 7.2</strong>."
-msgstr ""
+msgstr "Vous avez besoin d’au moins <strong>WordPress 5.2</strong> et <strong>PHP 7.2</strong>."
 
 #. Found in faq header.
 msgid "Where can I report a bug?"
-msgstr ""
+msgstr "Où puis-je signaler un bogue ?"
 
 #. Found in faq header.
 msgid "Where can I get support?"
-msgstr ""
+msgstr "Où puis-je obtenir de l’aide ?"
 
 #. Found in faq header.
 msgid "Can this plugin work on multisite?"
-msgstr ""
+msgstr "Cette extension fonctionne-t’elle sur un multisite ?"
 
 #. Found in faq header.
 msgid "What are the requirements for this plugin to work?"
-msgstr ""
+msgstr "Quels sont les prérequis pour que cette extension fonctionne ?"
 
 #. Found in installation list item.
 msgid "Enjoy!"
-msgstr ""
+msgstr "Profitez !"
 
 #. Found in installation list item.
 msgid "Visit 'PerfOps Settings &gt; Sessions' in the left-hand menu of your WP Admin to adjust settings."
-msgstr ""
+msgstr "Visitez « Réglages PerfOps > APCu Manager » dans le menu gauche de votre panneau d’administration pour ajuster les paramètres."
 
 #. Found in installation list item.
 msgid "Activate Sessions from your Plugins page."
-msgstr ""
+msgstr "Activez Sessions depuis votre page Extensions."
 
 #. Found in installation list item.
 msgid "Upload the <code>sessions</code> directory to your <code>/wp-content/plugins/</code> directory, using your favorite method (ftp, sftp, scp, etc...)."
-msgstr ""
+msgstr "Téléversez le dossier <code>sessions</code> dans votre dossier <code>/wp-content/plugins/</code>, en utilisant votre méthode préférée (ftp, sftp, scp, etc.)."
 
 #. Found in installation list item.
 msgid "Download Sessions."
-msgstr ""
+msgstr "Téléchargez Sessions."
 
 #. Found in installation list item.
 msgid "Activate Sessions."
-msgstr ""
+msgstr "Activez Sessions."
 
 #. Found in installation list item.
 msgid "Click on the 'Install Now' button."
-msgstr ""
+msgstr "Cliquez sur le bouton « Installer maintenant »."
 
 #. Found in installation list item.
 msgid "Search for 'Sessions'."
-msgstr ""
+msgstr "Recherchez « Sessions »."
 
 #. Found in installation list item.
 msgid "Visit 'Plugins &gt; Add New'."
-msgstr ""
+msgstr "Visitez « Extensions > Ajouter »."
 
 #. Found in installation header.
 msgid "Once Activated"
-msgstr ""
+msgstr "Une fois activé"
 
 #. Found in installation header.
 msgid "From WordPress.org"
-msgstr ""
+msgstr "Depuis WordPress.org"
 
 #. Found in installation header.
 msgid "From your WordPress dashboard"
-msgstr ""
+msgstr "Depuis votre tableau de bord WordPress"
 
 #. Found in description paragraph.
 msgid "If you like this plugin or find it useful and want to thank me for the work done, please consider making a donation to <a href=\"https://www.laquadrature.net/en\">La Quadrature Du Net</a> or the <a href=\"https://www.eff.org/\">Electronic Frontier Foundation</a> which are advocacy groups defending the rights and freedoms of citizens on the Internet. By supporting them, you help the daily actions they perform to defend our fundamental freedoms!"
-msgstr ""
+msgstr "Si vous aimez cette extension ou la trouvez utile et que vous voulez me remercier pour le travail accompli, vous pouvez faire un don à <a href=\"https://www.laquadrature.net/en\">La Quadrature Du Net</a> ou l’<a href=\"https://www.eff.org/\">Electronic Frontier Foundation</a> qui sont des associations de défense des droits et libertés des citoyens sur Internet. En les soutenant, vous aidez les actions quotidiennes qu’ils accomplissent pour défendre nos libertés fondamentales !"
 
 #. Found in description paragraph.
 msgid "Anyway, I'll be glad to help you if you encounter issues when using this plugin. Just use the support section of this plugin page."
-msgstr ""
+msgstr "Dans tous les cas, je serai heureux de vous apporter mon assistance si vous rencontrez des problèmes lors de l’utilisation de cette extension. Merci de me contacter via la page support de ce site."
 
 #. Found in description paragraph.
 msgid "This plugin is free and provided without warranty of any kind. Use it at your own risk, I'm not responsible for any improper use of this plugin, nor for any damage it might cause to your site. Always backup all your data before installing a new plugin."
-msgstr ""
+msgstr "Cette extension est gratuite et distribuée sans aucune garantie d’aucune sorte. Son utilisation se fait à vos risques et périls, je ne saurais être tenu responsable d’aucun dommage que son utilisation pourrait causer à votre site. Pensez à toujours sauvegarder vos données avant d’installer une nouvelle extension."
 
 #. Found in description paragraph.
 msgid "<strong>Sessions</strong> is a free and open source plugin for WordPress. It integrates many other free and open source works (as-is or modified). Please, see 'about' tab in the plugin settings to see the details."
-msgstr ""
+msgstr "<strong>Sessions</strong> est une extension libre et open source pour WordPress. Elle intègre de nombreuses autres œuvres libres et open source (telles quelles ou modifiées). Consultez l’onglet « à propos » dans l’extension pour obtenir des détails."
 
 #. Found in description paragraph.
 msgid "<strong>Sessions</strong> can report the following main items and metrics:"
-msgstr ""
+msgstr "<strong>Sessions</strong> peut rendre compte des métriques et éléments principaux suivants :"
 
 #. Found in description paragraph.
 msgid "For each roles defined on your site, you can also block login based on private/public IP ranges, and define idle times for sessions auto-termination."
-msgstr ""
+msgstr "Pour chaque rôle défini sur votre site, vous pouvez également bloquer la connexion en fonction des plages IP privées ou publiques, et définir les temps d’inactivité avant suppression automatique des sessions."
 
 #. Found in description paragraph.
 msgid "You can limit concurrent sessions, on a per role basis for the following criteria:"
-msgstr ""
+msgstr "Vous pouvez limiter les sessions simultanées, par rôle pour les critères suivants :"
 
 #. Found in description list item.
 msgid "password resets;"
-msgstr ""
+msgstr "réinitialisations de mots de passe ;"
 
 #. Found in description list item.
 msgid "login/logout breakdowns;"
-msgstr ""
+msgstr "répartition des connexions et déconnexions ;"
 
 #. Found in description list item.
 msgid "moves distribution;"
-msgstr ""
+msgstr "distribution des mouvements ;"
 
 #. Found in description list item.
 msgid "users and sessions variations;"
-msgstr ""
+msgstr "variations des comptes et sessions ;"
 
 #. Found in description list item.
 msgid "active and cleaned sessions details;"
-msgstr ""
+msgstr "détail sur les sessions actives ou nettoyées ;"
 
 #. Found in description list item.
 msgid "KPIs: login success, active sessions, cleaned sessions, active users, turnover and spam sessions;"
-msgstr ""
+msgstr "KPIs : connexions réussies, sessions actives, sessions nettoyées, comptes actifs, turnover et sessions indésirables ;"
 
 #. Found in description list item.
 msgid "count per device classes and types, client types, browser or OS (requires the free <a href=\"https://wordpress.org/plugins/device-detector/\">Device Detector</a> plugin)."
-msgstr ""
+msgstr "décompte par classe et type de périphérique, type de client, navigateur ou OS (nécessite l’extension gratuite <a href=\"https://wordpress.org/plugins/device-detector/\">Device Detector</a>)."
 
 #. Found in description list item.
 msgid "count per country (requires the free <a href=\"https://wordpress.org/plugins/ip-locator/\">IP Locator</a> plugin);"
-msgstr ""
+msgstr "décompte par pays (nécessite l’extension gratuite <a href=\"https://wordpress.org/plugins/ip-locator/\">IP Locator</a>) ;"
 
 #. Found in description list item.
 msgid "count per IP adresses;"
-msgstr ""
+msgstr "décompte par adresse IP ;"
 
 #. Found in description list item.
 msgid "count per user;"
-msgstr ""
+msgstr "décompte par compte ;"
 
 #. Found in description header.
 msgid "Donation"
@@ -224,28 +224,28 @@ msgstr "Don"
 
 #. Found in description header.
 msgid "Support"
-msgstr ""
+msgstr "Assistance"
 
 #. Screenshot description.
 msgid "Embedded Details In User Profile"
-msgstr ""
+msgstr "Détails embarqués dans la page du compte"
 
 #. Screenshot description.
 msgid "Plugin Options"
-msgstr ""
+msgstr "Options de l’extension"
 
 #. Screenshot description.
 msgid "Sessions Options Per Roles"
-msgstr ""
+msgstr "Options des sessions par rôles"
 
 #. Screenshot description.
 msgid "Main Analytics Dashboard"
-msgstr ""
+msgstr "Tableau de bord analytique principal"
 
 #. Screenshot description.
 msgid "Active Sessions Management"
-msgstr ""
+msgstr "Gestion des sessions actives"
 
 #. Found in changelog paragraph.
 msgid "Please, see <a href=\"https://github.com/Pierre-Lannoy/wp-sessions/blob/master/CHANGELOG.md\">full changelog</a> on GitHub."
-msgstr ""
+msgstr "Merci de consulter l’<a href=\"https://github.com/Pierre-Lannoy/wp-sessions/blob/master/CHANGELOG.md\">historique des modifications</a> sur GitHub."

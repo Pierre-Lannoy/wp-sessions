@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Sessions - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-11-28 15:58+0100\n"
+"PO-Revision-Date: 2020-12-07 17:46+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -57,11 +57,11 @@ msgstr "Sessions actives"
 
 #: includes/features/class-analytics.php:886
 msgid "no active users"
-msgstr "aucun utilisateur actif"
+msgstr "aucun compte actif"
 
 #: admin/class-sessions-admin.php:476
 msgid "Note: administrators having other roles are not affected by the privileges computation; this privileges computation only applies on non-administrator users having multiple roles."
-msgstr "Remarque : les administrateurs ayant d’autres rôles ne sont pas affectés par le calcul des privilèges ; ce calcul de privilèges ne s’applique qu’aux utilisateurs non administrateurs ayant plusieurs rôles."
+msgstr "Remarque : les administratrices ou administrateurs ayant d’autres rôles ne sont pas affectés par le calcul des privilèges ; ce calcul de privilèges ne s’applique qu’aux utilisatrices ou utilisateurs sans rôle d’administration mais ayant plusieurs autres rôles."
 
 #: admin/class-sessions-admin.php:476
 msgid "Operation mode of sessions limiter."
@@ -89,7 +89,7 @@ msgstr "Il vous suffit de l’ajouter pour l’utiliser comme source dans vos vi
 
 #: includes/integrations/class-databeam.php:50
 msgid "Allows to integrate, as a DataBeam source, all KPIs related to users' sessions."
-msgstr "Permet d’intégrer, en tant que source DataBeam, tous les indicateurs clés de performance liés aux sessions d’utilisateurs."
+msgstr "Permet d’intégrer, en tant que source DataBeam, tous les indicateurs clés de performance liés aux sessions."
 
 #: includes/integrations/class-databeam.php:49
 msgid "KPIs"
@@ -97,7 +97,7 @@ msgstr "KPIs"
 
 #: includes/features/class-analytics.php:731
 msgid "Users marked as spam."
-msgstr "Utilisateurs marqués comme indésirables."
+msgstr "Comptes marqués comme indésirables."
 
 #: includes/features/class-analytics.php:730
 msgctxt "Noun - Short (max 4 char) - Users marked as spam."
@@ -111,7 +111,7 @@ msgstr "Indésirables"
 
 #: includes/features/class-analytics.php:708
 msgid "Active users."
-msgstr "Utilisateurs actifs."
+msgstr "Comptes actifs."
 
 #: includes/features/class-analytics.php:707
 msgctxt "Noun - Short (max 4 char) - Active users."
@@ -121,11 +121,11 @@ msgstr "Utl."
 #: includes/features/class-analytics.php:706
 msgctxt "Noun - Active users."
 msgid "Users"
-msgstr "Utilisateurs"
+msgstr "Comptes"
 
 #: includes/features/class-analytics.php:685
 msgid "Moving users (registered or deleted)."
-msgstr "Mouvements utilisateurs (enregistrement ou suppressions)."
+msgstr "Mouvements utilisateur·ice·s (enregistrement ou suppressions)."
 
 #: includes/features/class-analytics.php:684
 msgctxt "Noun - Short (max 4 char) - Moving users."
@@ -178,13 +178,13 @@ msgstr "Maintenant"
 
 #: includes/features/class-analytics.php:1041
 msgid "Ratio of active users."
-msgstr "Ratio d’utilisateurs actifs."
+msgstr "Ratio de comptes actifs."
 
 #: includes/features/class-analytics.php:888
 msgid "%s active user"
 msgid_plural "%s active users"
-msgstr[0] "%s utilisateur actif"
-msgstr[1] "%s utilisateurs actifs"
+msgstr[0] "%s compte actif"
+msgstr[1] "%s comptes actifs"
 
 #: admin/partials/sessions-admin-tools-lines.php:17
 msgid "Number of sessions to display"
@@ -192,7 +192,7 @@ msgstr "Nombre de sessions à afficher"
 
 #: admin/class-sessions-admin.php:635
 msgid "Maximal number of IP per user. Requires IP follow-up to be activated - see \"Options\" tab."
-msgstr "Nombre maximal d’adresses IP par utilisateur. Nécessite l’activation du suivi des IP - voir l’onglet « Options »."
+msgstr "Nombre maximal d’adresses IP par compte. Nécessite l’activation du suivi des IP - voir l’onglet « Options »."
 
 #: admin/class-sessions-admin.php:596
 msgid "%d IP address"
@@ -421,7 +421,7 @@ msgstr "Connexions"
 
 #: includes/features/class-analytics.php:1051
 msgid "Ratio of users marked as spam."
-msgstr "Ratio d’utilisateurs marqués comme indésirables."
+msgstr "Ratio de comptes marqués comme indésirables."
 
 #: includes/features/class-analytics.php:1050
 msgctxt "Noun - Ratio of users marked as spam."
@@ -430,7 +430,7 @@ msgstr "Indésirable"
 
 #: includes/features/class-analytics.php:1046
 msgid "Ratio of moving users (registered or deleted)."
-msgstr "Ratio des mouvements utilisateurs (inscrits ou supprimés)."
+msgstr "Ratio des mouvements utilisateur·ice·s (inscrits ou supprimés)."
 
 #: includes/features/class-analytics.php:1045
 msgctxt "Noun - Users turnover."
@@ -440,7 +440,7 @@ msgstr "Turnover"
 #: includes/features/class-analytics.php:1040
 msgctxt "Noun - Percentage of active users."
 msgid "Active Users"
-msgstr "Utilisateurs actifs"
+msgstr "Comptes actifs"
 
 #: includes/features/class-analytics.php:643
 #: includes/features/class-analytics.php:1036
@@ -488,7 +488,7 @@ msgstr "Variation de session."
 
 #: includes/features/class-analytics.php:986
 msgid "Users variation."
-msgstr "Variation des utilisateurs."
+msgstr "Variation des comptes."
 
 #: includes/features/class-analytics.php:949
 msgid "Main Summary"
@@ -497,12 +497,12 @@ msgstr "Résumé principal"
 #: includes/features/class-analytics.php:871
 msgid "%s spam user"
 msgid_plural "%s spam users"
-msgstr[0] "%s utilisateur indésirable"
-msgstr[1] "%s utilisateurs indésirables"
+msgstr[0] "%s compte indésirable"
+msgstr[1] "%s comptes indésirables"
 
 #: includes/features/class-analytics.php:869
 msgid "no spam users"
-msgstr "aucun utilisateur indésirable"
+msgstr "aucun compte indésirable"
 
 #: includes/features/class-analytics.php:854
 msgid "%s move"
@@ -574,15 +574,15 @@ msgstr "Sessions en cours"
 
 #: includes/features/class-analytics.php:410
 msgid "Spam Users"
-msgstr "Utilisateurs indésirables"
+msgstr "Comptes indésirables"
 
 #: includes/features/class-analytics.php:406
 msgid "Users"
-msgstr "Utilisateurs"
+msgstr "Comptes"
 
 #: includes/features/class-analytics.php:404
 msgid "Legit Users"
-msgstr "Utilisateurs légitimes"
+msgstr "Comptes légitimes"
 
 #: includes/features/class-analytics.php:282
 #: includes/features/class-analytics.php:1128
@@ -1105,7 +1105,7 @@ msgstr "Méthode à utiliser lorsque le nombre maximal de sessions est atteint."
 
 #: admin/class-sessions-admin.php:651
 msgid "Maximal number of sessions for users."
-msgstr "Nombre maximal de sessions pour les utilisateurs."
+msgstr "Nombre maximal de sessions pour les comptes."
 
 #: admin/class-sessions-admin.php:619
 msgid "Allowed logins."
@@ -1162,14 +1162,14 @@ msgstr "Autoriser de partout"
 #: admin/class-sessions-admin.php:563
 msgid "%d session per user and per %s"
 msgid_plural "%d sessions per user and per %s"
-msgstr[0] "%d session par utilisateur et par %s"
-msgstr[1] "%d sessions par utilisateur et par %s"
+msgstr[0] "%d session par compte et par %s"
+msgstr[1] "%d sessions par compte et par %s"
 
 #: admin/class-sessions-admin.php:560
 msgid "%d session per user"
 msgid_plural "%d sessions per user"
-msgstr[0] "%d session par utilisateur"
-msgstr[1] "%d sessions par utilisateur"
+msgstr[0] "%d session par compte"
+msgstr[1] "%d sessions par compte"
 
 #: admin/class-sessions-admin.php:556
 msgid "No limit"
