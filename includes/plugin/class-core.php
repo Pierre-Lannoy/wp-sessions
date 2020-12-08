@@ -52,25 +52,11 @@ class Core {
 	 */
 	public function __construct() {
 		$this->loader = new Loader();
-		$this->set_locale();
 		$this->define_global_hooks();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 	}
 
-	/**
-	 * Define the locale for this plugin for internationalization.
-	 *
-	 * Uses the Adr_Sync_i18n class in order to set the domain and to register the hook
-	 * with WordPress.
-	 *
-	 * @since  1.0.0
-	 * @access private
-	 */
-	private function set_locale() {
-		$plugin_i18n = new I18n();
-		$this->loader->add_action( 'init', $plugin_i18n, 'load_plugin_textdomain' );
-	}
 
 	/**
 	 * Register all of the hooks related to the features of the plugin.
