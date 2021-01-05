@@ -95,45 +95,6 @@ class Option {
 	}
 
 	/**
-	 * Set the defaults options.
-	 *
-	 * @since 1.0.0
-	 */
-	public static function verify() {
-		foreach ( self::$network as $key => $val ) {
-			if ( 'not_present' === (string) self::network_get( $key, 'not_present' ) ) {
-				self::network_set( $key, $val );
-			}
-		}
-		// Options for whole site(s).
-		self::$defaults['use_cdn']           = false;
-		self::$defaults['script_in_footer']  = false;
-		self::$defaults['download_favicons'] = false;
-		self::$defaults['display_nag']       = true;
-		self::$defaults['nags']              = [];
-		self::$defaults['version']           = '0.0.0';
-		self::$defaults['history']           = 30;
-		self::$defaults['analytics']         = true;
-		self::$defaults['forceip']           = true;
-		self::$defaults['followip']          = true;
-		self::$defaults['rolemode']          = 0;
-		self::$defaults['zk_semaphore']      = 300;
-		self::$defaults['zk_cycle']          = 90;
-		self::$defaults['zk_tsize']          = 20;
-		self::$defaults['buffer_limit']      = 4000;
-		self::$network                       = [ 'version', 'use_cdn', 'download_favicons', 'script_in_footer', 'display_nag', 'analytics', 'forceip', 'followip', 'history', 'rolemode', 'zk_cycle', 'zk_tsize', 'zk_semaphore', 'buffer_limit' ];
-		// Specific options.
-		self::$defaults['limit']       = 'none';
-		self::$defaults['method']      = 'block';
-		self::$defaults['idle']        = 0;
-		self::$defaults['maxip']       = 0;
-		self::$defaults['block']       = 'none';
-		self::$defaults['cookie-ttl']  = 48;
-		self::$defaults['cookie-rttl'] = 336;
-		self::$specific                = [ 'limit', 'maxip', 'method', 'idle', 'block', 'cookie-ttl', 'cookie-rttl' ];
-	}
-
-	/**
 	 * Get the options infos for Site Health "info" tab.
 	 *
 	 * @since 1.0.0
@@ -284,18 +245,11 @@ class Option {
 	 * @since 1.0.0
 	 */
 	public static function reset_to_defaults() {
-		self::network_set( 'use_cdn', self::$defaults['use_cdn'] );
-		self::network_set( 'download_favicons', self::$defaults['download_favicons'] );
-		self::network_set( 'script_in_footer', self::$defaults['script_in_footer'] );
-		self::network_set( 'display_nag', self::$defaults['display_nag'] );
-		self::network_set( 'analytics', self::$defaults['analytics'] );
-		self::network_set( 'history', self::$defaults['history'] );
-		self::network_set( 'forceip', self::$defaults['forceip'] );
-		self::network_set( 'followip', self::$defaults['followip'] );
-		self::network_set( 'rolemode', self::$defaults['rolemode'] );
-		self::network_set( 'zk_cycle', self::$defaults['zk_cycle'] );
-		self::network_set( 'zk_tsize', self::$defaults['zk_tsize'] );
-		self::network_set( 'zk_semaphore', self::$defaults['zk_semaphore'] );
+		foreach ( self::$network as $key ) {
+			if ( 'version' !== $key ) {
+				self::network_set( $key, self::$defaults[ $key ] );
+			}
+		}
 	}
 
 	/**
