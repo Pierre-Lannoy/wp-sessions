@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Consistent reset for settings.
 - Improved translation loading.
 
+### Fixed
+- In Site Health section, Opcache status may be wrong (or generates PHP warnings) if OPcache API usage is restricted.
+
 ## [2.1.0] - 2020-12-03
 
 ### Added
