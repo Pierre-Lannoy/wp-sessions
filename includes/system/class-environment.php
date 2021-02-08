@@ -140,6 +140,19 @@ class Environment {
 	}
 
 	/**
+	 * Get the environment type.
+	 *
+	 * @return string The environment type.
+	 * @since    1.0.0
+	 */
+	public function stage() {
+		if ( function_exists( 'wp_get_environment_type' ) ) {
+			return wp_get_environment_type();
+		}
+		return 'unknown';
+	}
+
+	/**
 	 * Verification of WP MU.
 	 *
 	 * @return boolean     True if MU, false otherwise.
