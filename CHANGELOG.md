@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 - Compatibility with WordPress 5.7.
+- New values and more granularity for cookie durations and idle timeouts.
 
 ### Changed
 - Consistent reset for settings.

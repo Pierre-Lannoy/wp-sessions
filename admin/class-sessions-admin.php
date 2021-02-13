@@ -585,7 +585,7 @@ class Sessions_Admin {
 		$methods[] = [ 'default', esc_html__( 'Block and send a WordPress error', 'sessions' ) ];
 		$idle      = [];
 		$idle[]    = [ 0, esc_html__( 'Never terminate an idle session', 'sessions' ) ];
-		foreach ( [ 1, 2, 3, 4, 5, 6, 12, 24 ]  as $h ) {
+		foreach ( [ 1, 2, 3, 4, 5, 6, 12, 18, 24 ]  as $h ) {
 			// phpcs:ignore
 			$idle[] = [ $h, esc_html( sprintf( _n( 'Terminate a session when idle for more than %d hour', 'Terminate a session when idle for more than %d hours', $h, 'sessions' ), $h ) ) ];
 		}
@@ -596,13 +596,21 @@ class Sessions_Admin {
 			$maxip[] = [ $h, esc_html( sprintf( _n( '%d IP address', '%d IP addresses', $h, 'sessions' ), $h ) ) ];
 		}
 		$ttl = [];
-		foreach ( [ 1, 2, 3, 4 ]  as $h ) {
+		foreach ( [ 1, 2, 3, 4, 5, 6 ]  as $h ) {
 			// phpcs:ignore
 			$ttl[] = [ 24 * $h, esc_html( sprintf( _n( '%d day', '%d days', $h, 'sessions' ), $h ) ) ];
 		}
 		foreach ( [ 1, 2, 3, 4 ]  as $h ) {
 			// phpcs:ignore
 			$ttl[] = [ 24 * 7 * $h, esc_html( sprintf( _n( '%d week', '%d weeks', $h, 'sessions' ), $h ) ) ];
+		}
+		foreach ( [ 1, 2, 3, 4, 5, 6 ]  as $h ) {
+			// phpcs:ignore
+			$ttl[] = [ 24 * 30 * $h, esc_html( sprintf( _n( '%d month', '%d months', $h, 'sessions' ), $h ) ) ];
+		}
+		foreach ( [ 1, 2, 3 ]  as $h ) {
+			// phpcs:ignore
+			$ttl[] = [ 24 * 365 * $h, esc_html( sprintf( _n( '%d year', '%d years', $h, 'sessions' ), $h ) ) ];
 		}
 		$form = new Form();
 		foreach ( Role::get_all() as $role => $detail ) {
