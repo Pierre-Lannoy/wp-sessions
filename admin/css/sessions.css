@@ -942,5 +942,5 @@ button.btn {
 }
 
 .pose-selftoken {
-    animation:pose-selftoken-blink 1600ms infinite;
+    animation:pose-selftoken-blink 1200ms infinite;
 }
