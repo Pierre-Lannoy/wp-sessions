@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Sessions\n"
-"POT-Creation-Date: 2020-11-28 15:47+0100\n"
+"POT-Creation-Date: 2021-02-23 23:34+0100\n"
 "PO-Revision-Date: 2019-07-08 14:07+0200\n"
 "Last-Translator: Pierre Lannoy <pierre@lannoy.fr>\n"
 "Language-Team: Pierre Lannoy <pierre@lannoy.fr>\n"
@@ -188,14 +188,14 @@ msgstr ""
 msgid "Note: Sessions respects DISABLE_NAG_NOTICES flag."
 msgstr ""
 
-#: admin/class-sessions-admin.php:446
+#: admin/class-sessions-admin.php:446 admin/class-sessions-admin.php:609
 #, php-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/class-sessions-admin.php:450
+#: admin/class-sessions-admin.php:450 admin/class-sessions-admin.php:613
 #, php-format
 msgid "%d year"
 msgid_plural "%d years"
@@ -203,7 +203,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: admin/class-sessions-admin.php:463
-msgid "Disabled - Don't limit application sessions usage by roles"
+msgid "Disabled - Don't limit sessions by roles"
 msgstr ""
 
 #: admin/class-sessions-admin.php:464
@@ -353,33 +353,33 @@ msgid_plural "%d weeks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/class-sessions-admin.php:619
+#: admin/class-sessions-admin.php:627
 msgid "Allowed logins."
 msgstr ""
 
-#: admin/class-sessions-admin.php:635
+#: admin/class-sessions-admin.php:643
 msgid ""
 "Maximal number of IP per user. Requires IP follow-up to be activated - see "
 "\"Options\" tab."
 msgstr ""
 
-#: admin/class-sessions-admin.php:651
+#: admin/class-sessions-admin.php:659
 msgid "Maximal number of sessions for users."
 msgstr ""
 
-#: admin/class-sessions-admin.php:667
+#: admin/class-sessions-admin.php:675
 msgid "Method to be used when the maximal number of sessions is reached."
 msgstr ""
 
-#: admin/class-sessions-admin.php:683
+#: admin/class-sessions-admin.php:691
 msgid "Idle sessions supervision."
 msgstr ""
 
-#: admin/class-sessions-admin.php:699
+#: admin/class-sessions-admin.php:707
 msgid "Standard cookie duration."
 msgstr ""
 
-#: admin/class-sessions-admin.php:715
+#: admin/class-sessions-admin.php:723
 msgid "\"Remember Me\" cookie duration."
 msgstr ""
 
@@ -822,7 +822,7 @@ msgid "operating system"
 msgstr ""
 
 #: includes/features/class-sessions.php:224
-#: includes/features/class-wpcli.php:662
+#: includes/features/class-wpcli.php:660
 msgid "Generic"
 msgstr ""
 
@@ -1147,19 +1147,19 @@ msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/system/class-environment.php:193
+#: includes/system/class-environment.php:206
 msgid "log"
 msgstr ""
 
-#: includes/system/class-environment.php:198
+#: includes/system/class-environment.php:211
 msgid "display"
 msgstr ""
 
-#: includes/system/class-environment.php:204
+#: includes/system/class-environment.php:217
 msgid "Debug enabled"
 msgstr ""
 
-#: includes/system/class-environment.php:204
+#: includes/system/class-environment.php:217
 msgid "Debug disabled"
 msgstr ""
 
