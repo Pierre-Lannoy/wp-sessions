@@ -4,6 +4,10 @@ All notable changes to **Sessions** are documented in this *changelog*.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Added
+- Compatibility with WordPress 5.8.
+- It's now possible to set an idle time of 15, 30 and 45 minutes (thanks to [pgray](https://wordpress.org/support/users/pgray/)).
  
 ### Changed
 - Improved internal IP detection: support for cloud load balancers.

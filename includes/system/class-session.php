@@ -827,7 +827,11 @@ class Session {
 			}
 			return false;
 		}
-		$this->sessions[ $this->token ]['session_idle'] = time() + (int) $privileges['idle'] * HOUR_IN_SECONDS;
+		if ( 100 < (int) $privileges['idle'] ) {
+			$this->sessions[ $this->token ]['session_idle'] = time() + (int) ( ( $privileges['idle'] - 100 ) * MINUTE_IN_SECONDS );
+		} else {
+			$this->sessions[ $this->token ]['session_idle'] = time() + (int) ( $privileges['idle'] * HOUR_IN_SECONDS );
+		}
 		self::set_user_sessions( $this->sessions, $this->user_id );
 		return true;
 	}
@@ -895,7 +899,9 @@ class Session {
 		if ( 0 < count( $restrict ) ) {
 			$result .= implode( ' ', $restrict ) . ' ';
 		}
-		if ( 0 !== (int) $privileges['idle'] ) {
+		if ( 100 < (int) $privileges['idle'] ) {
+			$result .= esc_html( sprintf( _n( 'Sessions expire after %d minute of inactivity.', 'Sessions expire after %d minutes of inactivity.', $privileges['idle'] - 100, 'sessions' ), $privileges['idle'] - 100 ) ) . ' ';
+		} elseif ( 0 !== (int) $privileges['idle'] ) {
 			$result .= esc_html( sprintf( _n( 'Sessions expire after %d hour of inactivity.', 'Sessions expire after %d hours of inactivity.', $privileges['idle'], 'sessions' ), $privileges['idle'] ) ) . ' ';
 		}
 		if ( '' === $result ) {
