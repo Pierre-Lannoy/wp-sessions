@@ -15,7 +15,7 @@ use POSessions\System\Option;
 use POSessions\System\Database;
 use POSessions\System\Environment;
 use POSessions\System\Favicon;
-use POSessions\System\Logger;
+
 use POSessions\System\Cache;
 use POSessions\System\Timezone;
 use POSessions\Plugin\Feature\Capture;
@@ -149,7 +149,7 @@ class Schema {
 			$record['u_active']   = $query[0]['users'];
 			$record['u_sessions'] = $query[0]['sessions'];
 		}
-		Logger::debug( 'Misc stats added.' );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( 'Misc stats added.' );
 		Cache::set_global( 'data/statcheck', time(), 'infinite' );
 		return $record;
 	}
@@ -163,11 +163,11 @@ class Schema {
 		global $wpdb;
 		try {
 			$this->create_table();
-			Logger::debug( sprintf( 'Table "%s" created.', $wpdb->base_prefix . self::$statistics ) );
-			Logger::info( 'Schema installed.' );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( sprintf( 'Table "%s" created.', $wpdb->base_prefix . self::$statistics ) );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( 'Schema installed.' );
 		} catch ( \Throwable $e ) {
-			Logger::alert( sprintf( 'Unable to create "%s" table: %s', $wpdb->base_prefix . self::$statistics, $e->getMessage() ), $e->getCode() );
-			Logger::alert( 'Schema not installed.', $e->getCode() );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->alert( sprintf( 'Unable to create "%s" table: %s', $wpdb->base_prefix . self::$statistics, $e->getMessage() ), [ 'code' => $e->getCode() ] );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->alert( 'Schema not installed.', $e->getCode() );
 		}
 	}
 
@@ -180,10 +180,10 @@ class Schema {
 		global $wpdb;
 		try {
 			$this->create_table();
-			Logger::debug( sprintf( 'Table "%s" updated.', $wpdb->base_prefix . self::$statistics ) );
-			Logger::info( 'Schema updated.' );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( sprintf( 'Table "%s" updated.', $wpdb->base_prefix . self::$statistics ) );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( 'Schema updated.' );
 		} catch ( \Throwable $e ) {
-			Logger::alert( sprintf( 'Unable to update "%s" table: %s', $wpdb->base_prefix . self::$statistics, $e->getMessage() ), $e->getCode() );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->alert( sprintf( 'Unable to update "%s" table: %s', $wpdb->base_prefix . self::$statistics, $e->getMessage() ), [ 'code' => $e->getCode() ] );
 		}
 	}
 
@@ -201,12 +201,12 @@ class Schema {
 		$database = new Database();
 		$count    = $database->purge( self::$statistics, 'timestamp', 24 * $days );
 		if ( 0 === $count ) {
-			Logger::debug( 'No old records to delete.' );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( 'No old records to delete.' );
 		} elseif ( 1 === $count ) {
-			Logger::debug( '1 old record deleted.' );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( '1 old record deleted.' );
 			Cache::delete_global( 'data/oldestdate' );
 		} else {
-			Logger::debug( sprintf( '%1$s old records deleted.', $count ) );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( sprintf( '%1$s old records deleted.', $count ) );
 			Cache::delete_global( 'data/oldestdate' );
 		}
 	}
@@ -255,8 +255,8 @@ class Schema {
 		$sql = 'DROP TABLE IF EXISTS ' . $wpdb->base_prefix . self::$statistics;
 		// phpcs:ignore
 		$wpdb->query( $sql );
-		Logger::debug( sprintf( 'Table "%s" removed.', $wpdb->base_prefix . self::$statistics ) );
-		Logger::debug( 'Schema destroyed.' );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( sprintf( 'Table "%s" removed.', $wpdb->base_prefix . self::$statistics ) );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( 'Schema destroyed.' );
 	}
 
 	/**

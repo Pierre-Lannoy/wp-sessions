@@ -14,7 +14,7 @@ namespace POSessions\System;
 use POSessions\System\Environment;
 use POSessions\System\Role;
 use POSessions\System\Option;
-use POSessions\System\Logger;
+
 use POSessions\System\Hash;
 use POSessions\System\User;
 use POSessions\System\GeoIP;
@@ -178,7 +178,7 @@ class Session {
 	 */
 	private function verify_ip_range( $block ) {
 		if ( ! in_array( $block, [ 'none', 'external', 'local', 'all' ], true ) ) {
-			Logger::warning( 'IP range limitation set to "Allow For All".', 202 );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->warning( 'IP range limitation set to "Allow For All".', [ 'code' => 202 ] );
 			return 'allow';
 		}
 		if ( 'none' === $block ) {
@@ -772,7 +772,7 @@ class Session {
 					}
 				}
 			} else {
-				Logger::warning( sprintf( 'New session not allowed on this IP range for %s.', User::get_user_string( $this->user_id ) ), 403 );
+				\DecaLog\Engine::eventsLogger( POSE_SLUG )->warning( sprintf( 'New session not allowed on this IP range for %s.', User::get_user_string( $this->user_id ) ), [ 'code' => 403 ] );
 				$this->die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_bad_ip_message', __( 'You\'re not allowed to initiate a new session from your current IP address.', 'sessions' ) ), 403 );
 			}
 			if ( 'allow' !== $result ) {
@@ -787,20 +787,20 @@ class Session {
 								unset( $this->sessions[ $result ] );
 								do_action( 'sessions_force_terminate', $this->user_id );
 								self::set_user_sessions( $this->sessions, $this->user_id );
-								Logger::notice( sprintf( 'Session overridden for %s. Reason: %s.', User::get_user_string( $this->user_id ), $mode ) );
+								\DecaLog\Engine::eventsLogger( POSE_SLUG )->notice( sprintf( 'Session overridden for %s. Reason: %s.', User::get_user_string( $this->user_id ), $mode ) );
 							}
 						}
 						break;
 					case 'default':
-						Logger::warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), $mode ), 403 );
+						\DecaLog\Engine::eventsLogger( POSE_SLUG )->warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), $mode ), [ 'code' => 403 ] );
 						Capture::login_block( $this->user_id, true );
 						return new \WP_Error( '403', __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ) );
 					default:
-						Logger::warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), $mode ), 403 );
+						\DecaLog\Engine::eventsLogger( POSE_SLUG )->warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), $mode ), [ 'code' => 403 ] );
 						$this->die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ), 403 );
 				}
 			} else {
-				Logger::debug( sprintf( 'New session allowed for %s.', User::get_user_string( $this->user_id ) ), 200 );
+				\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( sprintf( 'New session allowed for %s.', User::get_user_string( $this->user_id ) ), [ 'code' => 200 ] );
 			}
 		}
 		return $user;
@@ -1093,7 +1093,7 @@ class Session {
 				}
 				$count = $wpdb->query( "DELETE FROM $wpdb->usermeta WHERE meta_key='session_tokens' AND user_id <> '" . $id . "'" . $criteria );
 				if ( false === $count ) {
-					Logger::warning( 'Unable to delete all sessions.' );
+					\DecaLog\Engine::eventsLogger( POSE_SLUG )->warning( 'Unable to delete all sessions.' );
 					return $count;
 				} else {
 					if ( isset( $user_id ) && is_integer( $user_id ) && 0 < $user_id ) {
@@ -1105,19 +1105,19 @@ class Session {
 						$sessions += $cpt;
 					}
 					if ( 0 === $sessions ) {
-						Logger::notice( 'No sessions to delete.' );
+						\DecaLog\Engine::eventsLogger( POSE_SLUG )->notice( 'No sessions to delete.' );
 					} else {
 						do_action( 'sessions_force_admin_terminate', $sessions );
-						Logger::notice( sprintf( 'All sessions have been deleted (%d deleted meta).', $sessions ) );
+						\DecaLog\Engine::eventsLogger( POSE_SLUG )->notice( sprintf( 'All sessions have been deleted (%d deleted meta).', $sessions ) );
 					}
 					return $sessions;
 				}
 			} else {
-				Logger::alert( 'An unknown user attempted to delete all active sessions.' );
+				\DecaLog\Engine::eventsLogger( POSE_SLUG )->alert( 'An unknown user attempted to delete all active sessions.' );
 				return false;
 			}
 		} else {
-			Logger::alert( 'A non authorized user attempted to delete all active sessions.' );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->alert( 'A non authorized user attempted to delete all active sessions.' );
 			return false;
 		}
 	}
@@ -1145,11 +1145,11 @@ class Session {
 					return 0;
 				}
 			} else {
-				Logger::alert( 'An unknown user attempted to delete all active sessions.' );
+				\DecaLog\Engine::eventsLogger( POSE_SLUG )->alert( 'An unknown user attempted to delete all active sessions.' );
 				return false;
 			}
 		} else {
-			Logger::alert( 'A non authorized user attempted to delete all active sessions.' );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->alert( 'A non authorized user attempted to delete all active sessions.' );
 			return false;
 		}
 	}
@@ -1180,14 +1180,14 @@ class Session {
 				}
 			}
 			if ( 0 === $count ) {
-				Logger::notice( 'No sessions to delete.' );
+				\DecaLog\Engine::eventsLogger( POSE_SLUG )->notice( 'No sessions to delete.' );
 			} else {
 				do_action( 'sessions_force_admin_terminate', $count );
-				Logger::notice( sprintf( 'All selected sessions have been deleted (%d deleted sessions).', $count ) );
+				\DecaLog\Engine::eventsLogger( POSE_SLUG )->notice( sprintf( 'All selected sessions have been deleted (%d deleted sessions).', $count ) );
 			}
 			return $count;
 		} else {
-			Logger::alert( 'A non authorized user attempted to delete some active sessions.' );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->alert( 'A non authorized user attempted to delete some active sessions.' );
 			return false;
 		}
 	}

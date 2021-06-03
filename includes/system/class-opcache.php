@@ -11,7 +11,7 @@
 
 namespace POSessions\System;
 
-use POSessions\System\Logger;
+
 use POSessions\System\Option;
 use POSessions\System\File;
 
@@ -186,7 +186,7 @@ class OPcache {
 			} else {
 				$s = 'Invalidation';
 			}
-			Logger::info( sprintf( '%s: %d file(s).', $s, $cpt ) );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( sprintf( '%s: %d file(s).', $s, $cpt ) );
 		}
 		return $cpt;
 	}
@@ -206,7 +206,7 @@ class OPcache {
 				if ( 0 === strpos( $file, './' ) ) {
 					foreach ( self::$do_not_compile as $item ) {
 						if ( false !== strpos( $file, $item ) ) {
-							Logger::debug( sprintf( 'File "%s" must not be recompiled.', $file ) );
+							\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( sprintf( 'File "%s" must not be recompiled.', $file ) );
 							continue 2;
 						}
 					}
@@ -221,17 +221,17 @@ class OPcache {
 							if ( @opcache_compile_file( $file ) ) {
 								$cpt++;
 							} else {
-								Logger::debug( sprintf( 'Unable to compile file "%s".', $file ) );
+								\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( sprintf( 'Unable to compile file "%s".', $file ) );
 							}
 						} catch ( \Throwable $e ) {
-							Logger::debug( sprintf( 'Unable to compile file "%s": %s.', $file, $e->getMessage() ), $e->getCode() );
+							\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( sprintf( 'Unable to compile file "%s": %s.', $file, $e->getMessage() ), [ 'code' => $e->getCode() ] );
 						}
 					} else {
-						Logger::debug( sprintf( 'File "%s" already cached.', $file ) );
+						\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( sprintf( 'File "%s" already cached.', $file ) );
 					}
 				}
 			}
-			Logger::info( sprintf( 'Recompilation: %d file(s).', $cpt ) );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( sprintf( 'Recompilation: %d file(s).', $cpt ) );
 		}
 		return $cpt;
 	}
@@ -260,7 +260,7 @@ class OPcache {
 						self::invalidate( $files, true );
 					}
 				} catch ( \Throwable $e ) {
-					Logger::error( sprintf( 'Unable to query OPcache status: %s.', $e->getMessage() ), $e->getCode() );
+					\DecaLog\Engine::eventsLogger( POSE_SLUG )->error( sprintf( 'Unable to query OPcache status: %s.', $e->getMessage() ), [ 'code' => $e->getCode() ] );
 				}
 			}
 		}
@@ -280,9 +280,9 @@ class OPcache {
 			$files[] = str_replace( ABSPATH, './', $file );
 		}
 		if ( Environment::is_wordpress_multisite() ) {
-			Logger::info( $automatic ? 'Network reset and warm-up initiated via cron.' : 'Network warm-up initiated via manual action.' );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( $automatic ? 'Network reset and warm-up initiated via cron.' : 'Network warm-up initiated via manual action.' );
 		} else {
-			Logger::info( $automatic ? 'Site reset and warm-up initiated via cron.' : 'Site warm-up initiated via manual action.' );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( $automatic ? 'Site reset and warm-up initiated via cron.' : 'Site warm-up initiated via manual action.' );
 		}
 		$result = self::recompile( $files, $force );
 		if ( $automatic ) {
@@ -291,9 +291,9 @@ class OPcache {
 			Cache::set_global( '/Data/WarmupTimestamp', time(), 'check' );
 		}
 		if ( Environment::is_wordpress_multisite() ) {
-			Logger::info( sprintf( 'Network warm-up terminated. %d files were recompiled', $result ) );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( sprintf( 'Network warm-up terminated. %d files were recompiled', $result ) );
 		} else {
-			Logger::info( sprintf( 'Site warm-up terminated. %d files were recompiled', $result ) );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( sprintf( 'Site warm-up terminated. %d files were recompiled', $result ) );
 		}
 		return $result;
 	}

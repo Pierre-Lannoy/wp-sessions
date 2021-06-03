@@ -424,7 +424,7 @@ class Cache {
 						}
 					}
 				} catch ( \Throwable $e ) {
-					Logger::error( sprintf( 'Unable to query APCu status: %s.', $e->getMessage() ), $e->getCode() );
+					\DecaLog\Engine::eventsLogger( POSE_SLUG )->error( sprintf( 'Unable to query APCu status: %s.', $e->getMessage() ), [ 'code' => $e->getCode() ] );
 				}
 			}
 		} else {
@@ -619,7 +619,7 @@ class Cache {
 		$log      .= '   Hit count: ' . $analytics['hit']['count'] . '   Hit time: ' . round($analytics['hit']['time'] * 1000, 3) . 'ms   Hit size: ' . Conversion::data_shorten( (int) $analytics['hit']['size'] );
 		$log      .= '   Miss count: ' . $analytics['miss']['count'] . '   Miss time: ' . round($analytics['miss']['time'] * 1000, 3) . 'ms   Miss size: ' . Conversion::data_shorten( (int) $analytics['miss']['size'] );
 		if ( 0 !== (int) $analytics['hit']['count'] || 0 !== (int) $analytics['miss']['count'] ) {
-			Logger::debug( $log );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( $log );
 		}
 	}
 

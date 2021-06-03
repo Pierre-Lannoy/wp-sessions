@@ -12,7 +12,7 @@ namespace POSessions\Plugin;
 use POSessions\System\Nag;
 use POSessions\System\Option;
 use Exception;
-use POSessions\System\Logger;
+
 use POSessions\System\Cache;
 use POSessions\Plugin\Feature\Schema;
 use POSessions\System\Markdown;
@@ -45,7 +45,7 @@ class Updater {
 				$this->update( $old );
 				// phpcs:ignore
 				$message  = sprintf( esc_html__( '%1$s has been correctly updated from version %2$s to version %3$s.', 'sessions' ), POSE_PRODUCT_NAME, $old, POSE_VERSION );
-				Logger::notice( $message );
+				\DecaLog\Engine::eventsLogger( POSE_SLUG )->notice( $message );
 				// phpcs:ignore
 				$message .= ' ' . sprintf( __( 'See <a href="%s">what\'s new</a>.', 'sessions' ), admin_url( 'admin.php?page=pose-settings&tab=about' ) );
 			}
@@ -73,7 +73,7 @@ class Updater {
 		$schema = new Schema();
 		$schema->update();
 		Cache::delete_global( 'data/*' );
-		Logger::notice( 'Cache purged.' );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->notice( 'Cache purged.' );
 	}
 
 	/**

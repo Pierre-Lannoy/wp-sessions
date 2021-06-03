@@ -12,7 +12,7 @@
 namespace POSessions\Plugin\Feature;
 
 use POSessions\System\Conversion;
-use POSessions\System\Logger;
+
 use POSessions\System\Date;
 use POSessions\System\Timezone;
 use POSessions\System\Option;

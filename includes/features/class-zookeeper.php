@@ -12,7 +12,7 @@
 namespace POSessions\Plugin\Feature;
 
 use POSessions\System\Cache;
-use POSessions\System\Logger;
+
 use POSessions\System\Option;
 use POSessions\System\Session;
 use POSessions\Plugin\Feature\Schema;
@@ -52,12 +52,12 @@ class ZooKeeper {
 			return;
 		}
 		if ( isset( $semaphore ) && $semaphore && (int) $semaphore + (int) Option::network_get( 'zk_semaphore' ) >= time() ) {
-			Logger::debug( '[ZooKeeper] Destroying staled semaphore.' );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( '[ZooKeeper] Destroying staled semaphore.' );
 		}
 		Cache::set_global( 'zookeeper/semaphore', time() );
-		Logger::debug( '[ZooKeeper] Starting background tasks execution.' );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( '[ZooKeeper] Starting background tasks execution.' );
 		self::terminate_sessions();
-		Logger::debug( '[ZooKeeper] Ending background tasks execution.' );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( '[ZooKeeper] Ending background tasks execution.' );
 		Cache::delete_global( 'zookeeper/semaphore' );
 		Cache::set_global( 'zookeeper/lastexec', time() );
 	}
@@ -69,7 +69,7 @@ class ZooKeeper {
 	 */
 	private static function terminate_sessions() {
 		global $wpdb;
-		Logger::debug( '[ZooKeeper] Starting "terminate_sessions" execution.' );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( '[ZooKeeper] Starting "terminate_sessions" execution.' );
 		$index = Cache::get_global( 'zookeeper/userindex' );
 		if ( ! $index ) {
 			$index = 0;
@@ -96,21 +96,21 @@ class ZooKeeper {
 			}
 			switch ( $cpt ) {
 				case 0:
-					Logger::debug( 'No session to auto-terminate.' );
+					\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( 'No session to auto-terminate.' );
 					break;
 				case 1:
-					Logger::notice( sprintf( '%d session auto-terminated.', $cpt ) );
+					\DecaLog\Engine::eventsLogger( POSE_SLUG )->notice( sprintf( '%d session auto-terminated.', $cpt ) );
 					break;
 				default:
-					Logger::notice( sprintf( '%d sessions auto-terminated.', $cpt ) );
+					\DecaLog\Engine::eventsLogger( POSE_SLUG )->notice( sprintf( '%d sessions auto-terminated.', $cpt ) );
 					break;
 			}
 		} else {
-			Logger::debug( 'No session to auto-terminate.' );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( 'No session to auto-terminate.' );
 			$index = 0;
 		}
 		Cache::set_global( 'zookeeper/userindex', $index, 'infinite' );
-		Logger::debug( '[ZooKeeper] Ending "terminate_sessions" execution.' );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( '[ZooKeeper] Ending "terminate_sessions" execution.' );
 	}
 
 }

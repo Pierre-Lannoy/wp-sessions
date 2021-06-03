@@ -16,7 +16,7 @@ use POSessions\System\Loader;
 use POSessions\System\I18n;
 use POSessions\System\Assets;
 use POSessions\Library\Libraries;
-use POSessions\System\Logger;
+
 use POSessions\System\Nag;
 use POSessions\System\Session;
 

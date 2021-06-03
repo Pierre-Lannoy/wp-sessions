@@ -17,7 +17,7 @@ use POSessions\System\Cache;
 use POSessions\System\Date;
 use POSessions\System\Conversion;
 use POSessions\System\Role;
-use POSessions\System\Logger;
+
 use POSessions\System\L10n;
 use POSessions\System\Http;
 use POSessions\System\Favicon;

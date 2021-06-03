@@ -11,7 +11,7 @@
 
 namespace POSessions\Plugin\Feature;
 
-use POSessions\System\Logger;
+
 use POSessions\System\User;
 use POSessions\Plugin\Feature\Schema;
 
@@ -192,7 +192,7 @@ class Capture {
 	 */
 	public static function sessions_after_idle_terminate( $user_id ) {
 		self::$idle ++;
-		Logger::info( sprintf( 'Idle session terminated for %s.', User::get_user_string( $user_id ) ) );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( sprintf( 'Idle session terminated for %s.', User::get_user_string( $user_id ) ) );
 	}
 
 	/**
@@ -218,7 +218,7 @@ class Capture {
 			return;
 		}
 		self::$forced ++;
-		Logger::info( 'Session cookie is expired.' );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( 'Session cookie is expired.' );
 	}
 
 	/**
@@ -229,7 +229,7 @@ class Capture {
 	 */
 	public static function sessions_force_terminate( $user_id ) {
 		self::$forced ++;
-		Logger::info( sprintf( 'Old session terminated for %s.', User::get_user_string( $user_id ) ) );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( sprintf( 'Old session terminated for %s.', User::get_user_string( $user_id ) ) );
 	}
 
 	/**
@@ -240,7 +240,7 @@ class Capture {
 	 */
 	public static function sessions_force_admin_terminate( $count ) {
 		self::$forced = self::$forced + $count;
-		Logger::debug( sprintf( 'Batch termination for %d sessions.', $count ) );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( sprintf( 'Batch termination for %d sessions.', $count ) );
 	}
 
 	/**
@@ -251,7 +251,7 @@ class Capture {
 	 */
 	public static function sessions_after_expired_terminate( $user_id ) {
 		self::$expired ++;
-		Logger::info( sprintf( 'Expired session terminated for %s.', User::get_user_string( $user_id ) ) );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( sprintf( 'Expired session terminated for %s.', User::get_user_string( $user_id ) ) );
 	}
 
 	/**
@@ -261,7 +261,7 @@ class Capture {
 	 */
 	public static function delete_user( $user_id, $reassign ) {
 		self::$delete ++;
-		Logger::info( sprintf( 'Deleted account for %s.', User::get_user_string( $user_id ) ) );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( sprintf( 'Deleted account for %s.', User::get_user_string( $user_id ) ) );
 	}
 
 	/**
@@ -271,7 +271,7 @@ class Capture {
 	 */
 	public static function user_register( $user_id ) {
 		self::$registration ++;
-		Logger::info( sprintf( 'Created account for %s.', User::get_user_string( $user_id ) ) );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( sprintf( 'Created account for %s.', User::get_user_string( $user_id ) ) );
 	}
 
 	/**
@@ -281,7 +281,7 @@ class Capture {
 	 */
 	public static function password_reset( $user, $new_pass ) {
 		self::$reset ++;
-		Logger::info( sprintf( 'Password reset for %s.', User::get_user_string( $user instanceof \WP_User ? $user->ID : 0 ) ) );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( sprintf( 'Password reset for %s.', User::get_user_string( $user instanceof \WP_User ? $user->ID : 0 ) ) );
 	}
 
 	/**
@@ -291,7 +291,7 @@ class Capture {
 	 */
 	public static function wp_logout() {
 		self::$logout ++;
-		Logger::info( 'A user has logged out.' );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( 'A user has logged out.' );
 	}
 
 	/**
@@ -301,7 +301,7 @@ class Capture {
 	 */
 	public static function wp_login_failed( $username ) {
 		self::$login_fail ++;
-		Logger::info( sprintf( 'Login failed for "%s" username.', $username ) );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( sprintf( 'Login failed for "%s" username.', $username ) );
 	}
 
 	/**
@@ -314,7 +314,7 @@ class Capture {
 		if ( ! $user ) {
 			$user = get_user_by( 'login', $user_login );
 		}
-		Logger::info( sprintf( 'Login success for %s.', User::get_user_string( $user instanceof \WP_User ? $user->ID : 0 ) ) );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( sprintf( 'Login success for %s.', User::get_user_string( $user instanceof \WP_User ? $user->ID : 0 ) ) );
 	}
 
 	/**
@@ -324,7 +324,7 @@ class Capture {
 	 */
 	public static function jpp_kill_login( $ip ) {
 		self::$login_block ++;
-		Logger::info( sprintf( 'Login blocked for "%s".', $ip ) );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( sprintf( 'Login blocked for "%s".', $ip ) );
 	}
 
 	/**
@@ -335,7 +335,7 @@ class Capture {
 	public static function wordfence_security_event( $event, $details = null, $a = null ) {
 		if ( 'loginLockout' === $event || 'breachLogin' === $event ) {
 			self::$login_block ++;
-			Logger::info( 'Login blocked.' );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( 'Login blocked.' );
 		}
 	}
 
@@ -351,7 +351,7 @@ class Capture {
 		if ( $dec ) {
 			self::$login_fail --;
 		}
-		Logger::info( sprintf( 'Login blocked for %s.', User::get_user_string( $user_id ) ) );
+		\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( sprintf( 'Login blocked for %s.', User::get_user_string( $user_id ) ) );
 	}
 
 }

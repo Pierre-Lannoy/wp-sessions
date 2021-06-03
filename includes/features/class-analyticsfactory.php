@@ -14,7 +14,7 @@ namespace POSessions\Plugin\Feature;
 use POSessions\Plugin\Feature\Analytics;
 use POSessions\System\Blog;
 use POSessions\System\Date;
-use POSessions\System\Logger;
+
 use POSessions\System\Timezone;
 
 /**

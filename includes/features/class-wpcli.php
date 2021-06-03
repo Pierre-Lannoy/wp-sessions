@@ -12,7 +12,7 @@
 namespace POSessions\Plugin\Feature;
 
 use POSessions\System\Environment;
-use POSessions\System\Logger;
+
 use POSessions\System\Option;
 use POSessions\System\Markdown;
 use POSessions\Plugin\Feature\Analytics;

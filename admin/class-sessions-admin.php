@@ -13,7 +13,7 @@ use POSessions\Plugin\Feature\Analytics;
 use POSessions\Plugin\Feature\AnalyticsFactory;
 use POSessions\System\Assets;
 use POSessions\System\Environment;
-use POSessions\System\Logger;
+
 use POSessions\System\Role;
 use POSessions\System\Option;
 use POSessions\System\Form;
@@ -277,12 +277,12 @@ class Sessions_Admin {
 				$message .= ' ' . esc_html__( 'For immediate implementation for all accounts, you must delete all active sessions.', 'sessions' );
 				$code     = 0;
 				add_settings_error( 'pose_no_error', $code, $message, 'updated' );
-				Logger::info( 'Plugin settings updated.', $code );
+				\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( 'Plugin settings updated.', [ 'code' => $code ] );
 			} else {
 				$message = esc_html__( 'Plugin settings have not been saved. Please try again.', 'sessions' );
 				$code    = 2;
 				add_settings_error( 'pose_nonce_error', $code, $message, 'error' );
-				Logger::warning( 'Plugin settings not updated.', $code );
+				\DecaLog\Engine::eventsLogger( POSE_SLUG )->warning( 'Plugin settings not updated.', [ 'code' => $code ] );
 			}
 		}
 	}
@@ -305,12 +305,12 @@ class Sessions_Admin {
 				$message = esc_html__( 'Plugin settings have been saved.', 'sessions' );
 				$code    = 0;
 				add_settings_error( 'pose_no_error', $code, $message, 'updated' );
-				Logger::info( 'Plugin settings updated.', $code );
+				\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( 'Plugin settings updated.', [ 'code' => $code ] );
 			} else {
 				$message = esc_html__( 'Plugin settings have not been saved. Please try again.', 'sessions' );
 				$code    = 2;
 				add_settings_error( 'pose_nonce_error', $code, $message, 'error' );
-				Logger::warning( 'Plugin settings not updated.', $code );
+				\DecaLog\Engine::eventsLogger( POSE_SLUG )->warning( 'Plugin settings not updated.', [ 'code' => $code ] );
 			}
 		}
 	}
@@ -327,12 +327,12 @@ class Sessions_Admin {
 				$message = esc_html__( 'Plugin settings have been reset to defaults.', 'sessions' );
 				$code    = 0;
 				add_settings_error( 'pose_no_error', $code, $message, 'updated' );
-				Logger::info( 'Plugin settings reset to defaults.', $code );
+				\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( 'Plugin settings reset to defaults.', [ 'code' => $code ] );
 			} else {
 				$message = esc_html__( 'Plugin settings have not been reset to defaults. Please try again.', 'sessions' );
 				$code    = 2;
 				add_settings_error( 'pose_nonce_error', $code, $message, 'error' );
-				Logger::warning( 'Plugin settings not reset to defaults.', $code );
+				\DecaLog\Engine::eventsLogger( POSE_SLUG )->warning( 'Plugin settings not reset to defaults.', [ 'code' => $code ] );
 			}
 		}
 	}
