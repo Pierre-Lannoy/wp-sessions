@@ -72,6 +72,10 @@ class EventsLogger implements \Psr\Log\LoggerInterface {
 	 * @since  1.0.0
 	 */
 	public function emergency( $message, $context = [] ) {
+		if ( ! is_array( $context ) ) {
+			$context = [ 'code' => 30973 ];
+			$this->debug( 'Wrong method argument: `$context` must be an array.', $context );
+		}
 		foreach ( $this->loggers as $logger ) {
 			$logger->emergency( (string) $message, array_key_exists( 'code', $context ) ? (int) $context['code'] : 0 );
 		}
@@ -90,6 +94,10 @@ class EventsLogger implements \Psr\Log\LoggerInterface {
 	 * @since  1.0.0
 	 */
 	public function alert( $message, $context = [] ) {
+		if ( ! is_array( $context ) ) {
+			$context = [ 'code' => 30973 ];
+			$this->debug( 'Wrong method argument: `$context` must be an array.', $context );
+		}
 		foreach ( $this->loggers as $logger ) {
 			$logger->alert( (string) $message, array_key_exists( 'code', $context ) ? (int) $context['code'] : 0 );
 		}
@@ -108,6 +116,10 @@ class EventsLogger implements \Psr\Log\LoggerInterface {
 	 * @since  1.0.0
 	 */
 	public function critical( $message, $context = [] ) {
+		if ( ! is_array( $context ) ) {
+			$context = [ 'code' => 30973 ];
+			$this->debug( 'Wrong method argument: `$context` must be an array.', $context );
+		}
 		foreach ( $this->loggers as $logger ) {
 			$logger->critical( (string) $message, array_key_exists( 'code', $context ) ? (int) $context['code'] : 0 );
 		}
@@ -126,6 +138,10 @@ class EventsLogger implements \Psr\Log\LoggerInterface {
 	 * @since  1.0.0
 	 */
 	public function error( $message, $context = [] ) {
+		if ( ! is_array( $context ) ) {
+			$context = [ 'code' => 30973 ];
+			$this->debug( 'Wrong method argument: `$context` must be an array.', $context );
+		}
 		foreach ( $this->loggers as $logger ) {
 			$logger->error( (string) $message, array_key_exists( 'code', $context ) ? (int) $context['code'] : 0 );
 		}
@@ -144,6 +160,10 @@ class EventsLogger implements \Psr\Log\LoggerInterface {
 	 * @since  1.0.0
 	 */
 	public function warning( $message, $context = [] ) {
+		if ( ! is_array( $context ) ) {
+			$context = [ 'code' => 30973 ];
+			$this->debug( 'Wrong method argument: `$context` must be an array.', $context );
+		}
 		foreach ( $this->loggers as $logger ) {
 			$logger->warning( (string) $message, array_key_exists( 'code', $context ) ? (int) $context['code'] : 0 );
 		}
@@ -161,6 +181,10 @@ class EventsLogger implements \Psr\Log\LoggerInterface {
 	 * @since  1.0.0
 	 */
 	public function notice( $message, $context = [] ) {
+		if ( ! is_array( $context ) ) {
+			$context = [ 'code' => 30973 ];
+			$this->debug( 'Wrong method argument: `$context` must be an array.', $context );
+		}
 		foreach ( $this->loggers as $logger ) {
 			$logger->notice( (string) $message, array_key_exists( 'code', $context ) ? (int) $context['code'] : 0 );
 		}
@@ -178,6 +202,10 @@ class EventsLogger implements \Psr\Log\LoggerInterface {
 	 * @since  1.0.0
 	 */
 	public function info( $message, $context = [] ) {
+		if ( ! is_array( $context ) ) {
+			$context = [ 'code' => 30973 ];
+			$this->debug( 'Wrong method argument: `$context` must be an array.', $context );
+		}
 		foreach ( $this->loggers as $logger ) {
 			$logger->info( (string) $message, array_key_exists( 'code', $context ) ? (int) $context['code'] : 0 );
 		}
@@ -196,6 +224,10 @@ class EventsLogger implements \Psr\Log\LoggerInterface {
 	 * @since  1.0.0
 	 */
 	public function debug( $message, $context = [] ) {
+		if ( ! is_array( $context ) ) {
+			$context = [ 'code' => 30973 ];
+			$this->debug( 'Wrong method argument: `$context` must be an array.', $context );
+		}
 		foreach ( $this->loggers as $logger ) {
 			$logger->debug( (string) $message, array_key_exists( 'code', $context ) ? (int) $context['code'] : 0 );
 		}
@@ -214,6 +246,10 @@ class EventsLogger implements \Psr\Log\LoggerInterface {
 	 * @since  1.0.0
 	 */
 	public function log( $level, $message, $context = [] ) {
+		if ( ! is_array( $context ) ) {
+			$context = [ 'code' => 30973 ];
+			$this->debug( 'Wrong method argument: `$context` must be an array.', $context );
+		}
 		foreach ( $this->loggers as $logger ) {
 			$logger->log( $level, (string) $message, array_key_exists( 'code', $context ) ? (int) $context['code'] : 0 );
 		}

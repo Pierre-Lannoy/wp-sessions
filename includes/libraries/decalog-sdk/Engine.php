@@ -20,8 +20,6 @@ namespace DecaLog;
  */
 class Engine {
 
-	// TODO: see how to use loggers list in admin UI
-
 	/**
 	 * The logger instances and parameters.
 	 *
@@ -37,9 +35,10 @@ class Engine {
 	 * @param string $slug    The slug identifier.
 	 * @param string $name    The name of the component that will trigger events.
 	 * @param string $version The version of the component that will trigger events.
+	 * @param string $icon    Optional. The base64-encoded image for the plugin logo. Preferably an SVG image.
 	 * @since 1.0.0
 	 */
-	private static function init( $class, $slug, $name, $version ) {
+	private static function init( $class, $slug, $name, $version, $icon = '' ) {
 		if ( is_string( $slug ) && '' !== $slug ) {
 			static::$loggers[ $slug ] = [
 				'logging'    => null,
@@ -48,10 +47,27 @@ class Engine {
 				'class'      => $class,
 				'name'       => (string) $name,
 				'version'    => (string) $version,
+				'icon'       => (string) $icon,
 			];
 		} else {
 			throw new \DecaLog\Exception\InvalidSlugException( 'The slug is not a valid, non-empty string.' );
 		}
+	}
+
+	/**
+	 * Get the loggers list.
+	 *
+	 * @return  array  The loggers list.
+	 * @since 1.0.0
+	 */
+	public static function getLoggers() {
+		$result = [];
+		foreach ( static::$loggers as $slug => $logger ) {
+			$result[ $slug ]['name']    = $logger['name'];
+			$result[ $slug ]['version'] = $logger['version'];
+			$result[ $slug ]['icon']    = $logger['icon'];
+		}
+		return $result;
 	}
 
 	/**
