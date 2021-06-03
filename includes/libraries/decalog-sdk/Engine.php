@@ -76,10 +76,11 @@ class Engine {
 	 * @param string $slug    The slug identifier.
 	 * @param string $name    The name of the theme that will trigger events.
 	 * @param string $version The version of the theme that will trigger events.
+	 * @param string $icon    Optional. The base64-encoded image for the plugin logo. Preferably an SVG image.
 	 * @since 1.0.0
 	 */
-	public static function initTheme( $slug, $name, $version ) {
-		static::init( 'theme', $slug, $name, $version );
+	public static function initTheme( $slug, $name, $version, $icon = '' ) {
+		static::init( 'theme', $slug, $name, $version, $icon );
 	}
 
 	/**
@@ -88,10 +89,11 @@ class Engine {
 	 * @param string $slug    The slug identifier.
 	 * @param string $name    The name of the plugin that will trigger events.
 	 * @param string $version The version of the plugin that will trigger events.
+	 * @param string $icon    Optional. The base64-encoded image for the plugin logo. Preferably an SVG image.
 	 * @since 1.0.0
 	 */
-	public static function initPlugin( $slug, $name, $version ) {
-		static::init( 'plugin', $slug, $name, $version );
+	public static function initPlugin( $slug, $name, $version, $icon = '' ) {
+		static::init( 'plugin', $slug, $name, $version, $icon );
 	}
 
 	/**

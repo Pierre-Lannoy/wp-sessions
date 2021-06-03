@@ -69,7 +69,7 @@ function pose_uninstall() {
  * @since 1.0.0
  */
 function pose_run() {
-	\DecaLog\Engine::initPlugin( POSE_SLUG, POSE_PRODUCT_NAME, POSE_VERSION );
+	\DecaLog\Engine::initPlugin( POSE_SLUG, POSE_PRODUCT_NAME, POSE_VERSION, \POSessions\Plugin\Core::get_base64_logo() );
 	// It is needed to do these inits here because some plugins make very early die()
 	\POSessions\System\Session::init();
 	\POSessions\Plugin\Feature\Capture::init();
