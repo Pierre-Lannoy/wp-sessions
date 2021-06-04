@@ -21,6 +21,14 @@ namespace DecaLog;
 class Engine {
 
 	/**
+	 * The engine version.
+	 *
+	 * @since  1.0.0
+	 * @var    string    $version    Maintains the engine version.
+	 */
+	private static $version = '1.0.0';
+
+	/**
 	 * The logger instances and parameters.
 	 *
 	 * @since  1.0.0
@@ -52,6 +60,55 @@ class Engine {
 		} else {
 			throw new \DecaLog\Exception\InvalidSlugException( 'The slug is not a valid, non-empty string.' );
 		}
+	}
+
+	/**
+	 * Verify if DecaLog is activated.
+	 *
+	 * @return  boolean  True if DecaLog is activated, false otherwise.
+	 * @since 1.0.0
+	 */
+	public static function isDecalogActivated() {
+		return class_exists( '\Decalog\Plugin\Feature\DLogger' );
+	}
+
+	/**
+	 * Get the version of DecaLog SDK.
+	 *
+	 * @return  string  The (SemVer) SDK version.
+	 * @since 1.0.0
+	 */
+	public static function getSdkVersion() {
+		return self::$version;
+	}
+
+	/**
+	 * Get the version of DecaLog.
+	 *
+	 * @return  string  The (SemVer) DecaLog version.
+	 * @since 1.0.0
+	 */
+	public static function getDecalogVersion() {
+		if ( defined( 'DECALOG_VERSION' ) ) {
+			return DECALOG_VERSION;
+		}
+		return '';
+	}
+
+	/**
+	 * Get the full version string.
+	 *
+	 * @return  string  The full version string.
+	 * @since 1.0.0
+	 */
+	public static function getVersionString() {
+		if ( self::isDecalogActivated() ) {
+			if ( ! defined( 'DECALOG_PRODUCT_NAME' ) ) {
+				define( 'DECALOG_PRODUCT_NAME', 'DecaLog' );
+			}
+			return DECALOG_PRODUCT_NAME . ' ' . self::getDecalogVersion() . ' (SDK ' . self::getSdkVersion() . ')';
+		}
+		return '';
 	}
 
 	/**
