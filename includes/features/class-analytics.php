@@ -633,6 +633,12 @@ class Analytics {
 							'raw'   => $data['kpi-main-session'],
 							'human' => $val['value'] . $val['abbreviation'],
 						],
+						'metrics'     => [
+							'name'  => 'session_active_today_avg',
+							'desc'  => 'Average number of active sessions today - [count]',
+							'value' => (float) $data['kpi-main-session'],
+							'type'  => 'gauge',
+						],
 					];
 					break;
 				case 'cleaned':
@@ -651,6 +657,12 @@ class Analytics {
 						'value'       => [
 							'raw'   => $data['kpi-main-cleaned'],
 							'human' => $val['value'] . $val['abbreviation'],
+						],
+						'metrics'     => [
+							'name'  => 'session_cleaned_today',
+							'desc'  => 'Number of cleaned sessions today - [count]',
+							'value' => (int) $data['kpi-main-cleaned'],
+							'type'  => 'counter',
 						],
 					];
 					break;
@@ -675,6 +687,12 @@ class Analytics {
 							'raw'   => $data['kpi-bottom-login'],
 							'human' => $val['value'] . $val['abbreviation'],
 						],
+						'metrics'     => [
+							'name'  => 'login_success_today',
+							'desc'  => 'Ratio of successful logins today - [percent]',
+							'value' => (float) ( $data['kpi-main-login'] / 100.0 ),
+							'type'  => 'gauge',
+						],
 					];
 					break;
 				case 'turnover':
@@ -697,6 +715,12 @@ class Analytics {
 						'value'       => [
 							'raw'   => $data['kpi-bottom-turnover'],
 							'human' => $val['value'] . $val['abbreviation'],
+						],
+						'metrics'     => [
+							'name'  => 'user_turnover_today',
+							'desc'  => 'Ratio of moving users today - [percent]',
+							'value' => (float) ( $data['kpi-main-turnover'] / 100.0 ),
+							'type'  => 'counter',
 						],
 					];
 					break;
@@ -721,6 +745,12 @@ class Analytics {
 							'raw'   => $data['kpi-bottom-user'],
 							'human' => $val['value'] . $val['abbreviation'],
 						],
+						'metrics'     => [
+							'name'  => 'user_active_today_avg',
+							'desc'  => 'Average ratio of active users today - [percent]',
+							'value' => (float) ( $data['kpi-main-user'] / 100.0 ),
+							'type'  => 'gauge',
+						],
 					];
 					break;
 				case 'spam':
@@ -743,6 +773,12 @@ class Analytics {
 						'value'       => [
 							'raw'   => $data['kpi-bottom-spam'],
 							'human' => $val['value'] . $val['abbreviation'],
+						],
+						'metrics'     => [
+							'name'  => 'user_spam_avg',
+							'desc'  => 'Ratio of spam user - [percent]',
+							'value' => (float) ( $data['kpi-main-user'] / 100.0 ),
+							'type'  => 'gauge',
 						],
 					];
 					break;

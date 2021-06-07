@@ -16,9 +16,11 @@ use POSessions\System\Loader;
 use POSessions\System\I18n;
 use POSessions\System\Assets;
 use POSessions\Library\Libraries;
-
+use POSessions\System\Cache;
 use POSessions\System\Nag;
 use POSessions\System\Session;
+use POSessions\Plugin\Feature\Analytics;
+use POSessions\System\Option;
 
 /**
  * The core plugin class.
@@ -55,6 +57,9 @@ class Core {
 		$this->define_global_hooks();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+		if ( \DecaLog\Engine::isDecalogActivated() && Option::network_get( 'metrics' ) ) {
+			$this->define_metrics();
+		}
 	}
 
 
@@ -111,6 +116,42 @@ class Core {
 		$plugin_public = new Sessions_Public();
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+	}
+
+	/**
+	 * Register all metrics of the plugin.
+	 *
+	 * @since  1.2.0
+	 * @access private
+	 */
+	private function define_metrics() {
+		$span      = \DecaLog\Engine::tracesLogger( POSE_SLUG )->start_span( 'Metrics collation' );
+		$cache_id  = 'metrics/lastcheck';
+		$analytics = Cache::get_global( $cache_id );
+		if ( ! isset( $analytics ) ) {
+			$analytics = Analytics::get_status_kpi_collection( [ 'site_id' => 0 ] );
+			Cache::set_global( $cache_id, $analytics, 'metrics' );
+		}
+		if ( isset( $analytics ) ) {
+			$metrics = \DecaLog\Engine::metricsLogger( POSE_SLUG );
+			if ( array_key_exists( 'data', $analytics ) ) {
+				foreach ( $analytics['data'] as $kpi ) {
+					$m = $kpi['metrics'] ?? null;
+					if ( isset( $m ) ) {
+						switch ( $m['type'] ) {
+							case 'gauge':
+								$metrics->createProdGauge( $m['name'], $m['value'], $m['desc'] );
+								break;
+							case 'counter':
+								$metrics->createProdCounter( $m['name'], $m['desc'] );
+								$metrics->incProdCounter( $m['name'], $m['value'] );
+								break;
+						}
+					}
+				}
+			}
+		}
+		\DecaLog\Engine::tracesLogger( POSE_SLUG )->end_span( $span );
 	}
 
 	/**
