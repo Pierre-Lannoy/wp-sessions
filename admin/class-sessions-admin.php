@@ -298,6 +298,7 @@ class Sessions_Admin {
 				Option::network_set( 'use_cdn', array_key_exists( 'pose_plugin_options_usecdn', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_options_usecdn' ) : false );
 				Option::network_set( 'display_nag', array_key_exists( 'pose_plugin_options_nag', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_options_nag' ) : false );
 				Option::network_set( 'analytics', array_key_exists( 'pose_plugin_features_analytics', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_features_analytics' ) : false );
+				Option::network_set( 'metrics', array_key_exists( 'pose_plugin_features_metrics', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_features_metrics' ) : false );
 				Option::network_set( 'forceip', array_key_exists( 'pose_plugin_features_forceip', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_features_forceip' ) : false );
 				Option::network_set( 'followip', array_key_exists( 'pose_plugin_features_followip', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_features_followip' ) : false );
 				Option::network_set( 'history', array_key_exists( 'pose_plugin_features_history', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_features_history', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'history' ) );
@@ -344,9 +345,9 @@ class Sessions_Admin {
 	 */
 	public function plugin_options_section_callback() {
 		$form = new Form();
-		if ( defined( 'DECALOG_VERSION' ) ) {
+		if ( \DecaLog\Engine::isDecalogActivated() ) {
 			$help  = '<img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'thumbs-up', 'none', '#00C800' ) . '" />&nbsp;';
-			$help .= sprintf( esc_html__( 'Your site is currently using %s.', 'sessions' ), '<em>DecaLog v' . DECALOG_VERSION . '</em>' );
+			$help .= sprintf( esc_html__( 'Your site is currently using %s.', 'sessions' ), '<em>' . \DecaLog\Engine::getVersionString() . '</em>' );
 		} else {
 			$help  = '<img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'alert-triangle', 'none', '#FF8C00' ) . '" />&nbsp;';
 			$help .= sprintf( esc_html__( 'Your site does not use any logging plugin. To log all events triggered in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory.', 'sessions' ), '<a href="https://wordpress.org/plugins/decalog/">DecaLog</a>' );
@@ -543,6 +544,22 @@ class Sessions_Admin {
 			]
 		);
 		register_setting( 'pose_plugin_features_section', 'pose_plugin_features_history' );
+		add_settings_field(
+			'pose_plugin_features_metrics',
+			esc_html__( 'Metrics', 'keys-master' ),
+			[ $form, 'echo_field_checkbox' ],
+			'pose_plugin_features_section',
+			'pose_plugin_features_section',
+			[
+				'text'        => esc_html__( 'Activated', 'sessions' ),
+				'id'          => 'pose_plugin_features_metrics',
+				'checked'     => \DecaLog\Engine::isDecalogActivated() ? Option::network_get( 'metrics' ) : false,
+				'description' => esc_html__( 'If checked, Sessions will collate and publish sessions metrics.', 'keys-master' ) . ( \DecaLog\Engine::isDecalogActivated() ? '' : '<br/>' . esc_html__( 'Note: for this to work, you must install DecaLog.', 'keys-master' ) ),
+				'full_width'  => false,
+				'enabled'     => \DecaLog\Engine::isDecalogActivated(),
+			]
+		);
+		register_setting( 'pose_plugin_features_section', 'pose_plugin_features_metrics' );
 	}
 
 	/**

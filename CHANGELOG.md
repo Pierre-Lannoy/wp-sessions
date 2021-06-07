@@ -3,14 +3,18 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.3.0] - 2021-06-xx
 
 ### Added
 - Compatibility with WordPress 5.8.
-- It's now possible to set an idle time of 15, 30 and 45 minutes (thanks to [pgray](https://wordpress.org/support/users/pgray/)).
+- Integration with DecaLog SDK.
+- Traces and metrics collation and publication.
+- New option, available via settings page and wp-cli, to disable/enable metrics collation.
  
 ### Changed
+- It's now possible to set an idle time of 15, 30 and 45 minutes (thanks to [pgray](https://wordpress.org/support/users/pgray/)).
 - Improved internal IP detection: support for cloud load balancers.
+- [WP-CLI] `sessions status` command now displays DecaLog SDK version too.
 
 ### Fixed
 - Sessions is not compatible with PHP 7.2 (thanks to [chernenkopetro](https://wordpress.org/support/users/chernenkopetro/)).
