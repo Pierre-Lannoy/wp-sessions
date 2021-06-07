@@ -87,6 +87,16 @@ class Environment {
 	}
 
 	/**
+	 * Get the current execution mode.
+	 *
+	 * @return  boolean True if metrics are available.
+	 * @since 1.0.0
+	 */
+	public static function exec_mode_for_metrics() {
+		return in_array( self::exec_mode(), [ 1, 5, 7 ], true );
+	}
+
+	/**
 	 * Get the major version number.
 	 *
 	 * @param  string $version Optional. The full version string.

@@ -12,6 +12,7 @@
 
 namespace POSessions\Plugin;
 
+use POSessions\System\Environment;
 use POSessions\System\Loader;
 use POSessions\System\I18n;
 use POSessions\System\Assets;
@@ -57,7 +58,7 @@ class Core {
 		$this->define_global_hooks();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-		if ( \DecaLog\Engine::isDecalogActivated() && Option::network_get( 'metrics' ) ) {
+		if ( \DecaLog\Engine::isDecalogActivated() && Option::network_get( 'metrics' ) && Environment::exec_mode_for_metrics() ) {
 			$this->define_metrics();
 		}
 	}
