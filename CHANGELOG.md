@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Compatibility with WordPress 5.8.
 - Integration with DecaLog SDK.
 - Traces and metrics collation and publication.
+- It's now possible to customize messages in case of forbidden access (thanks to [Jon Cuevas](https://wordpress.org/support/users/archondigital/)).
 - New option, available via settings page and wp-cli, to disable/enable metrics collation.
  
 ### Changed

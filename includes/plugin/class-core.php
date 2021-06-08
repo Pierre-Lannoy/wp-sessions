@@ -58,6 +58,7 @@ class Core {
 		$this->define_global_hooks();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+		$this->define_custom_messages();
 		if ( \DecaLog\Engine::isDecalogActivated() && Option::network_get( 'metrics' ) && Environment::exec_mode_for_metrics() ) {
 			$this->define_metrics();
 		}
@@ -117,6 +118,35 @@ class Core {
 		$plugin_public = new Sessions_Public();
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+	}
+
+	/**
+	 * Register all of the filters related to messages customization.
+	 *
+	 * @since  1.0.0
+	 * @access private
+	 */
+	private function define_custom_messages() {
+		if ( '' !== Option::network_get( 'blocked_message' ) ) {
+			add_filter(
+				'sessions_blocked_message',
+				function( $message ) {
+					return Option::network_get( 'blocked_message' );
+				},
+				0,
+				1
+			);
+		}
+		if ( '' !== Option::network_get( 'bad_ip_message' ) ) {
+			add_filter(
+				'sessions_bad_ip_message',
+				function( $message ) {
+					return Option::network_get( 'bad_ip_message' );
+				},
+				0,
+				1
+			);
+		}
 	}
 
 	/**

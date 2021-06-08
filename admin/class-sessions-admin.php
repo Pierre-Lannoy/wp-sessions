@@ -157,6 +157,7 @@ class Sessions_Admin {
 	 */
 	public function init_settings_sections() {
 		add_settings_section( 'pose_plugin_features_section', esc_html__( 'Plugin Features', 'sessions' ), [ $this, 'plugin_features_section_callback' ], 'pose_plugin_features_section' );
+		add_settings_section( 'pose_plugin_messages_section', esc_html__( 'Plugin Messages', 'sessions' ), [ $this, 'plugin_messages_section_callback' ], 'pose_plugin_messages_section' );
 		add_settings_section( 'pose_plugin_options_section', esc_html__( 'Plugin options', 'sessions' ), [ $this, 'plugin_options_section_callback' ], 'pose_plugin_options_section' );
 		add_settings_section( 'pose_plugin_roles_section', '', [ $this, 'plugin_roles_section_callback' ], 'pose_plugin_roles_section' );
 	}
@@ -303,6 +304,8 @@ class Sessions_Admin {
 				Option::network_set( 'followip', array_key_exists( 'pose_plugin_features_followip', $_POST ) ? (bool) filter_input( INPUT_POST, 'pose_plugin_features_followip' ) : false );
 				Option::network_set( 'history', array_key_exists( 'pose_plugin_features_history', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_features_history', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'history' ) );
 				Option::network_set( 'rolemode', array_key_exists( 'pose_plugin_features_rolemode', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_features_rolemode', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'rolemode' ) );
+				Option::network_set( 'bad_ip_message', array_key_exists( 'pose_plugin_messages_bad_ip_message', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_messages_bad_ip_message', FILTER_SANITIZE_STRING ) : Option::network_get( 'bad_ip_message' ) );
+				Option::network_set( 'blocked_message', array_key_exists( 'pose_plugin_messages_blocked_message', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_messages_blocked_message', FILTER_SANITIZE_STRING ) : Option::network_get( 'blocked_message' ) );
 				$message = esc_html__( 'Plugin settings have been saved.', 'sessions' );
 				$code    = 0;
 				add_settings_error( 'pose_no_error', $code, $message, 'updated' );
@@ -451,6 +454,47 @@ class Sessions_Admin {
 			$result[] = [ (int) ( 365 * $i ), esc_html( sprintf( _n( '%d year', '%d years', $i, 'sessions' ), $i ) ) ];
 		}
 		return $result;
+	}
+
+	/**
+	 * Callback for plugin messages section.
+	 *
+	 * @since 2.3.0
+	 */
+	public function plugin_messages_section_callback() {
+		$form = new Form();
+		add_settings_field(
+			'pose_plugin_messages_blocked_message',
+			esc_html__( 'Session not allowed', 'sessions' ),
+			[ $form, 'echo_field_input_text' ],
+			'pose_plugin_messages_section',
+			'pose_plugin_messages_section',
+			[
+				'id'          => 'pose_plugin_messages_blocked_message',
+				'value'       => Option::network_get( 'blocked_message' ),
+				'description' => esc_html__( 'Custom message shown to the user. If not set, default message is used.', 'sessions' ) . '<br/>' . sprintf( esc_html__(  'Default message is "%s".', 'sessions'),  esc_html__( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ),
+				'full_width'  => false,
+				'placeholder' => '',
+				'enabled'     => true,
+			]
+		);
+		register_setting( 'pose_plugin_messages_section', 'pose_plugin_messages_blocked_message' );
+		add_settings_field(
+			'pose_plugin_messages_bad_ip_message',
+			esc_html__( 'IP not allowed', 'sessions' ),
+			[ $form, 'echo_field_input_text' ],
+			'pose_plugin_messages_section',
+			'pose_plugin_messages_section',
+			[
+				'id'          => 'pose_plugin_messages_bad_ip_message',
+				'value'       => Option::network_get( 'bad_ip_message' ),
+				'description' => esc_html__( 'Custom message shown to the user. If not set, default message is used.', 'sessions' ) . '<br/>' . sprintf( esc_html__(  'Default message is "%s".', 'sessions'),  esc_html__( 'You\'re not allowed to initiate a new session from your current IP address.', 'sessions' ) ),
+				'full_width'  => false,
+				'placeholder' => '',
+				'enabled'     => true,
+			]
+		);
+		register_setting( 'pose_plugin_messages_section', 'pose_plugin_messages_bad_ip_message' );
 	}
 
 	/**
