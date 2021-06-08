@@ -590,7 +590,7 @@ class Sessions_Admin {
 		register_setting( 'pose_plugin_features_section', 'pose_plugin_features_history' );
 		add_settings_field(
 			'pose_plugin_features_metrics',
-			esc_html__( 'Metrics', 'keys-master' ),
+			esc_html__( 'Metrics', 'sessions' ),
 			[ $form, 'echo_field_checkbox' ],
 			'pose_plugin_features_section',
 			'pose_plugin_features_section',
@@ -598,7 +598,7 @@ class Sessions_Admin {
 				'text'        => esc_html__( 'Activated', 'sessions' ),
 				'id'          => 'pose_plugin_features_metrics',
 				'checked'     => \DecaLog\Engine::isDecalogActivated() ? Option::network_get( 'metrics' ) : false,
-				'description' => esc_html__( 'If checked, Sessions will collate and publish sessions metrics.', 'keys-master' ) . ( \DecaLog\Engine::isDecalogActivated() ? '' : '<br/>' . esc_html__( 'Note: for this to work, you must install DecaLog.', 'keys-master' ) ),
+				'description' => esc_html__( 'If checked, Sessions will collate and publish sessions metrics.', 'sessions' ) . '<br/>' . ( \DecaLog\Engine::isDecalogActivated() ? esc_html__( 'Note: for this to work, you must enable analytics.', 'sessions' ) : esc_html__( 'Note: for this to work, you must install DecaLog.', 'sessions' ) ),
 				'full_width'  => false,
 				'enabled'     => \DecaLog\Engine::isDecalogActivated(),
 			]
