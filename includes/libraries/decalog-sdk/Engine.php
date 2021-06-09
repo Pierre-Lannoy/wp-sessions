@@ -26,7 +26,7 @@ class Engine {
 	 * @since  1.0.0
 	 * @var    string    $version    Maintains the engine version.
 	 */
-	private static $version = '1.0.0';
+	private static $version = '1.1.0';
 
 	/**
 	 * The logger instances and parameters.
@@ -47,6 +47,9 @@ class Engine {
 	 * @since 1.0.0
 	 */
 	private static function init( $class, $slug, $name, $version, $icon = '' ) {
+		if ( ! defined( 'DECALOG_MAX_SHUTDOWN_PRIORITY' ) ) {
+			define( 'DECALOG_MAX_SHUTDOWN_PRIORITY', PHP_INT_MAX - 1000 );
+		}
 		if ( is_string( $slug ) && '' !== $slug ) {
 			static::$loggers[ $slug ] = [
 				'logging'    => null,
