@@ -777,7 +777,7 @@ class Analytics {
 						'metrics'     => [
 							'name'  => 'user_spam_avg',
 							'desc'  => 'Ratio of spam user - [percent]',
-							'value' => (float) ( $data['kpi-main-user'] / 100.0 ),
+							'value' => (float) ( $data['kpi-main-spam'] / 100.0 ),
 							'type'  => 'gauge',
 						],
 					];
