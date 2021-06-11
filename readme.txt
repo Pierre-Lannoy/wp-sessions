@@ -41,7 +41,9 @@ You can also set a maximum number of IPs used for each user - useful to limit cr
 * modify operations mode - see `wp help sessions mode` for details;
 * display sessions and accounts statistics - see `wp help sessions analytics` for details.
 
-For a full help on WP-CLI commands in Sessions, please [read this guide](https://github.com/Pierre-Lannoy/wp-sessions/blob/master/WP-CLI.md).
+For a full help on WP-CLI commands in Sessions, please [read this guide](https://perfops.one/sessions-wpcli).
+
+> **Sessions** is part of [PerfOps One](https://perfops.one/), a suite of free and open source WordPress plugins dedicated to observability and operations performance.
 
 **Sessions** is a free and open source plugin for WordPress. It integrates many other free and open source works (as-is or modified). Please, see 'about' tab in the plugin settings to see the details.
 
@@ -103,7 +105,7 @@ You can report bugs and suggest ideas via the [GitHub issue tracker](https://git
 
 == Changelog ==
 
-Please, see [full changelog](https://github.com/Pierre-Lannoy/wp-sessions/blob/master/CHANGELOG.md) on GitHub.
+Please, see [full changelog](https://perfops.one/sessions-changelog).
 
 == Upgrade Notice ==
 
