@@ -616,7 +616,7 @@ class Sessions_Admin {
 		$result   = [];
 		$result[] = [ 'none', esc_html__( 'No limit', 'sessions' ) ];
 		foreach ( LimiterTypes::$selector_names as $key => $name ) {
-			for ( $i = 1; $i <= 3; $i++ ) {
+			for ( $i = 1; $i <= 9; $i++ ) {
 				if ( '' === $name ) {
 					$result[] = [ $key . '-' . $i, esc_html( sprintf( _n( '%d session per user', '%d sessions per user', $i, 'sessions' ), $i ) ), LimiterTypes::is_selector_available( $key ) ];
 				} else {

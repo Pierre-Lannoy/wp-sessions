@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 - It's now possible to set an idle time of 15, 30 and 45 minutes (thanks to [pgray](https://wordpress.org/support/users/pgray/)).
 - Improved internal IP detection: support for cloud load balancers.
+- It's now possible to set from 1 to 9 sessions per user.
 - [WP-CLI] `sessions status` command now displays DecaLog SDK version too.
 
 ### Fixed
