@@ -193,7 +193,7 @@ class Sessions_Admin {
 	public function add_row_meta( $links, $file ) {
 		if ( 0 === strpos( $file, POSE_SLUG . '/' ) ) {
 			$links[] = '<a href="https://wordpress.org/support/plugin/' . POSE_SLUG . '/">' . __( 'Support', 'sessions' ) . '</a>';
-			$links[] = '<a href="https://github.com/Pierre-Lannoy/wp-sessions">' . __( 'GitHub repository', 'sessions' ) . '</a>';
+			$links[] = '<a href="https://perfops.one">PefOps One</a>';
 		}
 		return $links;
 	}
