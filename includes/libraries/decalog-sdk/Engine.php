@@ -26,7 +26,7 @@ class Engine {
 	 * @since  1.0.0
 	 * @var    string    $version    Maintains the engine version.
 	 */
-	private static $version = '1.1.0';
+	private static $version = '1.2.0';
 
 	/**
 	 * The logger instances and parameters.
@@ -47,9 +47,6 @@ class Engine {
 	 * @since 1.0.0
 	 */
 	private static function init( $class, $slug, $name, $version, $icon = '' ) {
-		if ( ! defined( 'DECALOG_MAX_SHUTDOWN_PRIORITY' ) ) {
-			define( 'DECALOG_MAX_SHUTDOWN_PRIORITY', PHP_INT_MAX - 1000 );
-		}
 		if ( is_string( $slug ) && '' !== $slug ) {
 			static::$loggers[ $slug ] = [
 				'logging'    => null,
@@ -227,4 +224,70 @@ class Engine {
 		return static::$loggers[ $slug ]['tracing'];
 	}
 
+	/**
+	 * Generates a v4 UUID.
+	 *
+	 * @since  1.2.0
+	 * @return string      A v4 UUID.
+	 */
+	private static function generate_v4() {
+		return sprintf(
+			'%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+			// phpcs:disable
+			mt_rand( 0, 0xffff ),
+			mt_rand( 0, 0xffff ),
+			mt_rand( 0, 0xffff ),
+			mt_rand( 0, 0x0fff ) | 0x4000,
+			mt_rand( 0, 0x3fff ) | 0x8000,
+			mt_rand( 0, 0xffff ),
+			mt_rand( 0, 0xffff ),
+			mt_rand( 0, 0xffff )
+		// phpcs:enabled
+		);
+	}
+
+	/**
+	 * Generates a (pseudo) unique ID.
+	 * This function does not generate cryptographically secure values, and should not be used for cryptographic purposes.
+	 *
+	 * @param   integer $length     The length of the ID.
+	 * @return  string  The unique ID.
+	 * @since  1.2.0
+	 */
+	public static function generate_unique_id( $length = 8 ) {
+		$result = '';
+		do {
+			$s       = self::generate_v4();
+			$s       = str_replace( '-', date( 'his' ), $s );
+			$result .= $s;
+			$l       = strlen( $result );
+		} while ( $l < $length );
+		return substr( str_shuffle( $result ), 0, $length );
+	}
+
+}
+
+if ( ! defined( 'DECALOG_MAX_SHUTDOWN_PRIORITY' ) ) {
+	define( 'DECALOG_MAX_SHUTDOWN_PRIORITY', PHP_INT_MAX - 1000 );
+}
+if ( ! defined( 'DECALOG_SPAN_MUPLUGINS_LOAD' ) ) {
+	define( 'DECALOG_SPAN_MUPLUGINS_LOAD', \DecaLog\Engine::generate_unique_id() );
+}
+if ( ! defined( 'DECALOG_SPAN_PLUGINS_LOAD' ) ) {
+	define( 'DECALOG_SPAN_PLUGINS_LOAD', \DecaLog\Engine::generate_unique_id() );
+}
+if ( ! defined( 'DECALOG_SPAN_THEME_SETUP' ) ) {
+	define( 'DECALOG_SPAN_THEME_SETUP', \DecaLog\Engine::generate_unique_id() );
+}
+if ( ! defined( 'DECALOG_SPAN_USER_AUTHENTICATION' ) ) {
+	define( 'DECALOG_SPAN_USER_AUTHENTICATION', \DecaLog\Engine::generate_unique_id() );
+}
+if ( ! defined( 'DECALOG_SPAN_PLUGINS_INITIALIZATION' ) ) {
+	define( 'DECALOG_SPAN_PLUGINS_INITIALIZATION', \DecaLog\Engine::generate_unique_id() );
+}
+if ( ! defined( 'DECALOG_SPAN_MAIN_RUN' ) ) {
+	define( 'DECALOG_SPAN_MAIN_RUN', \DecaLog\Engine::generate_unique_id() );
+}
+if ( ! defined( 'DECALOG_SPAN_SHUTDOWN' ) ) {
+	define( 'DECALOG_SPAN_SHUTDOWN', \DecaLog\Engine::generate_unique_id() );
 }
