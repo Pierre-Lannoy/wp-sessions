@@ -1042,7 +1042,7 @@ class Session {
 	 * @since   1.0.0
 	 */
 	public static function auto_terminate_session( $sessions, $user_id ) {
-		$span = \DecaLog\Engine::tracesLogger( POSE_SLUG )->start_span( 'Sessions auto-terminating' );
+		$span = \DecaLog\Engine::tracesLogger( POSE_SLUG )->start_span( 'Sessions auto-terminating', DECALOG_SPAN_SHUTDOWN );
 		$idle = [];
 		$exp  = [];
 		foreach ( $sessions as $token => $session ) {
@@ -1078,7 +1078,7 @@ class Session {
 		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() || 1 === Environment::exec_mode() ) {
 			$id = get_current_user_id();
 			if ( ( isset( $id ) && is_integer( $id ) && 0 < $id ) || 1 === Environment::exec_mode() ) {
-				$span = \DecaLog\Engine::tracesLogger( POSE_SLUG )->start_span( 'Sessions deleting' );
+				$span = \DecaLog\Engine::tracesLogger( POSE_SLUG )->start_span( 'Sessions deleting', DECALOG_SPAN_MAIN_RUN );
 				if ( isset( $user_id ) && is_integer( $user_id ) && 0 < $user_id ) {
 					$criteria = " AND user_id = '" . $user_id . "'";
 				} else {
@@ -1168,7 +1168,7 @@ class Session {
 	 */
 	public static function delete_selected_sessions( $bulk ) {
 		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() ) {
-			$span      = \DecaLog\Engine::tracesLogger( POSE_SLUG )->start_span( 'Sessions deleting' );
+			$span      = \DecaLog\Engine::tracesLogger( POSE_SLUG )->start_span( 'Sessions deleting', DECALOG_SPAN_MAIN_RUN );
 			$selftoken = Hash::simple_hash( wp_get_session_token(), false );
 			$count     = 0;
 			foreach ( $bulk as $id ) {
