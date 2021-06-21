@@ -1042,7 +1042,7 @@ class Session {
 	 * @since   1.0.0
 	 */
 	public static function auto_terminate_session( $sessions, $user_id ) {
-		$span = \DecaLog\Engine::tracesLogger( POSE_SLUG )->start_span( 'Sessions auto-terminating', DECALOG_SPAN_SHUTDOWN );
+		$span = \DecaLog\Engine::tracesLogger( POSE_SLUG )->startSpan( 'Sessions auto-terminating', DECALOG_SPAN_SHUTDOWN );
 		$idle = [];
 		$exp  = [];
 		foreach ( $sessions as $token => $session ) {
@@ -1061,7 +1061,7 @@ class Session {
 			do_action( 'sessions_after_expired_terminate', $user_id );
 		}
 		self::set_user_sessions( $sessions, $user_id );
-		\DecaLog\Engine::tracesLogger( POSE_SLUG )->end_span( $span );
+		\DecaLog\Engine::tracesLogger( POSE_SLUG )->endSpan( $span );
 		return count( $idle ) + count( $exp );
 	}
 
@@ -1078,7 +1078,7 @@ class Session {
 		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() || 1 === Environment::exec_mode() ) {
 			$id = get_current_user_id();
 			if ( ( isset( $id ) && is_integer( $id ) && 0 < $id ) || 1 === Environment::exec_mode() ) {
-				$span = \DecaLog\Engine::tracesLogger( POSE_SLUG )->start_span( 'Sessions deleting', DECALOG_SPAN_MAIN_RUN );
+				$span = \DecaLog\Engine::tracesLogger( POSE_SLUG )->startSpan( 'Sessions deleting', DECALOG_SPAN_MAIN_RUN );
 				if ( isset( $user_id ) && is_integer( $user_id ) && 0 < $user_id ) {
 					$criteria = " AND user_id = '" . $user_id . "'";
 				} else {
@@ -1097,7 +1097,7 @@ class Session {
 				$count = $wpdb->query( "DELETE FROM $wpdb->usermeta WHERE meta_key='session_tokens' AND user_id <> '" . $id . "'" . $criteria );
 				if ( false === $count ) {
 					\DecaLog\Engine::eventsLogger( POSE_SLUG )->warning( 'Unable to delete all sessions.' );
-					\DecaLog\Engine::tracesLogger( POSE_SLUG )->end_span( $span );
+					\DecaLog\Engine::tracesLogger( POSE_SLUG )->endSpan( $span );
 					return $count;
 				} else {
 					if ( isset( $user_id ) && is_integer( $user_id ) && 0 < $user_id ) {
@@ -1114,7 +1114,7 @@ class Session {
 						do_action( 'sessions_force_admin_terminate', $sessions );
 						\DecaLog\Engine::eventsLogger( POSE_SLUG )->notice( sprintf( 'All sessions have been deleted (%d deleted meta).', $sessions ) );
 					}
-					\DecaLog\Engine::tracesLogger( POSE_SLUG )->end_span( $span );
+					\DecaLog\Engine::tracesLogger( POSE_SLUG )->endSpan( $span );
 					return $sessions;
 				}
 			} else {
@@ -1168,7 +1168,7 @@ class Session {
 	 */
 	public static function delete_selected_sessions( $bulk ) {
 		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() ) {
-			$span      = \DecaLog\Engine::tracesLogger( POSE_SLUG )->start_span( 'Sessions deleting', DECALOG_SPAN_MAIN_RUN );
+			$span      = \DecaLog\Engine::tracesLogger( POSE_SLUG )->startSpan( 'Sessions deleting', DECALOG_SPAN_MAIN_RUN );
 			$selftoken = Hash::simple_hash( wp_get_session_token(), false );
 			$count     = 0;
 			foreach ( $bulk as $id ) {
@@ -1191,7 +1191,7 @@ class Session {
 				do_action( 'sessions_force_admin_terminate', $count );
 				\DecaLog\Engine::eventsLogger( POSE_SLUG )->notice( sprintf( 'All selected sessions have been deleted (%d deleted sessions).', $count ) );
 			}
-			\DecaLog\Engine::tracesLogger( POSE_SLUG )->end_span( $span );
+			\DecaLog\Engine::tracesLogger( POSE_SLUG )->endSpan( $span );
 			return $count;
 		} else {
 			\DecaLog\Engine::eventsLogger( POSE_SLUG )->alert( 'A non authorized user attempted to delete some active sessions.' );

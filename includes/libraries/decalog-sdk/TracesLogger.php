@@ -51,7 +51,7 @@ class TracesLogger {
 	 * @return  string   Id of started span.
 	 * @since   1.0.0
 	 */
-	public function start_span( $name, $parent_id = 'xxx' ) {
+	public function startSpan( $name, $parent_id = 'xxx' ) {
 		if ( $this->tracer ) {
 			return $this->tracer->start_span( $name, $parent_id );
 		}
@@ -64,7 +64,7 @@ class TracesLogger {
 	 * @param   string  $id  The id of the span.
 	 * @since   1.0.0
 	 */
-	public function end_span( $id ) {
+	public function endSpan( $id ) {
 		if ( $this->tracer ) {
 			$this->tracer->end_span( $id );
 		}
