@@ -3,7 +3,7 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.3.0] - 2021-06-xx
+## [2.3.0] - 2021-06-22
 
 ### Added
 - Compatibility with WordPress 5.8.
