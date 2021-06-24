@@ -2,12 +2,12 @@
 # This file is distributed under the same license as the Plugins - Sessions - Stable Readme (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-12-07 17:20+0100\n"
+"PO-Revision-Date: 2021-06-24 15:55+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 3.0\n"
 "Language: fr\n"
 "Project-Id-Version: Plugins - Sessions - Stable Readme (latest release)\n"
 "POT-Creation-Date: \n"
@@ -23,8 +23,12 @@ msgid "Sessions"
 msgstr "Sessions"
 
 #. Found in description paragraph.
-msgid "For a full help on WP-CLI commands in Sessions, please <a href=\"https://github.com/Pierre-Lannoy/wp-sessions/blob/master/WP-CLI.md\">read this guide</a>."
-msgstr "Pour obtenir une aide complète sur les commandes WP-CLI dans Sessions, veuillez <a href=\"https://github.com/Pierre-Lannoy/wp-sessions/blob/master/WP-CLI.md\">lire ce guide</a>."
+msgid "<strong>Sessions</strong> is part of <a href=\"https://perfops.one/\">PerfOps One</a>, a suite of free and open source WordPress plugins dedicated to observability and operations performance."
+msgstr "<strong>Sessions</strong> fait partie de <a href=\"https://perfops.one/\">PerfOps One</a>, une suite d’extensions WordPress gratuites et open source dédiées à l’observabilité et aux performances des opérations."
+
+#. Found in description paragraph.
+msgid "For a full help on WP-CLI commands in Sessions, please <a href=\"https://perfops.one/sessions-wpcli\">read this guide</a>."
+msgstr "Pour obtenir une aide complète sur les commandes WP-CLI pour Sessions, veuillez lire <a href=\"https://perfops.one/sessions-wpcli\">ce guide</a>."
 
 #. Found in description paragraph.
 msgid "<strong>Sessions</strong> supports a set of WP-CLI commands to:"
@@ -247,5 +251,5 @@ msgid "Active Sessions Management"
 msgstr "Gestion des sessions actives"
 
 #. Found in changelog paragraph.
-msgid "Please, see <a href=\"https://github.com/Pierre-Lannoy/wp-sessions/blob/master/CHANGELOG.md\">full changelog</a> on GitHub."
-msgstr "Merci de consulter le <a href=\"https://github.com/Pierre-Lannoy/wp-sessions/blob/master/CHANGELOG.md\">journal des modifications</a> sur GitHub."
+msgid "Please, see <a href=\"https://perfops.one/sessions-changelog\">full changelog</a>."
+msgstr "Merci de consulter le <a href=\"https://perfops.one/sessions-changelog\">journal des modifications</a>."
