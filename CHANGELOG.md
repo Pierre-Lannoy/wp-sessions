@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - New redesigned UI for Perfops One plugins management and menus.
 - It's now possible to set an idle time of 36, 48 and 72 hours.
 
+### Fixed
+- In some conditions, the plugin may be in the default site language rather than the user's language.
+
 ## [2.3.0] - 2021-06-22
 
 ### Added
