@@ -22,7 +22,7 @@ use POSessions\System\Date;
 use POSessions\System\Timezone;
 use POSessions\System\GeoIP;
 use POSessions\Plugin\Feature\LimiterTypes;
-use PerfOpsOne\AdminMenus;
+use PerfOpsOne\Menus;
 use POSessions\System\Statistics;
 
 /**
@@ -87,7 +87,7 @@ class Sessions_Admin {
 	 * @return array    The completed menus array.
 	 * @since 1.0.0
 	 */
-	public function init_perfops_admin_menus( $perfops ) {
+	public function init_perfopsone_admin_menus( $perfops ) {
 		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() ) {
 			$perfops['analytics'][] = [
 				'name'          => esc_html_x( 'Sessions', 'Common name - not the name of the plugin.', 'sessions' ),
@@ -99,7 +99,6 @@ class Sessions_Admin {
 				'menu_title'    => esc_html_x( 'Sessions', 'Common name - not the name of the plugin.', 'sessions' ),
 				'capability'    => 'manage_options',
 				'callback'      => [ $this, 'get_viewer_page' ],
-				'position'      => 50,
 				'plugin'        => POSE_SLUG,
 				'activated'     => Option::network_get( 'analytics' ),
 				'remedy'        => esc_url( admin_url( 'admin.php?page=pose-settings&tab=misc' ) ),
@@ -114,7 +113,6 @@ class Sessions_Admin {
 				'menu_title'    => esc_html_x( 'Sessions', 'Common name - not the name of the plugin.', 'sessions' ),
 				'capability'    => 'manage_options',
 				'callback'      => [ $this, 'get_manager_page' ],
-				'position'      => 50,
 				'plugin'        => POSE_SLUG,
 				'activated'     => true,
 				'remedy'        => '',
@@ -129,7 +127,6 @@ class Sessions_Admin {
 				'menu_title'    => POSE_PRODUCT_NAME,
 				'capability'    => 'manage_options',
 				'callback'      => [ $this, 'get_settings_page' ],
-				'position'      => 50,
 				'plugin'        => POSE_SLUG,
 				'version'       => POSE_VERSION,
 				'activated'     => true,
@@ -141,13 +138,22 @@ class Sessions_Admin {
 	}
 
 	/**
+	 * Dispatch the items in the settings menu.
+	 *
+	 * @since 2.0.0
+	 */
+	public function finalize_admin_menus() {
+		Menus::finalize();
+	}
+
+	/**
 	 * Set the items in the settings menu.
 	 *
 	 * @since 1.0.0
 	 */
 	public function init_admin_menus() {
-		add_filter( 'init_perfops_admin_menus', [ $this, 'init_perfops_admin_menus' ] );
-		AdminMenus::initialize();
+		add_filter( 'init_perfopsone_admin_menus', [ $this, 'init_perfopsone_admin_menus' ] );
+		Menus::initialize();
 	}
 
 	/**

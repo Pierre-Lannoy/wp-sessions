@@ -3,9 +3,10 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.4.0] - Unreleased yet.
+## [2.3.1] - Unreleased
 
 ### Changed
+- New redesigned UI for Perfops One plugins management and menus.
 - It's now possible to set an idle time of 36, 48 and 72 hours.
 
 ## [2.3.0] - 2021-06-22
