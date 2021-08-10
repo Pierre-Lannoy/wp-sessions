@@ -3,11 +3,12 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.3.1] - Unreleased
+## [2.3.1] - 2021-08-11
 
 ### Changed
 - New redesigned UI for PerfOps One plugins management and menus (thanks to [Loïc Antignac](https://github.com/webaxones), [Paul Bonaldi](https://profiles.wordpress.org/bonaldi/), [Axel Ducoron](https://github.com/aksld), [Laurent Millet](https://profiles.wordpress.org/wplmillet/), [Samy Rabih](https://github.com/samy) and [Raphaël Riehl](https://github.com/raphaelriehl) for their invaluable help).
 - It's now possible to set an idle time of 36, 48 and 72 hours.
+- There's now a `perfopsone_advanced_controls` filter to display advanced plugin settings.
 
 ### Fixed
 - In some conditions, the plugin may be in the default site language rather than the user's language.
