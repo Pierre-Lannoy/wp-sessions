@@ -1105,9 +1105,7 @@ class Session {
 					} else {
 						$cpt = self::delete_remaining_sessions();
 					}
-					if ( 0 < $cpt ) {
-						$sessions += $cpt;
-					}
+					$sessions += $cpt;
 					if ( 0 === $sessions ) {
 						\DecaLog\Engine::eventsLogger( POSE_SLUG )->notice( 'No sessions to delete.' );
 					} else {
