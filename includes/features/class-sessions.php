@@ -292,13 +292,15 @@ class Sessions extends \WP_List_Table {
 		$user_info = get_userdata( $item['id'] );
 		$name      = $user_info->display_name;
 		$icon      = '<img style="width:32px;margin-right:10px;margin-top:1px;float:left;" src="' . esc_url( get_avatar_url( $item['id'], [ 'size' => '64' ] ) ) . '" />';
-		$role      = Role::get_user_main( $item['id'] );
-		if ( array_key_exists( $role, $this->roles ) ) {
-			$role = $this->roles[ $role ]['l10n_name'];
-		} else {
-			$role = '';
+		$roles     = [];
+		foreach ( Role::get_user_all( $item['id'] ) as $role ) {
+			if ( array_key_exists( $role, $this->roles ) && array_key_exists( 'l10n_name', $this->roles[ $role ] ) ) {
+				$roles[] = $this->roles[ $role ]['l10n_name'];
+			} else {
+				$roles[] = $role;
+			}
 		}
-		$role = '<br /><span style="color:silver">' . $role . '</span>';
+		$role = '<br /><span style="color:silver">' . implode ( ', ', $roles ) . '</span>';
 		$user = '<strong><a href="' . get_edit_user_link( $item['id'] ) . '">' . $name . '</a></strong>';
 		return $icon . $user . $this->get_filter( 'id', $item['id'] ) . $role;
 	}

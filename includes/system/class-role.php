@@ -134,7 +134,6 @@ class Role {
 		foreach ( self::get_all() as $key => $detail ) {
 			if ( in_array( $key, $user->roles, true ) ) {
 				$role[] = $key;
-				break;
 			}
 		}
 		return $role;
