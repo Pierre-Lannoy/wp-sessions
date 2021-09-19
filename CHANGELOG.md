@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 - [SEC002] In some cases, "cumulative privileges" maybe interpreted as "least privileges" (thanks to [ShamiraO](https://github.com/ShamiraO)).
-- With multiple roles per user, session idle time lower than one hour may be wrongly computed.
+- With multiple roles per user, session idle time (when less than one hour) may be wrongly computed.
 
 ## [2.4.0] - 2021-09-07
 
