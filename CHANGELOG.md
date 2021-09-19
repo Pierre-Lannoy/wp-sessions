@@ -3,13 +3,14 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.5.0] - Not yet released
-
-### Added
-- Compatibility with WordPress 5.9.
+## [2.4.1] - Not yet released
 
 ### Changed
 - The sessions list now displays all users' roles (thanks to [ShamiraO](https://github.com/ShamiraO)).
+
+### Fixed
+- [SEC002] In some cases, "cumulative privileges" maybe interpreted as "least privileges" (thanks to [ShamiraO](https://github.com/ShamiraO)).
+- With multiple roles per user, session idle time lower than one hour may be wrongly computed.
 
 ## [2.4.0] - 2021-09-07
 

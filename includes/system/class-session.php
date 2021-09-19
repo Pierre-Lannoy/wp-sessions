@@ -550,11 +550,19 @@ class Session {
 						$method = $settings[ $role ]['method'];
 					}
 				}
-				// Max idle days
-				if ( 0 === $settings[ $role ]['idle'] ) {
-					$idle = 0;
-				} elseif ( $settings[ $role ]['idle'] > $idle && 0 !== $idle ) {
-					$idle = $settings[ $role ]['idle'];
+				// Max idle time
+				if ( 0 !== $idle ) {
+					$tidle = $settings[ $role ]['idle'];
+					if ( 100 < $tidle ) {
+						$tidle = $tidle - 100;
+					} else {
+						$tidle = $tidle * 60;
+					}
+					if ( ! $settings[ $role ]['idle'] ) {
+						$idle = 0;
+					} elseif ( $tidle > $idle ) {
+						$idle = $tidle;
+					}
 				}
 				// Max number of IPs
 				if ( 0 !== $maxip ) {
@@ -619,11 +627,15 @@ class Session {
 						$method = $settings[ $role ]['method'];
 					}
 				}
-				// Max idle days
-				if ( $settings[ $role ]['idle'] < $idle && 0 !== $settings[ $role ]['idle'] ) {
-					$idle = $settings[ $role ]['idle'];
-				} elseif ( 0 === $settings[ $role ]['idle'] && PHP_INT_MAX === $idle ) {
-					$idle = 0;
+				// Max idle time
+				$tidle = $settings[ $role ]['idle'];
+				if ( 100 < $tidle ) {
+					$tidle = $tidle - 100;
+				} else {
+					$tidle = $tidle * 60;
+				}
+				if ( $tidle < $idle && 0 !== $tidle ) {
+					$idle = $tidle;
 				}
 				// Max number of IPs
 				if ( 0 === $settings[ $role ]['maxip'] ) {
@@ -686,7 +698,16 @@ class Session {
 		$modes['block']  = $block;
 		$modes['limits'] = $limits;
 		$modes['method'] = $method;
-		$modes['idle']   = $idle;
+		if ( PHP_INT_MAX === $idle ) {
+			$idle = 0;
+		}
+		if ( ! $idle ) {
+			$modes['idle'] = $idle;
+		} elseif ( 60 > $idle ) {
+			$modes['idle'] = (int) ( $idle + 100 );
+		} else {
+			$modes['idle'] = (int) ( $idle / 60 );
+		}
 		$modes['ttl']    = $ttl;
 		$modes['rttl']   = $rttl;
 		$result['roles'] = $roles;
@@ -707,7 +728,7 @@ class Session {
 			foreach ( Role::get_all() as $key => $detail ) {
 				if ( in_array( $key, $this->user->roles, true ) ) {
 					$roles[] = $key;
-					break;
+					//break;
 				}
 			}
 		}
