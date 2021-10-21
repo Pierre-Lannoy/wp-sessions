@@ -175,7 +175,7 @@ class Sessions_Admin {
 		add_settings_section( 'pose_plugin_messages_section', esc_html__( 'Plugin Messages', 'sessions' ), [ $this, 'plugin_messages_section_callback' ], 'pose_plugin_messages_section' );
 		add_settings_section( 'pose_plugin_options_section', esc_html__( 'Plugin options', 'sessions' ), [ $this, 'plugin_options_section_callback' ], 'pose_plugin_options_section' );
 		add_settings_section( 'pose_plugin_roles_section', '', [ $this, 'plugin_roles_section_callback' ], 'pose_plugin_roles_section' );
-		if ( apply_filters( 'perfopsone_advanced_controls', false ) ) {
+		if ( apply_filters( 'perfopsone_show_advanced', false ) ) {
 			add_settings_section( 'pose_plugin_advanced_section', esc_html__( 'Plugin advanced options', 'keys-master' ), [ $this, 'plugin_advanced_section_callback' ], 'pose_plugin_advanced_section' );
 		}
 	}
