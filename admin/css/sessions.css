@@ -25,6 +25,7 @@
     --kpi-small-letter-spacing: 0.1px;
 }
 
+
 .pose-about-logo {
     width: 128px;
     float: right;
@@ -532,7 +533,7 @@
 }
 
 .ct-labels .ct-horizontal {
-    transform: translateX(-18px);
+    transform: translateX(-32px);
 }
 
 .ct-labels .ct-vertical {
