@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 - Compatibility with WordPress 5.9.
+- New button in settings to install recommended plugins.
 - The available hooks (filters and actions) are now described in `HOOKS.md` file.
 
 ### Changed

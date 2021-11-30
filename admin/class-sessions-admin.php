@@ -23,6 +23,7 @@ use POSessions\System\Timezone;
 use POSessions\System\GeoIP;
 use POSessions\Plugin\Feature\LimiterTypes;
 use PerfOpsOne\Menus;
+use PerfOpsOne\AdminBar;
 use POSessions\System\Statistics;
 
 /**
@@ -163,6 +164,7 @@ class Sessions_Admin {
 	public function init_admin_menus() {
 		add_filter( 'init_perfopsone_admin_menus', [ $this, 'init_perfopsone_admin_menus' ] );
 		Menus::initialize();
+		AdminBar::initialize();
 	}
 
 	/**
@@ -256,6 +258,36 @@ class Sessions_Admin {
 									$this->save_options();
 								} elseif ( ! empty( $_POST ) && array_key_exists( 'reset-to-defaults', $_POST ) ) {
 									$this->reset_options();
+								}
+							}
+							break;
+						case 'install-decalog':
+							if ( class_exists( 'PerfOpsOne\Installer' ) ) {
+								$result = \PerfOpsOne\Installer::do( 'decalog', true );
+								if ( '' === $result ) {
+									add_settings_error( 'sessions_no_error', '', esc_html__( 'Plugin successfully installed and activated with default settings.', 'sessions' ), 'info' );
+								} else {
+									add_settings_error( 'sessions_install_error', '', sprintf( esc_html__( 'Unable to install or activate the plugin. Error message: %s.', 'sessions' ), $result ), 'error' );
+								}
+							}
+							break;
+						case 'install-podd':
+							if ( class_exists( 'PerfOpsOne\Installer' ) ) {
+								$result = \PerfOpsOne\Installer::do( 'device-detector', true );
+								if ( '' === $result ) {
+									add_settings_error( 'sessions_no_error', '', esc_html__( 'Plugin successfully installed and activated with default settings.', 'sessions' ), 'info' );
+								} else {
+									add_settings_error( 'sessions_install_error', '', sprintf( esc_html__( 'Unable to install or activate the plugin. Error message: %s.', 'sessions' ), $result ), 'error' );
+								}
+							}
+							break;
+						case 'install-iplocator':
+							if ( class_exists( 'PerfOpsOne\Installer' ) ) {
+								$result = \PerfOpsOne\Installer::do( 'ip-locator', true );
+								if ( '' === $result ) {
+									add_settings_error( 'sessions_no_error', '', esc_html__( 'Plugin successfully installed and activated with default settings.', 'sessions' ), 'info' );
+								} else {
+									add_settings_error( 'sessions_install_error', '', sprintf( esc_html__( 'Unable to install or activate the plugin. Error message: %s.', 'sessions' ), $result ), 'error' );
 								}
 							}
 							break;
@@ -456,6 +488,9 @@ class Sessions_Admin {
 		} else {
 			$help  = '<img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'alert-triangle', 'none', '#FF8C00' ) . '" />&nbsp;';
 			$help .= sprintf( esc_html__( 'Your site does not use any logging plugin. To log all events triggered in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory.', 'sessions' ), '<a href="https://wordpress.org/plugins/decalog/">DecaLog</a>' );
+			if ( class_exists( 'PerfOpsOne\Installer' ) && ! Environment::is_wordpress_multisite() ) {
+				$help .= '<br/><a href="' . esc_url( admin_url( 'admin.php?page=pose-settings&tab=misc&action=install-decalog' ) ) . '" class="poo-button-install"><img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'download-cloud', 'none', '#FFFFFF', 3 ) . '" />&nbsp;&nbsp;' . esc_html__('Install It Now', 'sessions' ) . '</a>';
+			}
 		}
 		add_settings_field(
 			'pose_plugin_options_logger',
@@ -474,6 +509,9 @@ class Sessions_Admin {
 		} else {
 			$help  = '<img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'alert-triangle', 'none', '#FF8C00' ) . '" />&nbsp;';
 			$help .= sprintf( esc_html__( 'Your site does not use any device detection mechanism. To allow device differentiation in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory.', 'sessions' ), '<a href="https://wordpress.org/plugins/device-detector/">Device Detector</a>' );
+			if ( class_exists( 'PerfOpsOne\Installer' ) && ! Environment::is_wordpress_multisite() ) {
+				$help .= '<br/><a href="' . esc_url( admin_url( 'admin.php?page=pose-settings&tab=misc&action=install-podd' ) ) . '" class="poo-button-install"><img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'download-cloud', 'none', '#FFFFFF', 3 ) . '" />&nbsp;&nbsp;' . esc_html__('Install It Now', 'sessions' ) . '</a>';
+			}
 		}
 		add_settings_field(
 			'pose_plugin_options_podd',
@@ -493,6 +531,9 @@ class Sessions_Admin {
 		} else {
 			$help  = '<img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'alert-triangle', 'none', '#FF8C00' ) . '" />&nbsp;';
 			$help .= sprintf( esc_html__( 'Your site does not use any IP geographic information plugin. To allow country differentiation in Sessions, I recommend you to install the excellent (and free) %s. But it is not mandatory.', 'sessions' ), '<a href="https://wordpress.org/plugins/ip-locator/">IP Locator</a>' );
+			if ( class_exists( 'PerfOpsOne\Installer' ) && ! Environment::is_wordpress_multisite() ) {
+				$help .= '<br/><a href="' . esc_url( admin_url( 'admin.php?page=pose-settings&tab=misc&action=install-iplocator' ) ) . '" class="poo-button-install"><img style="width:16px;vertical-align:text-bottom;" src="' . \Feather\Icons::get_base64( 'download-cloud', 'none', '#FFFFFF', 3 ) . '" />&nbsp;&nbsp;' . esc_html__('Install It Now', 'sessions' ) . '</a>';
+			}
 		}
 		add_settings_field(
 			'pose_plugin_options_geoip',
