@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 - Country translation with i18n module may be wrong.
+- Plugin advanced settings are not translatable.
 
 ## [2.4.1] - 2021-09-20
 
