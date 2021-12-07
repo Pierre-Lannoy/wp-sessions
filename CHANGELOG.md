@@ -3,6 +3,11 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.0] - Not Yet Released
+
+### Fixed
+- The console menu may display an empty screen (thanks to [Renaud Pacouil](https://www.laboiteare.fr)).
+
 ## [2.5.0] - 2021-12-07
 
 ### Added
