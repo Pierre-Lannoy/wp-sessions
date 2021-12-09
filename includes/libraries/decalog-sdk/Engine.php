@@ -26,7 +26,7 @@ class Engine {
 	 * @since  1.0.0
 	 * @var    string    $version    Maintains the engine version.
 	 */
-	private static $version = '2.0.0';
+	private static $version = '2.0.1';
 
 	/**
 	 * The logger instances and parameters.
@@ -291,4 +291,8 @@ if ( ! defined( 'DECALOG_SPAN_MAIN_RUN' ) ) {
 }
 if ( ! defined( 'DECALOG_SPAN_SHUTDOWN' ) ) {
 	define( 'DECALOG_SPAN_SHUTDOWN', \DecaLog\Engine::generate_unique_id() );
+}
+
+if ( ! defined( 'DECALOG_TRACEID' ) ) {
+	define( 'DECALOG_TRACEID', $this->generate_unique_id( 32 ) );
 }
