@@ -256,9 +256,10 @@ class Engine {
 	 */
 	public static function generate_unique_id( $length = 8 ) {
 		$result = '';
+		$date   = new \DateTime();
 		do {
-			$s       = self::generate_v4();
-			$s       = str_replace( '-', date( 'his' ), $s );
+			$s       = $this->generate_v4();
+			$s       = str_replace( '-', (string) ( $date->format( 'u' ) ), $s );
 			$result .= $s;
 			$l       = strlen( $result );
 		} while ( $l < $length );
