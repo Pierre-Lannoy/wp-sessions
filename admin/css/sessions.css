@@ -7,7 +7,6 @@
     --pop-box-border: 1px solid rgba(90, 115, 142, 0.2);
     --pop-box-hover: rgba(90, 115, 142, 0.2);
     --table-bg-color: #F9F9FB;
-
     --title-font-size: 22px;
     --title-font-weight: 500;
     --title-letter-spacing: 1.2px;
@@ -16,7 +15,7 @@
     --subtitle-border: 1px solid #DDDDDD;
     --header-action-font-color: #5A738E;
     --header-action-font-size: 12px;
-    --header-action-font-weight: 100;
+    --header-action-font-weight: 300;
     --kpi-big-font-size: 32px;
     --kpi-big-font-weight: 400;
     --kpi-big-letter-spacing: 0.8px;
