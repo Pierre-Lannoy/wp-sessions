@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [2.6.0] - Not Yet Released
 
 ### Added
+- Compatibility with PHP 8.1.
 - A new option to delete all sessions of users resetting their passwords (thanks to [mrdexters1](https://profiles.wordpress.org/mrdexters1/) for the suggestion).
 
 ### Changed

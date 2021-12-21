@@ -923,16 +923,16 @@ class Sessions extends \WP_List_Table {
 				$this->paged = 1;
 			}
 		}
-		$this->order = filter_input( INPUT_GET, 'order', FILTER_SANITIZE_STRING );
+		$this->order = filter_input( INPUT_GET, 'order', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		if ( ! $this->order ) {
 			$this->order = 'desc';
 		}
-		$this->orderby = filter_input( INPUT_GET, 'orderby', FILTER_SANITIZE_STRING );
+		$this->orderby = filter_input( INPUT_GET, 'orderby', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		if ( ! $this->orderby ) {
 			$this->orderby = 'id';
 		}
 		foreach ( [ 'id', 'ip', 'device', 'os_name', 'client_name' ] as $f ) {
-			$v = filter_input( INPUT_GET, $f, FILTER_SANITIZE_STRING );
+			$v = filter_input( INPUT_GET, $f, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 			if ( $v ) {
 				$this->filters[ $f ] = $v;
 			}
@@ -948,13 +948,13 @@ class Sessions extends \WP_List_Table {
 		if ( '' === $this->action ) {
 			$action = '-1';
 			if ( '-1' === $action && wp_verify_nonce( $this->nonce, 'bulk-sessions-tools' ) && array_key_exists( 'action', $_POST ) ) {
-				$action = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_STRING );
+				$action = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 			}
 			if ( '-1' === $action && wp_verify_nonce( $this->nonce, 'bulk-sessions-tools' ) && array_key_exists( 'action2', $_POST ) ) {
-				$action = filter_input( INPUT_POST, 'action2', FILTER_SANITIZE_STRING );
+				$action = filter_input( INPUT_POST, 'action2', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 			}
 			if ( '-1' !== $action && wp_verify_nonce( $this->nonce, 'bulk-sessions-tools' ) && array_key_exists( 'bulk', $_POST ) ) {
-				$this->bulk = filter_input( INPUT_POST, 'bulk', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY );
+				$this->bulk = filter_input( INPUT_POST, 'bulk', FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FORCE_ARRAY );
 				if ( 0 < count( $this->bulk ) ) {
 					$this->action = $action;
 				}
