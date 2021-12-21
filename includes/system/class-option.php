@@ -77,6 +77,7 @@ class Option {
 		self::$defaults['analytics']         = true;
 		self::$defaults['metrics']           = true;
 		self::$defaults['forceip']           = true;
+		self::$defaults['killonreset']       = true;
 		self::$defaults['followip']          = true;
 		self::$defaults['rolemode']          = 0;
 		self::$defaults['zk_semaphore']      = 300;
@@ -85,7 +86,7 @@ class Option {
 		self::$defaults['buffer_limit']      = 4000;
 		self::$defaults['bad_ip_message']    = '';
 		self::$defaults['blocked_message']   = '';
-		self::$network                       = [ 'version', 'use_cdn', 'download_favicons', 'script_in_footer', 'display_nag', 'analytics', 'forceip', 'followip', 'history', 'metrics', 'rolemode', 'zk_cycle', 'zk_tsize', 'zk_semaphore', 'buffer_limit', 'bad_ip_message', 'blocked_message' ];
+		self::$network                       = [ 'version', 'use_cdn', 'download_favicons', 'script_in_footer', 'display_nag', 'analytics', 'forceip', 'followip', 'history', 'metrics', 'rolemode', 'killonreset', 'zk_cycle', 'zk_tsize', 'zk_semaphore', 'buffer_limit', 'bad_ip_message', 'blocked_message' ];
 		// Specific options.
 		self::$defaults['limit']       = 'none';
 		self::$defaults['method']      = 'block';

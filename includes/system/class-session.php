@@ -940,6 +940,9 @@ class Session {
 		if ( Option::network_get( 'forceip' ) ) {
 			$_SERVER['REMOTE_ADDR'] = IP::get_current();
 		}
+		if ( Option::network_get( 'killonreset' ) ) {
+			add_action( 'after_password_reset', [ self::class, 'reset' ] );
+		}
 		add_action( 'init', [ self::class, 'initialize' ], PHP_INT_MAX );
 		add_action( 'set_current_user', [ self::class, 'initialize' ], PHP_INT_MAX );
 	}
@@ -969,6 +972,18 @@ class Session {
 			add_filter( 'auth_cookie_expiration', [ self::$instance, 'cookie_expiration' ], PHP_INT_MAX, 3 );
 			add_filter( 'authenticate', [ self::$instance, 'limit_logins' ], PHP_INT_MAX, 3 );
 			add_filter( 'jetpack_sso_handle_login', [ self::$instance, 'jetpack_sso_handle_login' ], PHP_INT_MAX, 2 );
+		}
+	}
+
+	/**
+	 * Delete sessions after password reset.
+	 *
+	 * @since    2.6.0
+	 */
+	public static function reset( $user = null ) {
+		if ( isset( $user ) && $user instanceof \WP_User && 0 < $user->ID ) {
+			self::delete_all_sessions( $user->ID, true );
+			\DecaLog\Engine::eventsLogger( POSE_SLUG )->notice( sprintf( 'All sessions deleted for %s after password reset.', User::get_user_string( $user->ID ) ) );
 		}
 	}
 
@@ -1095,10 +1110,10 @@ class Session {
 	 * @return int|bool False if it was not possible, otherwise the number of deleted meta.
 	 * @since    1.0.0
 	 */
-	public static function delete_all_sessions( $user_id = null) {
-		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() || 1 === Environment::exec_mode() ) {
+	public static function delete_all_sessions( $user_id = null, $force = false ) {
+		if ( Role::SUPER_ADMIN === Role::admin_type() || Role::SINGLE_ADMIN === Role::admin_type() || 1 === Environment::exec_mode() || $force ) {
 			$id = get_current_user_id();
-			if ( ( isset( $id ) && is_integer( $id ) && 0 < $id ) || 1 === Environment::exec_mode() ) {
+			if ( ( isset( $id ) && is_integer( $id ) && 0 < $id ) || 1 === Environment::exec_mode() || $force ) {
 				$span = \DecaLog\Engine::tracesLogger( POSE_SLUG )->startSpan( 'Sessions deleting', DECALOG_SPAN_MAIN_RUN );
 				if ( isset( $user_id ) && is_integer( $user_id ) && 0 < $user_id ) {
 					$criteria = " AND user_id = '" . $user_id . "'";
