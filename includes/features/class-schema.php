@@ -351,7 +351,7 @@ class Schema {
 	 * @since    1.0.0
 	 */
 	public static function get_time_series( $filter, $cache = true, $extra_field = '', $extras = [], $not = false, $limit = 0 ) {
-		return self::get_grouped_list( $filter, '', $cache, $extra_field, $extras, $not, 'ORDER BY timestamp ASC', $limit );
+		return self::get_grouped_list( $filter, 'timestamp', $cache, $extra_field, $extras, $not, 'ORDER BY timestamp ASC', $limit );
 	}
 
 	/**

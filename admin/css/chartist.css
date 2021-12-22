@@ -83,9 +83,9 @@
     -ms-flex-align: flex-start;
     align-items: flex-start;
     -webkit-box-pack: center;
-    -webkit-justify-content: center;
+    -webkit-justify-content: flex-start;
     -ms-flex-pack: center;
-    justify-content: center;
+    justify-content: flex-start;
     text-align: center;
     text-anchor: start; }
 

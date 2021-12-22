@@ -228,8 +228,11 @@
 }
 
 .pose-multichart-item,
+.pose-multichart-xlarge-item,
 .pose-multichart-large-item,
-.pose-multichart-small-item{
+.pose-multichart-medium-item,
+.pose-multichart-small-item,
+.pose-multichart-xsmall-item{
     position: absolute;
     height: 200px;
     visibility:hidden;
@@ -239,18 +242,32 @@
 }
 
 .pose-multichart-item svg,
+.pose-multichart-xlarge-item svg,
 .pose-multichart-large-item svg,
-.pose-multichart-small-item svg{
+.pose-multichart-medium-item svg,
+.pose-multichart-small-item svg,
+.pose-multichart-xsmall-item svg{
     overflow: visible;
 }
 
 .pose-multichart-item.active,
+.pose-multichart-xlarge-item.active,
 .pose-multichart-large-item.active,
-.pose-multichart-small-item.active{
+.pose-multichart-medium-item.active,
+.pose-multichart-small-item.active,
+.pose-multichart-xsmall-item.active{
     visibility:visible;
     opacity:1;
     transition:visibility 0.6s linear,opacity 0.6s linear;
 }
+
+.pose-multichart-xlarge-item .ct-bar {stroke-width: 6% !important;stroke-opacity: 0.8 !important;}
+.pose-multichart-large-item .ct-bar {stroke-width: 3% !important;stroke-opacity: 0.8 !important;}
+.pose-multichart-medium-item .ct-bar {stroke-width: 1.5% !important;stroke-opacity: 0.8 !important;}
+.pose-multichart-small-item .ct-bar {stroke-width: 0.75% !important;stroke-opacity: 0.8 !important;}
+.pose-multichart-xsmall-item .ct-bar {stroke-width: 0.4% !important;stroke-opacity: 0.8 !important;}
+
+
 
 .pose-module-title-bar {
     border-bottom: var(--subtitle-border);
@@ -525,14 +542,8 @@
     display: none;
 }
 
-#pose-chart-memory .ct-labels foreignObject:first-child,
-#pose-chart-buf .ct-labels foreignObject:first-child,
-#pose-chart-key .ct-labels foreignObject:first-child{
-    display: block !important;
-}
-
 .ct-labels .ct-horizontal {
-    transform: translateX(-32px);
+    transform: translateX(-7px);
 }
 
 .ct-labels .ct-vertical {

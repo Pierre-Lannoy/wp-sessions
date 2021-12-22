@@ -305,7 +305,6 @@ class Analytics {
 		$item['password'] = [ 'reset' ];
 		$data             = [];
 		$series           = [];
-		$labels           = [];
 		$boundaries       = [];
 		$json             = [];
 		foreach ( $item as $selector => $array ) {
@@ -317,9 +316,7 @@ class Analytics {
 		}
 		// Data normalization.
 		if ( 0 !== count( $query ) ) {
-			foreach ( $query as  $row ) {
-				$datetime = new \DateTime( $row['timestamp'], new \DateTimeZone( 'UTC' ) );
-				$datetime->setTimezone( $this->timezone );
+			foreach ( $query as $row ) {
 				$record = [];
 				foreach ( $row as $k => $v ) {
 					if ( 0 === strpos( $k, 'u_' ) ) {
@@ -332,7 +329,7 @@ class Analytics {
 						$record[ $k ] = (int) $v;
 					}
 				}
-				$data[ strtotime( $datetime->format( 'Y-m-d' ) . ' 12:00:00' ) ] = $record;
+				$data[ $row['timestamp'] ] = $record;
 			}
 			// Boundaries computation.
 			foreach ( $data as $datum ) {
@@ -356,13 +353,29 @@ class Analytics {
 				}
 			}
 			// Series computation.
-			foreach ( $data as $timestamp => $datum ) {
-				// Series.
-				$ts = 'new Date(' . (string) $timestamp . '000)';
+			$init    = strtotime( $this->start ) - 86400;
+			for ( $i = 0; $i < $this->duration + 2; $i++ ) {
+				$ts = 'new Date(' . (string) ( ( $i * 86400 ) + $init ) . '000)';
 				foreach ( array_merge( $item['user'], $item['session'], $item['turnover'], $item['log'], $item['password'] ) as $key ) {
 					foreach ( $item as $selector => $array ) {
 						if ( in_array( $key, $array, true ) ) {
 							$series[ $key ][] = [
+								'x' => $ts,
+								'y' => 'null',
+							];
+							continue 2;
+						}
+					}
+				}
+			}
+			foreach ( $data as $timestamp => $datum ) {
+				// Series.
+				$ts  = 'new Date(' . (string) strtotime( $timestamp ) . '000)';
+				$idx = (int) ( ( strtotime( $timestamp ) - $init ) / 86400 );
+				foreach ( array_merge( $item['user'], $item['session'], $item['turnover'], $item['log'], $item['password'] ) as $key ) {
+					foreach ( $item as $selector => $array ) {
+						if ( in_array( $key, $array, true ) ) {
+							$series[ $key ][$idx] = [
 								'x' => $ts,
 								'y' => round( $datum[ $key ] / $boundaries[ $selector ]['factor'], ( 1 === $boundaries[ $selector ]['factor'] ? 0 : 2 ) ),
 							];
@@ -370,29 +383,6 @@ class Analytics {
 						}
 					}
 				}
-				// Labels.
-				$labels[] = 'moment(' . $timestamp . '000).format("ll")';
-			}
-			// Result encoding.
-			$shift    = 86400;
-			$datetime = new \DateTime( $this->start . ' 00:00:00', $this->timezone );
-			$offset   = $this->timezone->getOffset( $datetime );
-			$datetime = $datetime->getTimestamp() + $offset;
-			array_unshift( $labels, 'moment(' . (string) ( $datetime - $shift ) . '000).format("ll")' );
-			$before   = [
-				'x' => 'new Date(' . (string) ( $datetime - $shift ) . '000)',
-				'y' => 'null',
-			];
-			$datetime = new \DateTime( $this->end . ' 23:59:59', $this->timezone );
-			$offset   = $this->timezone->getOffset( $datetime );
-			$datetime = $datetime->getTimestamp() + $offset;
-			$after    = [
-				'x' => 'new Date(' . (string) ( $datetime + $shift ) . '000)',
-				'y' => 'null',
-			];
-			foreach ( array_merge( $item['user'], $item['session'], $item['turnover'], $item['log'], $item['password'] ) as $key ) {
-				array_unshift( $series[ $key ], $before );
-				$series[ $key ][] = $after;
 			}
 			// Users.
 			foreach ( $item as $selector => $array ) {
@@ -450,34 +440,26 @@ class Analytics {
 						'data' => $series[ $field ],
 					];
 				}
-				if ( 'turnover' === $selector || 'log' === $selector ) {
-					$json[ $selector ] = wp_json_encode(
-						[
-							'labels' => $labels,
-							'series' => $serie,
-						]
-					);
-				} else {
-					$json[ $selector ] = wp_json_encode( [ 'series' => $serie ] );
-				}
+				$json[ $selector ] = wp_json_encode( [ 'series' => $serie ] );
 				$json[ $selector ] = str_replace( '"x":"new', '"x":new', $json[ $selector ] );
 				$json[ $selector ] = str_replace( ')","y"', '),"y"', $json[ $selector ] );
 				$json[ $selector ] = str_replace( '"null"', 'null', $json[ $selector ] );
-				$json[ $selector ] = str_replace( '"labels":["moment', '"labels":[moment', $json[ $selector ] );
-				$json[ $selector ] = str_replace( '","moment', ',moment', $json[ $selector ] );
-				$json[ $selector ] = str_replace( '"],"series":', '],"series":', $json[ $selector ] );
-				$json[ $selector ] = str_replace( '\\"', '"', $json[ $selector ] );
 			}
 
 			// Rendering.
-			$divisor = $this->duration + 1;
-			while ( 11 < $divisor ) {
-				foreach ( [ 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397 ] as $divider ) {
-					if ( 0 === $divisor % $divider ) {
-						$divisor = $divisor / $divider;
-						break;
-					}
-				}
+			$ticks  = (int) ( 1 + ( $this->duration / 15 ) );
+			$style  = 'pose-multichart-xlarge-item';
+			if ( 20 < $this->duration ) {
+				$style  = 'pose-multichart-large-item';
+			}
+			if ( 40 < $this->duration ) {
+				$style  = 'pose-multichart-medium-item';
+			}
+			if ( 60 < $this->duration ) {
+				$style  = 'pose-multichart-small-item';
+			}
+			if ( 80 < $this->duration ) {
+				$style  = 'pose-multichart-xsmall-item';
 			}
 			$result  = '<div class="pose-multichart-handler">';
 			$result .= '<div class="pose-multichart-item active" id="pose-chart-user">';
@@ -493,16 +475,13 @@ class Analytics {
 			$result .= '  showLine: true,';
 			$result .= '  showPoint: false,';
 			$result .= '  plugins: [user_tooltip' . $uuid . '],';
-			$result .= '  axisX: {labelOffset: {x: 3,y: 0},scaleMinSpace: 100, type: Chartist.FixedScaleAxis, divisor:' . $divisor . ', labelInterpolationFnc: function (value) {return moment(value).format("YYYY-MM-DD");}},';
+			$result .= '  axisX: {showGrid: true, scaleMinSpace: 10, type: Chartist.FixedScaleAxis, divisor:' . ( $this->duration + 1 ) . ', labelInterpolationFnc: function skipLabels(value, index, labels) {return 0 === index % ' . $ticks . ' ? moment(value).format("DD") : null;}},';
 			$result .= '  axisY: {type: Chartist.AutoScaleAxis, labelInterpolationFnc: function (value) {return value.toString() + " ' . Conversion::number_shorten( $boundaries['user']['factor'], 0, true )['abbreviation'] . '";}},';
 			$result .= ' };';
 			$result .= ' new Chartist.Line("#pose-chart-user", user_data' . $uuid . ', user_option' . $uuid . ');';
 			$result .= '});';
 			$result .= '</script>';
-			$result .= '<div class="pose-multichart-small-item" id="pose-chart-turnover">';
-			$result .= '<style>';
-			$result .= '.pose-multichart-small-item .ct-bar {stroke-width: 6px !important;stroke-opacity: 0.8 !important;}';
-			$result .= '</style>';
+			$result .= '<div class="' . $style . '" id="pose-chart-turnover">';
 			$result .= '</div>';
 			$result .= '<script>';
 			$result .= 'jQuery(function ($) {';
@@ -510,9 +489,8 @@ class Analytics {
 			$result .= ' var turnover_tooltip' . $uuid . ' = Chartist.plugins.tooltip({justvalue: true, appendToBody: true});';
 			$result .= ' var turnover_option' . $uuid . ' = {';
 			$result .= '  height: 300,';
-			$result .= '  seriesBarDistance: 8,';
 			$result .= '  plugins: [turnover_tooltip' . $uuid . '],';
-			$result .= '  axisX: {showGrid: false, labelOffset: {x: 18,y: 0}},';
+			$result .= '  axisX: {showGrid: false, scaleMinSpace: 10, type: Chartist.FixedScaleAxis, divisor:' . ( $this->duration + 1 ) . ', labelInterpolationFnc: function skipLabels(value, index, labels) {return 0 === index % ' . $ticks . ' ? moment(value).format("DD") : null;}},';
 			$result .= '  axisY: {showGrid: true, labelInterpolationFnc: function (value) {return value.toString() + " ' . Conversion::number_shorten( $boundaries['turnover']['factor'], 0, true )['abbreviation'] . '";}},';
 			$result .= ' };';
 			$result .= ' new Chartist.Bar("#pose-chart-turnover", turnover_data' . $uuid . ', turnover_option' . $uuid . ');';
@@ -531,16 +509,13 @@ class Analytics {
 			$result .= '  showLine: true,';
 			$result .= '  showPoint: false,';
 			$result .= '  plugins: [session_tooltip' . $uuid . '],';
-			$result .= '  axisX: {labelOffset: {x: 3,y: 0},scaleMinSpace: 100, type: Chartist.FixedScaleAxis, divisor:' . $divisor . ', labelInterpolationFnc: function (value) {return moment(value).format("YYYY-MM-DD");}},';
+			$result .= '  axisX: {showGrid: true, scaleMinSpace: 10, type: Chartist.FixedScaleAxis, divisor:' . ( $this->duration + 1 ) . ', labelInterpolationFnc: function skipLabels(value, index, labels) {return 0 === index % ' . $ticks . ' ? moment(value).format("DD") : null;}},';
 			$result .= '  axisY: {type: Chartist.AutoScaleAxis, labelInterpolationFnc: function (value) {return value.toString() + " ' . Conversion::number_shorten( $boundaries['session']['factor'], 0, true )['abbreviation'] . '";}},';
 			$result .= ' };';
 			$result .= ' new Chartist.Line("#pose-chart-session", session_data' . $uuid . ', session_option' . $uuid . ');';
 			$result .= '});';
 			$result .= '</script>';
-			$result .= '<div class="pose-multichart-large-item large-bar" id="pose-chart-log">';
-			$result .= '<style>';
-			$result .= '.pose-multichart-large-item .ct-bar {stroke-width: 20px !important;stroke-opacity: 0.8 !important;}';
-			$result .= '</style>';
+			$result .= '<div class="' . $style . '" id="pose-chart-log">';
 			$result .= '</div>';
 			$result .= '<script>';
 			$result .= 'jQuery(function ($) {';
@@ -550,9 +525,9 @@ class Analytics {
 			$result .= '  height: 300,';
 			$result .= '  stackBars: true,';
 			$result .= '  stackMode: "accumulate",';
-			$result .= '  seriesBarDistance: 1,';
+			$result .= '  seriesBarDistance: 0,';
 			$result .= '  plugins: [log_tooltip' . $uuid . '],';
-			$result .= '  axisX: {showGrid: false, labelOffset: {x: 18,y: 0}},';
+			$result .= '  axisX: {showGrid: false, type: Chartist.FixedScaleAxis, divisor:' . ( $this->duration + 1 ) . ', labelInterpolationFnc: function skipLabels(value, index, labels) {return 0 === index % ' . $ticks . ' ? moment(value).format("DD") : null;}},';
 			$result .= '  axisY: {showGrid: true, labelInterpolationFnc: function (value) {return value.toString() + " ' . Conversion::number_shorten( $boundaries['log']['factor'], 0, true )['abbreviation'] . '";}},';
 			$result .= ' };';
 			$result .= ' new Chartist.Bar("#pose-chart-log", log_data' . $uuid . ', log_option' . $uuid . ');';
@@ -571,7 +546,7 @@ class Analytics {
 			$result .= '  showLine: true,';
 			$result .= '  showPoint: false,';
 			$result .= '  plugins: [password_tooltip' . $uuid . '],';
-			$result .= '  axisX: {labelOffset: {x: 3,y: 0},scaleMinSpace: 100, type: Chartist.FixedScaleAxis, divisor:' . $divisor . ', labelInterpolationFnc: function (value) {return moment(value).format("YYYY-MM-DD");}},';
+			$result .= '  axisX: {showGrid: true, scaleMinSpace: 10, type: Chartist.FixedScaleAxis, divisor:' . ( $this->duration + 1 ) . ', labelInterpolationFnc: function skipLabels(value, index, labels) {return 0 === index % ' . $ticks . ' ? moment(value).format("DD") : null;}},';
 			$result .= '  axisY: {type: Chartist.AutoScaleAxis, labelInterpolationFnc: function (value) {return value.toString() + " ' . Conversion::number_shorten( $boundaries['password']['factor'], 0, true )['abbreviation'] . '";}},';
 			$result .= ' };';
 			$result .= ' new Chartist.Line("#pose-chart-password", password_data' . $uuid . ', password_option' . $uuid . ');';
