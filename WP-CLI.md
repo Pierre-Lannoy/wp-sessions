@@ -95,7 +95,7 @@ Success: operation mode is now "no role limitation".
 
 ## Managing main settings
 
-To toggle on/off main settings, use `wp sessions settings <enable|disable> <analytics|ip-override|ip-follow|metrics>`.
+To toggle on/off main settings, use `wp sessions settings <enable|disable> <analytics|ip-override|ip-follow|metrics|kill-on-reset>`.
 
 If you try to disable a setting, wp-cli will ask you to confirm. To force answer to yes without prompting, just use `--yes`.
 
@@ -105,6 +105,7 @@ If you try to disable a setting, wp-cli will ask you to confirm. To force answer
 - `ip-override`: override WordPress IP detection feature
 - `ip-follow`: IP follow-up feature
 - `metrics`: metrics collation feature
+- `kill-on-reset`: metrics collation feature
 
 ### Example
 

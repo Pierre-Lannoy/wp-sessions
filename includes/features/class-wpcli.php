@@ -279,7 +279,7 @@ class Wpcli {
 	 * <enable|disable>
 	 * : The action to take.
 	 *
-	 * <analytics|ip-override|ip-follow|metrics>
+	 * <analytics|ip-override|ip-follow|metrics|kill-on-reset>
 	 * : The setting to change.
 	 *
 	 * [--yes]
@@ -319,6 +319,10 @@ class Wpcli {
 						Option::network_set( 'metrics', true );
 						$this->success( 'metrics collation is now activated.', '', $stdout );
 						break;
+					case 'kill-on-reset':
+						Option::network_set( 'killonreset', true );
+						$this->success( 'users\' sessions will now be deleted after password resets.', '', $stdout );
+						break;
 					default:
 						$this->error( 1, $stdout );
 				}
@@ -344,6 +348,11 @@ class Wpcli {
 						\WP_CLI::confirm( 'Are you sure you want to deactivate metrics collation?', $assoc_args );
 						Option::network_set( 'metrics', false );
 						$this->success( 'metrics collation is now deactivated.', '', $stdout );
+						break;
+					case 'kill-on-reset':
+						\WP_CLI::confirm( 'Are you sure you want to deactivate sessions deletion after password resets?', $assoc_args );
+						Option::network_set( 'killonreset', false );
+						$this->success( 'users\' sessions will now be left untouched after password resets.', '', $stdout );
 						break;
 					default:
 						$this->error( 1, $stdout );
