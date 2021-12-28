@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 - Charts allow now to display more than 2 months of data.
 - Improved timescale computation and date display for all charts.
+- Refactored cache mechanisms to fully support Redis and Memcached.
 - Bar charts have now a resizable width.
 - Updated DecaLog SDK from version 2.0.0 to version 2.0.2.
 - Updated PerfOps One library from 2.2.1 to 2.2.2.
