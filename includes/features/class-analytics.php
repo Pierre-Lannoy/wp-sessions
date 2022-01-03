@@ -296,7 +296,7 @@ class Analytics {
 	 */
 	private function query_chart() {
 		$uuid             = UUID::generate_unique_id( 5 );
-		$query            = Schema::get_time_series( $this->filter, ! $this->is_today, '', [], false );
+		$query            = Schema::get_time_series( $this->filter, ! $this->is_today );
 		$item             = [];
 		$item['user']     = [ 'u_ham', 'u_spam' ];
 		$item['session']  = [ 'u_active', 'expired', 'forced', 'idle' ];
