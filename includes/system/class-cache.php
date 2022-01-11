@@ -63,30 +63,6 @@ class Cache {
 	private static $apcu_available = false;
 
 	/**
-	 * Hits values.
-	 *
-	 * @since  1.0.0
-	 * @var    array    $hit    Hits values.
-	 */
-	private static $hit = [];
-
-	/**
-	 * Miss values.
-	 *
-	 * @since  1.0.0
-	 * @var    array    $miss    Miss values.
-	 */
-	private static $miss = [];
-
-	/**
-	 * Current (temporary) values.
-	 *
-	 * @since  1.0.0
-	 * @var    array    $current    Current (temporary) values.
-	 */
-	private static $current = [];
-
-	/**
 	 * Initializes the class and set its properties.
 	 *
 	 * @since 1.0.0
@@ -125,18 +101,6 @@ class Cache {
 		}
 		self::$apcu_pool_prefix = APCU_CACHE_PREFIX;
 		self::$apcu_available = function_exists( 'apcu_delete' ) && function_exists( 'apcu_fetch' ) && function_exists( 'apcu_store' );
-		add_action( 'shutdown', [ 'POSessions\System\Cache', 'log_debug' ], 10, 0 );
-		add_filter( 'perfopsone_icache_introspection', [ 'POSessions\System\Cache', 'introspection' ] );
-	}
-
-	/**
-	 * Get the introspection endpoint.
-	 *
-	 * @since 1.0.0
-	 */
-	public static function introspection( $endpoints ) {
-		$endpoints[ POSE_SLUG ] = [ 'name' => POSE_PRODUCT_NAME, 'version' => POSE_VERSION, 'endpoint' => [ 'POSessions\System\Cache', 'get_analytics' ] ];
-		return $endpoints;
 	}
 
 	/**
@@ -208,7 +172,6 @@ class Cache {
 	 * @since  1.0.0
 	 */
 	private static function get_for_full_name( $item_name ) {
-		$chrono    = microtime( true );
 		$item_name = self::normalized_item_name( $item_name );
 		$found     = false;
 		if ( self::$apcu_available && Option::network_get( 'use_apcu', true ) ) {
@@ -220,13 +183,8 @@ class Cache {
 			$found  = false !== $result;
 		}
 		if ( $found ) {
-			self::$hit[] = [
-				'time' => microtime( true ) - $chrono,
-				'size' => strlen( serialize( $result ) ),
-			];
 			return $result;
 		} else {
-			self::$current[ $item_name ] = $chrono;
 			return null;
 		}
 	}
@@ -292,12 +250,6 @@ class Cache {
 				$result = wp_cache_set( $item_name, $value, self::$pool_name, $expiration );
 			} else {
 				$result = set_transient( self::$pool_name . '_' . $item_name, $value, $expiration );
-			}
-			if ( array_key_exists( $item_name, self::$current ) ) {
-				self::$miss[] = [
-					'time' => microtime( true ) - self::$current[ $item_name ],
-					'size' => strlen( serialize( $result ) ),
-				];
 			}
 		} else {
 			$result = false;
@@ -533,67 +485,6 @@ class Cache {
 		$step   = self::get_step( $ttl_range );
 		$factor = $step * (int) round( ( $max - $min ) / ( 2 * $step ) );
 		return $min + (int) round( $factor );
-	}
-
-	/**
-	 * Get cache analytics.
-	 *
-	 * @return array The cache analytics.
-	 * @since  1.0.0
-	 */
-	public static function get_analytics() {
-		$result    = [];
-		$hit_time  = 0;
-		$hit_count = count( self::$hit );
-		$hit_size  = 0;
-		if ( 0 < $hit_count ) {
-			foreach ( self::$hit as $h ) {
-				$hit_time = $hit_time + $h['time'];
-				$hit_size = $hit_size + $h['size'];
-			}
-			$hit_time = $hit_time / $hit_count;
-			$hit_size = $hit_size / $hit_count;
-		}
-		$result['hit']['count'] = $hit_count;
-		$result['hit']['time'] = $hit_time;
-		$result['hit']['size'] = $hit_size;
-		$miss_time  = 0;
-		$miss_count = count( self::$miss );
-		$miss_size  = 0;
-		if ( 0 < $miss_count ) {
-			foreach ( self::$miss as $h ) {
-				$miss_time = $miss_time + $h['time'];
-				$miss_size = $miss_size + $h['size'];
-			}
-			$miss_time = $miss_time / $miss_count;
-			$miss_size = $miss_size / $miss_count;
-		}
-		$result['miss']['count'] = $miss_count;
-		$result['miss']['time'] = $miss_time;
-		$result['miss']['size'] = $miss_size;
-		if ( wp_using_ext_object_cache() ) {
-			$result['type'] = 'object_cache';
-		} elseif ( self::$apcu_available ) {
-			$result['type'] = 'apcu';
-		} else {
-			$result['type'] = 'db_transient';
-		}
-		return $result;
-	}
-
-	/**
-	 * Logs the cache analytics.
-	 *
-	 * @since  1.0.0
-	 */
-	public static function log_debug() {
-		$analytics = self::get_analytics();
-		$log       = '[' . $analytics['type'] . ']';
-		$log      .= '   Hit count: ' . $analytics['hit']['count'] . '   Hit time: ' . round($analytics['hit']['time'] * 1000, 3) . 'ms   Hit size: ' . Conversion::data_shorten( (int) $analytics['hit']['size'] );
-		$log      .= '   Miss count: ' . $analytics['miss']['count'] . '   Miss time: ' . round($analytics['miss']['time'] * 1000, 3) . 'ms   Miss size: ' . Conversion::data_shorten( (int) $analytics['miss']['size'] );
-		if ( 0 !== (int) $analytics['hit']['count'] || 0 !== (int) $analytics['miss']['count'] ) {
-			\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( $log );
-		}
 	}
 
 	/**
