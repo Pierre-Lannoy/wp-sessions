@@ -4,7 +4,7 @@ Tags: authentication, login, protection, role, session
 Requires at least: 5.2
 Requires PHP: 7.2
 Tested up to: 5.9
-Stable tag: 2.6.0
+Stable tag: 2.6.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -13,6 +13,8 @@ Powerful sessions manager for WordPress with sessions limiter and full analytics
 == Description ==
 
 **Sessions** is a powerful sessions manager for WordPress with a multi-criteria sessions limiter and full analytics reporting about logins, logouts and account creation. It relies on the standard WordPress sessions manager and add it extra features and controls.
+
+> 🎁 Give this plugin a drive test on a free dummy site: [One-Click Test!](https://tastewp.com/new/?pre-installed-plugin-slug=sessions)
 
 You can limit concurrent sessions, on a per role basis for the following criteria:
 
