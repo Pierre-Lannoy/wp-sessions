@@ -3,6 +3,17 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.7.0] - Not Yet Released
+
+### Added
+
+### Changed
+- Site Health page now presents a much more realistic test about object caching.
+
+### Fixed
+
+### Removed
+
 ## [2.6.2] - 2022-01-17
 
 ### Fixed
