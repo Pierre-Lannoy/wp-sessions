@@ -68,6 +68,7 @@ class Favicon {
 				}
 			}
 		}
+		$name = str_replace( [ 'https://', 'http://' ], '', $name );
 		$filename = $dir . sanitize_file_name( $name ) . '.png';
 		if ( array_key_exists( $name, self::$icons ) ) {
 			return self::$icons[ $name ];
@@ -85,12 +86,18 @@ class Favicon {
 			if ( ! $force_download ) {
 				return self::get_default();
 			}
-			$response = wp_remote_get( 'https://www.google.com/s2/favicons?domain=' . esc_url_raw( $name ) );
+			$response = wp_remote_get( 'https://www.google.com/s2/favicons?domain=' . $name );
 			if ( is_wp_error( $response ) ) {
 				\DecaLog\Engine::eventsLogger( POSE_SLUG )->error( 'Unable to download "' . $name . '" favicon: ' . $response->get_error_message(), [ 'code' => $response->get_error_code() ] );
 				return self::get_default();
 			}
-			if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			if ( 404 === wp_remote_retrieve_response_code( $response ) ) {
+				$response = wp_remote_get( 'https://www.google.com/s2/favicons?domain=https://' . $name );
+			}
+			if ( 404 === wp_remote_retrieve_response_code( $response ) ) {
+				$response = wp_remote_get( 'https://www.google.com/s2/favicons?domain=http://' . $name );
+			}
+			if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) && 404 !== (int) wp_remote_retrieve_response_code( $response ) ) {
 				\DecaLog\Engine::eventsLogger( POSE_SLUG )->error( 'Unable to download "' . $name . '" favicon.', [ 'code' => wp_remote_retrieve_response_code( $response ) ] );
 				return self::get_default();
 			}
