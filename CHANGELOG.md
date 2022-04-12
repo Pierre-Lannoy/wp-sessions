@@ -6,13 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [2.7.0] - Not Yet Released
 
 ### Added
+- Compatibility with WordPress 6.0.
 
 ### Changed
 - Site Health page now presents a much more realistic test about object caching.
 
 ### Fixed
-
-### Removed
+- [SEC001] Moment.js library updated to 2.29.2 / [CVE-2022-24785](https://github.com/advisories/GHSA-8hfj-j24r-96c4).
 
 ## [2.6.2] - 2022-01-17
 
