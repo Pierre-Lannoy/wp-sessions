@@ -26,7 +26,7 @@ class Engine {
 	 * @since  1.0.0
 	 * @var    string    $version    Maintains the engine version.
 	 */
-	private static $version = '2.0.2';
+	private static $version = '3.0.0';
 
 	/**
 	 * The logger instances and parameters.
@@ -151,6 +151,19 @@ class Engine {
 	 */
 	public static function initPlugin( $slug, $name, $version, $icon = '' ) {
 		static::init( 'plugin', $slug, $name, $version, $icon );
+	}
+
+	/**
+	 * Registers a new library logger.
+	 *
+	 * @param string $slug    The slug identifier.
+	 * @param string $name    The name of the library that will trigger events.
+	 * @param string $version The version of the library that will trigger events.
+	 * @param string $icon    Optional. The base64-encoded image for the library logo. Preferably an SVG image.
+	 * @since 3.0.0
+	 */
+	public static function initLibrary( $slug, $name, $version, $icon = '' ) {
+		static::init( 'library', $slug, $name, $version, $icon );
 	}
 
 	/**

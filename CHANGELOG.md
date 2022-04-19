@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 - Site Health page now presents a much more realistic test about object caching.
+- Updated DecaLog SDK from version 2.0.2 to version 3.0.0.
 
 ### Fixed
 - [SEC001] Moment.js library updated to 2.29.2 / [CVE-2022-24785](https://github.com/advisories/GHSA-8hfj-j24r-96c4).
