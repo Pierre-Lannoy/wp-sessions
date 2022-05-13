@@ -105,7 +105,7 @@ class Cache {
 	 */
 	public static function init() {
 		self::$ttls = [
-			'ephemeral'         => 0,
+			'ephemeral'         => 1 * MINUTE_IN_SECONDS,
 			'infinite'          => 10 * YEAR_IN_SECONDS,
 			'diagnosis'         => HOUR_IN_SECONDS,
 			'metrics'           => 1 * MINUTE_IN_SECONDS,
