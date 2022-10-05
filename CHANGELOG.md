@@ -7,9 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 - Compatibility with WordPress 6.1.
+- [WPCLI] The result of `wp sessions` commands are now logged in [DecaLog](https://wordpress.org/plugins/decalog/).
 
 ### Changed
 - Improved ephemeral cache in analytics.
+- [WPCLI] The result of `wp sessions` commands are now prefixed by the product name.
 
 ### Fixed
 - [SEC004] Moment.js library updated to 2.29.4 / [Regular Expression Denial of Service (ReDoS)](https://github.com/moment/moment/issues/6012).
