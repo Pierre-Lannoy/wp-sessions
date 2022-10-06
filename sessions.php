@@ -10,7 +10,7 @@
  * Plugin Name:       Sessions
  * Plugin URI:        https://perfops.one/sessions
  * Description:       Powerful sessions manager for WordPress with sessions limiter and full analytics reporting capabilities.
- * Version:           2.7.0
+ * Version:           2.8.0
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Pierre Lannoy / PerfOps One
