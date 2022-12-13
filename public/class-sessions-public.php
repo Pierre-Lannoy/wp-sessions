@@ -45,7 +45,7 @@ class Sessions_Public {
 	 * @since 1.0.0
 	 */
 	public function enqueue_styles() {
-		$this->assets->register_style( POSE_ASSETS_ID, POSE_PUBLIC_URL, 'css/sessions.min.css' );
+		//$this->assets->register_style( POSE_ASSETS_ID, POSE_PUBLIC_URL, 'css/sessions.min.css' );
 	}
 
 	/**
@@ -54,7 +54,7 @@ class Sessions_Public {
 	 * @since 1.0.0
 	 */
 	public function enqueue_scripts() {
-		$this->assets->register_script( POSE_ASSETS_ID, POSE_PUBLIC_URL, 'js/sessions.min.js', [ 'jquery' ] );
+		//$this->assets->register_script( POSE_ASSETS_ID, POSE_PUBLIC_URL, 'js/sessions.min.js', [ 'jquery' ] );
 	}
 
 }
