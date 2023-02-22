@@ -1,5 +1,5 @@
 === Sessions ===
-Contributors: PierreLannoy
+Contributors: PierreLannoy, hosterra
 Tags: authentication, login, protection, role, session
 Requires at least: 5.2
 Requires PHP: 7.2
