@@ -17,6 +17,9 @@ This sponsoring is a way to keep PerfOps One plugins suite free, open source and
 ### Changed
 - Improved loading by removing unneeded jQuery references in public rendering (thanks to [Kishorchand](https://github.com/Kishorchandth)).
 
+### Fixed
+- In some edge-cases, detecting IP may produce PHP deprecation warnings (thanks to [YR Chen](https://github.com/stevapple)).
+
 ## [2.8.0] - 2022-10-06
 
 ### Added
