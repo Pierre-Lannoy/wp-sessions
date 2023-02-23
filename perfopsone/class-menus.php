@@ -96,6 +96,7 @@ if ( ! class_exists( 'PerfOpsOne\Menus' ) ) {
 								if ( isset( $item['post_callback'] ) && is_callable( $item['post_callback'] ) && $hook_suffix ) {
 									call_user_func( $item['post_callback'], $hook_suffix );
 								}
+								
 							} else {
 								self::$current_item = $item;
 								self::$current_menu = $menu;

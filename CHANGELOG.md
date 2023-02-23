@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [2.9.0] - Not Yet Released
 
+The developments of PerfOps One suite, of which this plugin is a part, is now sponsored by [Hosterra](https://hosterra.eu).
+
+Hosterra is a web hosting company I founded in late 2022 whose purpose is to propose web services operating in a European data center that is water and energy efficient and ensures a first step towards GDPR compliance.
+
+This sponsoring is a way to keep PerfOps One plugins suite free, open source and independent.
+
 ### Added
 - Compatibility with WordPress 6.2.
 
