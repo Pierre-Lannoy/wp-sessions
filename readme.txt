@@ -3,8 +3,8 @@ Contributors: PierreLannoy, hosterra
 Tags: authentication, login, protection, role, session
 Requires at least: 5.2
 Requires PHP: 7.2
-Tested up to: 6.1
-Stable tag: 2.8.0
+Tested up to: 6.2
+Stable tag: 2.9.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
