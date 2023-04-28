@@ -84,9 +84,10 @@ class Option {
 		self::$defaults['zk_cycle']          = 90;
 		self::$defaults['zk_tsize']          = 20;
 		self::$defaults['buffer_limit']      = 4000;
+		self::$defaults['fallback']          = '';
 		self::$defaults['bad_ip_message']    = '';
 		self::$defaults['blocked_message']   = '';
-		self::$network                       = [ 'version', 'use_cdn', 'use_apcu',  'download_favicons', 'script_in_footer', 'display_nag', 'analytics', 'forceip', 'followip', 'history', 'metrics', 'rolemode', 'killonreset', 'zk_cycle', 'zk_tsize', 'zk_semaphore', 'buffer_limit', 'bad_ip_message', 'blocked_message' ];
+		self::$network                       = [ 'version', 'use_cdn', 'use_apcu',  'download_favicons', 'script_in_footer', 'display_nag', 'analytics', 'forceip', 'followip', 'history', 'metrics', 'rolemode', 'killonreset', 'zk_cycle', 'zk_tsize', 'zk_semaphore', 'buffer_limit', 'fallback', 'bad_ip_message', 'blocked_message' ];
 		// Specific options.
 		self::$defaults['limit']       = 'none';
 		self::$defaults['method']      = 'block';

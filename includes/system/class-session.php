@@ -39,7 +39,7 @@ class Session {
 	 * The current user ID.
 	 *
 	 * @since  1.0.0
-	 * @var    integer    $user_id    The current user ID.
+	 * @var    integer $user_id The current user ID.
 	 */
 	private $user_id = 0;
 
@@ -47,7 +47,7 @@ class Session {
 	 * The current user.
 	 *
 	 * @since  1.0.0
-	 * @var    \WP_User    $user    The current user.
+	 * @var    \WP_User $user The current user.
 	 */
 	private $user = null;
 
@@ -55,7 +55,7 @@ class Session {
 	 * The user's sessions.
 	 *
 	 * @since  1.0.0
-	 * @var    array    $sessions    The user's sessions.
+	 * @var    array $sessions The user's sessions.
 	 */
 	private $sessions = [];
 
@@ -63,7 +63,7 @@ class Session {
 	 * The user's distinct sessions IP.
 	 *
 	 * @since  1.1.0
-	 * @var    array    $ip    The user's distinct sessions IP.
+	 * @var    array $ip The user's distinct sessions IP.
 	 */
 	private $ip = [];
 
@@ -71,7 +71,7 @@ class Session {
 	 * The current token.
 	 *
 	 * @since  1.0.0
-	 * @var    string    $token    The current token.
+	 * @var    string $token The current token.
 	 */
 	private $token = '';
 
@@ -79,14 +79,15 @@ class Session {
 	 * The class instance.
 	 *
 	 * @since  1.0.0
-	 * @var    $object    $instance    The class instance.
+	 * @var    $object $instance    The class instance.
 	 */
 	private static $instance = null;
 
 	/**
 	 * Create an instance.
 	 *
-	 * @param mixed $user  Optional, the user or user ID.
+	 * @param mixed $user Optional, the user or user ID.
+	 *
 	 * @since 1.0.0
 	 */
 	public function __construct( $user = null ) {
@@ -96,7 +97,8 @@ class Session {
 	/**
 	 * Create an instance.
 	 *
-	 * @param mixed $user  Optional, the user or user ID.
+	 * @param mixed $user Optional, the user or user ID.
+	 *
 	 * @since 1.0.0
 	 */
 	private function load_user( $user = null ) {
@@ -140,6 +142,7 @@ class Session {
 		if ( isset( $this->sessions ) ) {
 			return count( $this->sessions );
 		}
+
 		return 0;
 	}
 
@@ -156,9 +159,10 @@ class Session {
 	/**
 	 * Modifies cookies durations.
 	 *
-	 * @param int  $expiration  Duration of the expiration period in seconds.
-	 * @param int  $user_id     User ID.
-	 * @param bool $remember    Whether to remember the user login. Default false.
+	 * @param int $expiration Duration of the expiration period in seconds.
+	 * @param int $user_id User ID.
+	 * @param bool $remember Whether to remember the user login. Default false.
+	 *
 	 * @return int New duration of the expiration period in seconds.
 	 * @since 1.0.0
 	 */
@@ -166,19 +170,22 @@ class Session {
 		if ( ! isset( $this->user ) || ( isset( $user_id ) && $user_id !== $this->user_id ) ) {
 			return $expiration;
 		}
+
 		return (int) $this->get_privileges_for_user()['modes'][ $remember ? 'rttl' : 'ttl' ] * HOUR_IN_SECONDS;
 	}
 
 	/**
 	 * Verify if the ip range is allowed.
 	 *
-	 * @param string  $block The ip block ode.
+	 * @param string $block The ip block ode.
+	 *
 	 * @return string 'allow' or 'disallow'.
 	 * @since 1.0.0
 	 */
 	private function verify_ip_range( $block ) {
 		if ( ! in_array( $block, [ 'none', 'external', 'local', 'all' ], true ) ) {
 			\DecaLog\Engine::eventsLogger( POSE_SLUG )->warning( 'IP range limitation set to "Allow For All".', [ 'code' => 202 ] );
+
 			return 'allow';
 		}
 		if ( 'none' === $block ) {
@@ -190,13 +197,15 @@ class Session {
 		if ( 'local' === $block && IP::is_current_public() ) {
 			return 'allow';
 		}
+
 		return 'disallow';
 	}
 
 	/**
 	 * Verify if the max number of ip.
 	 *
-	 * @param integer  $maxip The ip max number.
+	 * @param integer $maxip The ip max number.
+	 *
 	 * @return string 'allow' or 'disallow'.
 	 * @since 1.1.0
 	 */
@@ -207,13 +216,15 @@ class Session {
 		if ( $maxip > count( $this->ip ) ) {
 			return 'allow';
 		}
+
 		return 'disallow';
 	}
 
 	/**
 	 * Verify if the maximum allowed is reached.
 	 *
-	 * @param integer  $limit The maximum allowed.
+	 * @param integer $limit The maximum allowed.
+	 *
 	 * @return string 'allow' or the token of the overridable if maximum is reached.
 	 * @since 1.0.0
 	 */
@@ -232,22 +243,27 @@ class Session {
 			function ( $a, $b ) {
 				if ( $a['login'] === $b['login'] ) {
 					return 0;
-				} return ( $a['login'] < $b['login'] ) ? -1 : 1;
+				}
+
+				return ( $a['login'] < $b['login'] ) ? - 1 : 1;
 			}
 		);
 		if ( $limit < count( $this->sessions ) ) {
 			$this->sessions = array_slice( $this->sessions, 1 );
 			do_action( 'sessions_force_terminate', $this->user_id );
 			self::set_user_sessions( $this->sessions, $this->user_id );
+
 			return $this->verify_per_user_limit( $limit );
 		}
+
 		return array_key_first( $this->sessions );
 	}
 
 	/**
 	 * Verify if the maximum allowed is reached.
 	 *
-	 * @param integer  $limit The maximum allowed.
+	 * @param integer $limit The maximum allowed.
+	 *
 	 * @return string 'allow' or the token of the overridable if maximum is reached.
 	 * @since 1.0.0
 	 */
@@ -276,7 +292,9 @@ class Session {
 			function ( $a, $b ) {
 				if ( $a['login'] === $b['login'] ) {
 					return 0;
-				} return ( $a['login'] < $b['login'] ) ? -1 : 1;
+				}
+
+				return ( $a['login'] < $b['login'] ) ? - 1 : 1;
 			}
 		);
 		if ( $limit < count( $compare ) ) {
@@ -284,15 +302,18 @@ class Session {
 			do_action( 'sessions_force_terminate', $this->user_id );
 			$this->sessions = array_merge( $compare, $buffer );
 			self::set_user_sessions( $this->sessions, $this->user_id );
+
 			return $this->verify_per_user_limit( $limit );
 		}
+
 		return array_key_first( $compare );
 	}
 
 	/**
 	 * Verify if the maximum allowed is reached.
 	 *
-	 * @param integer  $limit The maximum allowed.
+	 * @param integer $limit The maximum allowed.
+	 *
 	 * @return string 'allow' or the token of the overridable if maximum is reached.
 	 * @since 1.0.0
 	 */
@@ -323,7 +344,9 @@ class Session {
 			function ( $a, $b ) {
 				if ( $a['login'] === $b['login'] ) {
 					return 0;
-				} return ( $a['login'] < $b['login'] ) ? -1 : 1;
+				}
+
+				return ( $a['login'] < $b['login'] ) ? - 1 : 1;
 			}
 		);
 		if ( $limit < count( $compare ) ) {
@@ -331,16 +354,19 @@ class Session {
 			do_action( 'sessions_force_terminate', $this->user_id );
 			$this->sessions = array_merge( $compare, $buffer );
 			self::set_user_sessions( $this->sessions, $this->user_id );
+
 			return $this->verify_per_user_limit( $limit );
 		}
+
 		return array_key_first( $compare );
 	}
 
 	/**
 	 * Verify if the maximum allowed is reached.
 	 *
-	 * @param string   $ua The user agent.
-	 * @param string   $selector The selector ('device-class', 'device-type', 'device-client',...).
+	 * @param string $ua The user agent.
+	 * @param string $selector The selector ('device-class', 'device-type', 'device-client',...).
+	 *
 	 * @return string The requested ID.
 	 * @since 1.0.0
 	 */
@@ -357,6 +383,7 @@ class Session {
 				if ( $device->class_is_desktop ) {
 					return 'desktop';
 				}
+
 				return 'other';
 			case 'device-type':
 				if ( $device->device_is_smartphone ) {
@@ -389,6 +416,7 @@ class Session {
 				if ( $device->device_is_camera ) {
 					return 'camera';
 				}
+
 				return 'other';
 			case 'device-client':
 				if ( $device->client_is_browser ) {
@@ -409,20 +437,23 @@ class Session {
 				if ( $device->client_is_media_player ) {
 					return 'media-payer';
 				}
+
 				return 'other';
 			case 'device-browser':
 				return $device->client_short_name;
 			case 'device-os':
 				return $device->os_short_name;
 		}
+
 		return '';
 	}
 
 	/**
 	 * Verify if the maximum allowed is reached.
 	 *
-	 * @param string   $selector The selector ('device-class', 'device-type', 'device-client',...).
-	 * @param integer  $limit    The maximum allowed.
+	 * @param string $selector The selector ('device-class', 'device-type', 'device-client',...).
+	 * @param integer $limit The maximum allowed.
+	 *
 	 * @return string 'allow' or the token of the overridable if maximum is reached.
 	 * @since 1.0.0
 	 */
@@ -451,7 +482,9 @@ class Session {
 			function ( $a, $b ) {
 				if ( $a['login'] === $b['login'] ) {
 					return 0;
-				} return ( $a['login'] < $b['login'] ) ? -1 : 1;
+				}
+
+				return ( $a['login'] < $b['login'] ) ? - 1 : 1;
 			}
 		);
 		if ( $limit < count( $compare ) ) {
@@ -459,16 +492,19 @@ class Session {
 			do_action( 'sessions_force_terminate', $this->user_id );
 			$this->sessions = array_merge( $compare, $buffer );
 			self::set_user_sessions( $this->sessions, $this->user_id );
+
 			return $this->verify_per_user_limit( $limit );
 		}
+
 		return array_key_first( $compare );
 	}
 
 	/**
 	 * Enforce sessions limitation if needed.
 	 *
-	 * @param string  $message  The error message.
-	 * @param integer $error    The error code.
+	 * @param string $message The error message.
+	 * @param integer $error The error code.
+	 *
 	 * @since 1.0.0
 	 */
 	private function die( $message, $error ) {
@@ -477,10 +513,28 @@ class Session {
 	}
 
 	/**
+	 * Enforce redirection if needed.
+	 *
+	 * @param string $mode The reason code.
+	 *
+	 * @since 2.10.0
+	 */
+	private function redirect( $mode ) {
+		Capture::login_block( $this->user_id );
+		$url = (string) Option::network_get( 'fallback' );
+		if ( '' === $url ) {
+			$url = get_site_url();
+		}
+		wp_redirect( esc_url( add_query_arg( [ 'reason' => $mode ] , $url ) ), 303 );
+		exit;
+	}
+
+	/**
 	 * Enforce sessions limitation if needed.
 	 *
-	 * @param \WP_User|false|null $user     Local User information.
-	 * @param object $user_data             WordPress.com User Login information.
+	 * @param \WP_User|false|null $user Local User information.
+	 * @param object $user_data WordPress.com User Login information.
+	 *
 	 * @since 1.0.0
 	 */
 	public function jetpack_sso_handle_login( $user, $user_data ) {
@@ -492,7 +546,8 @@ class Session {
 	/**
 	 * Computes privileges for a set of roles.
 	 *
-	 * @param array     $roles  The set of roles for which the privileges must be computed.
+	 * @param array $roles The set of roles for which the privileges must be computed.
+	 *
 	 * @return array    The privileges.
 	 * @since 2.0.0
 	 */
@@ -505,8 +560,8 @@ class Session {
 		$block_local    = false;
 		$limits         = [];
 		if ( 0 === (int) Option::network_get( 'rolemode' ) ) { // Cumulative privileges.
-			$idle   = -1;
-			$maxip  = -1;
+			$idle   = - 1;
+			$maxip  = - 1;
 			$ttl    = 0;
 			$rttl   = 0;
 			$method = '';
@@ -527,7 +582,18 @@ class Session {
 				if ( 'none' === $settings[ $role ]['limit'] ) {
 					$limits['none'] = true;
 				} else {
-					foreach ( [ 'user', 'country', 'ip', 'device-class', 'device-type', 'device-client', 'device-browser', 'device-os' ] as $type ) {
+					foreach (
+						[
+							'user',
+							'country',
+							'ip',
+							'device-class',
+							'device-type',
+							'device-client',
+							'device-browser',
+							'device-os'
+						] as $type
+					) {
 						if ( 0 === strpos( $settings[ $role ]['limit'], $type . '-' ) ) {
 							$value = (int) substr( $settings[ $role ]['limit'], strlen( $type ) + 1 );
 							if ( array_key_exists( $type, $limits ) ) {
@@ -604,7 +670,18 @@ class Session {
 				if ( 'none' === $settings[ $role ]['limit'] ) {
 					$limits['none'] = true;
 				} else {
-					foreach ( [ 'user', 'country', 'ip', 'device-class', 'device-type', 'device-client', 'device-browser', 'device-os' ] as $type ) {
+					foreach (
+						[
+							'user',
+							'country',
+							'ip',
+							'device-class',
+							'device-type',
+							'device-client',
+							'device-browser',
+							'device-os'
+						] as $type
+					) {
 						if ( 0 === strpos( $settings[ $role ]['limit'], $type . '-' ) ) {
 							$value = (int) substr( $settings[ $role ]['limit'], strlen( $type ) + 1 );
 							if ( array_key_exists( $type, $limits ) ) {
@@ -660,8 +737,7 @@ class Session {
 				$block = 'none';
 			} elseif ( $block_external ) {
 				$block = 'external';
-			}
-			elseif ( $block_local ) {
+			} elseif ( $block_local ) {
 				$block = 'local';
 			} else {
 				$block = 'none';
@@ -671,8 +747,7 @@ class Session {
 				$block = 'all';
 			} elseif ( $block_external ) {
 				$block = 'external';
-			}
-			elseif ( $block_local ) {
+			} elseif ( $block_local ) {
 				$block = 'local';
 			} else {
 				$block = 'none';
@@ -692,7 +767,7 @@ class Session {
 			unset( $limits['none'] );
 		}
 		// Max number of IPs
-		if ( PHP_INT_MAX !== $maxip && -1 !== $maxip ) {
+		if ( PHP_INT_MAX !== $maxip && - 1 !== $maxip ) {
 			$limits['ip'] = $maxip;
 		}
 		$modes['block']  = $block;
@@ -712,6 +787,7 @@ class Session {
 		$modes['rttl']   = $rttl;
 		$result['roles'] = $roles;
 		$result['modes'] = $modes;
+
 		return $result;
 	}
 
@@ -732,21 +808,23 @@ class Session {
 				}
 			}
 		}
+
 		return $this->get_privileges_for_roles( $roles );
 	}
 
 	/**
 	 * Enforce sessions limitation if needed.
 	 *
-	 * @param mixed   $user         WP_User if the user is authenticated, WP_Error or null otherwise.
-	 * @param string  $username     Username or email address.
-	 * @param string  $password     User password.
-	 * @param boolean $force_403    Optional. Force a 403 error if needed (in place of 'default' method).
+	 * @param mixed $user WP_User if the user is authenticated, WP_Error or null otherwise.
+	 * @param string $username Username or email address.
+	 * @param string $password User password.
+	 * @param boolean $force_403 Optional. Force a 403 error if needed (in place of 'default' method).
+	 *
 	 * @return mixed WP_User if the user is allowed, WP_Error or null otherwise.
 	 * @since 1.0.0
 	 */
 	public function limit_logins( $user, $username, $password, $force_403 = false ) {
-		if ( -1 === (int) Option::network_get( 'rolemode' ) ) {
+		if ( - 1 === (int) Option::network_get( 'rolemode' ) ) {
 			return $user;
 		}
 		if ( $user instanceof \WP_User ) {
@@ -815,7 +893,11 @@ class Session {
 					case 'default':
 						\DecaLog\Engine::eventsLogger( POSE_SLUG )->warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), $mode ), [ 'code' => 403 ] );
 						Capture::login_block( $this->user_id, true );
+
 						return new \WP_Error( '403', __( '<strong>ERROR</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ) );
+					case 'redirect':
+						\DecaLog\Engine::eventsLogger( POSE_SLUG )->warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), $mode ), [ 'code' => 303 ] );
+						$this->redirect( $mode );
 					default:
 						\DecaLog\Engine::eventsLogger( POSE_SLUG )->warning( sprintf( 'New session not allowed for %s. Reason: %s.', User::get_user_string( $this->user_id ), $mode ), [ 'code' => 403 ] );
 						$this->die( __( '<strong>FORBIDDEN</strong>: ', 'sessions' ) . apply_filters( 'sessions_blocked_message', __( 'You\'re not allowed to initiate a new session because your maximum number of active sessions has been reached.', 'sessions' ) ), 403 );
@@ -824,6 +906,7 @@ class Session {
 				\DecaLog\Engine::eventsLogger( POSE_SLUG )->debug( sprintf( 'New session allowed for %s.', User::get_user_string( $this->user_id ) ), [ 'code' => 200 ] );
 			}
 		}
+
 		return $user;
 	}
 
@@ -846,6 +929,7 @@ class Session {
 				unset( $this->sessions[ $this->token ]['session_idle'] );
 				self::set_user_sessions( $this->sessions, $this->user_id );
 			}
+
 			return false;
 		}
 		if ( 100 < (int) $privileges['idle'] ) {
@@ -854,6 +938,7 @@ class Session {
 			$this->sessions[ $this->token ]['session_idle'] = time() + (int) ( $privileges['idle'] * HOUR_IN_SECONDS );
 		}
 		self::set_user_sessions( $this->sessions, $this->user_id );
+
 		return true;
 	}
 
@@ -875,6 +960,7 @@ class Session {
 		}
 		$this->sessions[ $this->token ]['ip'] = IP::expand( $_SERVER['REMOTE_ADDR'] );
 		self::set_user_sessions( $this->sessions, $this->user_id );
+
 		return true;
 	}
 
@@ -928,6 +1014,7 @@ class Session {
 		if ( '' === $result ) {
 			$result = esc_html__( 'No restrictions.', 'sessions' );
 		}
+
 		return $result;
 	}
 
@@ -990,8 +1077,9 @@ class Session {
 	/**
 	 * Get an element in a cookie.
 	 *
-	 * @param string $scheme  The cookie scheme to use: 'auth', 'secure_auth', or 'logged_in'.
+	 * @param string $scheme The cookie scheme to use: 'auth', 'secure_auth', or 'logged_in'.
 	 * @param string $element The element to retrieve.
+	 *
 	 * @return  string  The element.
 	 * @since   1.0.0
 	 */
@@ -1003,13 +1091,15 @@ class Session {
 		if ( array_key_exists( $element, $cookie_elements ) ) {
 			return (string) $cookie_elements[ $element ];
 		}
+
 		return '';
 	}
 
 	/**
 	 * Get sessions.
 	 *
-	 * @param   mixed $user_id  Optional. The user ID.
+	 * @param mixed $user_id Optional. The user ID.
+	 *
 	 * @return  array  The list of sessions.
 	 * @since   1.0.0
 	 */
@@ -1028,6 +1118,7 @@ class Session {
 		if ( ! is_array( $result ) ) {
 			$result = [];
 		}
+
 		return $result;
 	}
 
@@ -1047,14 +1138,16 @@ class Session {
 				$record['meta_value'] = maybe_unserialize( $record['meta_value'] );
 			}
 		}
+
 		return $result;
 	}
 
 	/**
 	 * Set sessions.
 	 *
-	 * @param   array   $sessions The sessions records.
-	 * @param   mixed   $user_id  Optional. The user ID.
+	 * @param array $sessions The sessions records.
+	 * @param mixed $user_id Optional. The user ID.
+	 *
 	 * @return  boolean   True if the operation was successful, false otherwise.
 	 * @since   1.0.0
 	 */
@@ -1066,14 +1159,16 @@ class Session {
 		if ( ! $user_id || ! is_int( $user_id ) ) {
 			return $result;
 		}
+
 		return (bool) update_user_meta( $user_id, 'session_tokens', $sessions );
 	}
 
 	/**
 	 * Terminate sessions needing to be terminated.
 	 *
-	 * @param   array   $sessions The sessions records.
-	 * @param   integer   $user_id  The user ID.
+	 * @param array $sessions The sessions records.
+	 * @param integer $user_id The user ID.
+	 *
 	 * @return  integer   Number of terminated sessions.
 	 * @since   1.0.0
 	 */
@@ -1098,15 +1193,16 @@ class Session {
 		}
 		self::set_user_sessions( $sessions, $user_id );
 		\DecaLog\Engine::tracesLogger( POSE_SLUG )->endSpan( $span );
+
 		return count( $idle ) + count( $exp );
 	}
-
 
 
 	/**
 	 * Delete all sessions.
 	 *
-	 * @param integer   $user_id    Optional. Delete only for this user.
+	 * @param integer $user_id Optional. Delete only for this user.
+	 *
 	 * @return int|bool False if it was not possible, otherwise the number of deleted meta.
 	 * @since    1.0.0
 	 */
@@ -1134,6 +1230,7 @@ class Session {
 				if ( false === $count ) {
 					\DecaLog\Engine::eventsLogger( POSE_SLUG )->warning( 'Unable to delete all sessions.' );
 					\DecaLog\Engine::tracesLogger( POSE_SLUG )->endSpan( $span );
+
 					return $count;
 				} else {
 					if ( isset( $user_id ) && is_integer( $user_id ) && 0 < $user_id ) {
@@ -1149,14 +1246,17 @@ class Session {
 						\DecaLog\Engine::eventsLogger( POSE_SLUG )->notice( sprintf( 'All sessions have been deleted (%d deleted meta).', $sessions ) );
 					}
 					\DecaLog\Engine::tracesLogger( POSE_SLUG )->endSpan( $span );
+
 					return $sessions;
 				}
 			} else {
 				\DecaLog\Engine::eventsLogger( POSE_SLUG )->alert( 'An unknown user attempted to delete all active sessions.' );
+
 				return false;
 			}
 		} else {
 			\DecaLog\Engine::eventsLogger( POSE_SLUG )->alert( 'A non authorized user attempted to delete all active sessions.' );
+
 			return false;
 		}
 	}
@@ -1179,16 +1279,19 @@ class Session {
 						unset( $sessions[ $key ] );
 					}
 					self::set_user_sessions( $sessions, $user_id );
+
 					return $cpt;
 				} else {
 					return 0;
 				}
 			} else {
 				\DecaLog\Engine::eventsLogger( POSE_SLUG )->alert( 'An unknown user attempted to delete all active sessions.' );
+
 				return false;
 			}
 		} else {
 			\DecaLog\Engine::eventsLogger( POSE_SLUG )->alert( 'A non authorized user attempted to delete all active sessions.' );
+
 			return false;
 		}
 	}
@@ -1196,7 +1299,8 @@ class Session {
 	/**
 	 * Delete selected sessions.
 	 *
-	 * @param array   $bulk   The sessions to delete.
+	 * @param array $bulk The sessions to delete.
+	 *
 	 * @return int|bool False if it was not possible, otherwise the number of deleted meta.
 	 * @since    1.0.0
 	 */
@@ -1214,7 +1318,7 @@ class Session {
 					if ( $selftoken !== $token ) {
 						unset( $sessions[ $token ] );
 						if ( self::set_user_sessions( $sessions, $user_id ) ) {
-							++$count;
+							++ $count;
 						}
 					}
 				}
@@ -1226,9 +1330,11 @@ class Session {
 				\DecaLog\Engine::eventsLogger( POSE_SLUG )->notice( sprintf( 'All selected sessions have been deleted (%d deleted sessions).', $count ) );
 			}
 			\DecaLog\Engine::tracesLogger( POSE_SLUG )->endSpan( $span );
+
 			return $count;
 		} else {
 			\DecaLog\Engine::eventsLogger( POSE_SLUG )->alert( 'A non authorized user attempted to delete some active sessions.' );
+
 			return false;
 		}
 	}

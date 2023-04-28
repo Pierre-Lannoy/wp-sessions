@@ -174,7 +174,7 @@ class Sessions_Admin {
 	 */
 	public function init_settings_sections() {
 		add_settings_section( 'pose_plugin_features_section', esc_html__( 'Plugin Features', 'sessions' ), [ $this, 'plugin_features_section_callback' ], 'pose_plugin_features_section' );
-		add_settings_section( 'pose_plugin_messages_section', esc_html__( 'Plugin Messages', 'sessions' ), [ $this, 'plugin_messages_section_callback' ], 'pose_plugin_messages_section' );
+		add_settings_section( 'pose_plugin_messages_section', esc_html__( 'Plugin Behaviour', 'sessions' ), [ $this, 'plugin_messages_section_callback' ], 'pose_plugin_messages_section' );
 		add_settings_section( 'pose_plugin_options_section', esc_html__( 'Plugin options', 'sessions' ), [ $this, 'plugin_options_section_callback' ], 'pose_plugin_options_section' );
 		add_settings_section( 'pose_plugin_roles_section', '', [ $this, 'plugin_roles_section_callback' ], 'pose_plugin_roles_section' );
 		if ( apply_filters( 'perfopsone_show_advanced', false ) ) {
@@ -357,6 +357,7 @@ class Sessions_Admin {
 				Option::network_set( 'rolemode', array_key_exists( 'pose_plugin_features_rolemode', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_features_rolemode', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'rolemode' ) );
 				Option::network_set( 'bad_ip_message', array_key_exists( 'pose_plugin_messages_bad_ip_message', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_messages_bad_ip_message', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) : Option::network_get( 'bad_ip_message' ) );
 				Option::network_set( 'blocked_message', array_key_exists( 'pose_plugin_messages_blocked_message', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_messages_blocked_message', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) : Option::network_get( 'blocked_message' ) );
+				Option::network_set( 'fallback', array_key_exists( 'pose_plugin_messages_fallback', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_messages_fallback', FILTER_SANITIZE_URL ) : Option::network_get( 'fallback' ) );
 				Option::network_set( 'zk_semaphore', array_key_exists( 'pose_plugin_advanced_zk_semaphore', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_advanced_zk_semaphore', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'zk_semaphore' ) );
 				Option::network_set( 'zk_cycle', array_key_exists( 'pose_plugin_advanced_zk_cycle', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_advanced_zk_cycle', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'zk_cycle' ) );
 				Option::network_set( 'zk_tsize', array_key_exists( 'pose_plugin_advanced_zk_tsize', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_advanced_zk_tsize', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'zk_tsize' ) );
@@ -609,6 +610,22 @@ class Sessions_Admin {
 	public function plugin_messages_section_callback() {
 		$form = new Form();
 		add_settings_field(
+			'pose_plugin_messages_fallback',
+			esc_html__( 'Fallback page', 'sessions' ),
+			[ $form, 'echo_field_input_text' ],
+			'pose_plugin_messages_section',
+			'pose_plugin_messages_section',
+			[
+				'id'          => 'pose_plugin_messages_fallback',
+				'value'       => Option::network_get( 'fallback' ),
+				'description' => esc_html__( 'Full URL of the fallback page.', 'sessions' ) . '<br/>' . __(  'To help you to customize your fallback page, a parameter named <code>reason</code> will be added to this url.', 'sessions' ),
+				'full_width'  => false,
+				'placeholder' => '',
+				'enabled'     => true,
+			]
+		);
+		register_setting( 'pose_plugin_messages_section', 'pose_plugin_messages_fallback' );
+		add_settings_field(
 			'pose_plugin_messages_blocked_message',
 			esc_html__( 'Session not allowed', 'sessions' ),
 			[ $form, 'echo_field_input_text' ],
@@ -802,8 +819,9 @@ class Sessions_Admin {
 		$blocks[]  = [ 'local', esc_html__( 'Allow only from public IP ranges', 'sessions' ) ];
 		$methods   = [];
 		$methods[] = [ 'override', esc_html__( 'Override oldest session', 'sessions' ) ];
-		/* translators: please, do not translate the string [HTTP 403 / Forbidden] as it is a standard HTTP header. */
+		/* translators: please, do not translate the strings [HTTP 403 / Forbidden] and [HTTP 303 / See Other] as they are a standard HTTP headers. */
 		$methods[] = [ 'block', esc_html__( 'Block and send a "HTTP 403 / Forbidden" error', 'sessions' ) ];
+		$methods[] = [ 'redirect', esc_html__( 'Block and redirect to the fallback page with a "HTTP 303 / See Other" code', 'sessions' ) ];
 		$methods[] = [ 'default', esc_html__( 'Block and send a WordPress error', 'sessions' ) ];
 		$idle      = [];
 		$idle[]    = [ 0, esc_html__( 'Never terminate an idle session', 'sessions' ) ];
@@ -850,7 +868,7 @@ class Sessions_Admin {
 					'list'        => $blocks,
 					'id'          => 'pose_plugin_roles_block_' . $role,
 					'value'       => $settings[ $role ]['block'],
-					'description' => esc_html__( 'Allowed logins.', 'sessions' ),
+					'description' => esc_html__( 'Allowed IP for logins. A user trying to login from a disallowed IP range will always receive a HTTP/403 error.', 'sessions' ),
 					'full_width'  => false,
 					'enabled'     => true,
 				]
