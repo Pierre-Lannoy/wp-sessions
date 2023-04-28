@@ -3,15 +3,15 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.10.0] - Not Yet Released
+## [2.10.0] - 2023-04-28
 
 ### Added
 - New blocking type "fallback page" to redirect user when he/she is not authorized to login (thanks to [drmustafa1](https://github.com/drmustafa1)).
 
 ### Changed
-- Improved the speed of sessions lookup on large WordPress users base.
+- Improved speed of sessions lookup on large WordPress users base.
 - Improved messages handling.
-- Details are added (in the UI) about allowing logins from all/publix/private IP ranges.
+- Details added (in the UI) about allowing logins from all/public/private IP ranges.
 
 ## [2.9.1] - 2023-03-02
 
