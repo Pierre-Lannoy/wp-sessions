@@ -601,7 +601,7 @@ class Analytics {
 						'ratio'       => null,
 						'variation'   => [
 							'raw'      => round( $data['kpi-index-session'] / 100, 6 ),
-							'percent'  => round( $data['kpi-index-session'], 2 ),
+							'percent'  => round( $data['kpi-index-session'] ?? 0, 2 ),
 							'permille' => round( $data['kpi-index-session'] * 10, 2 ),
 						],
 						'value'       => [
@@ -626,7 +626,7 @@ class Analytics {
 						'ratio'       => null,
 						'variation'   => [
 							'raw'      => round( $data['kpi-index-cleaned'] / 100, 6 ),
-							'percent'  => round( $data['kpi-index-cleaned'], 2 ),
+							'percent'  => round( $data['kpi-index-cleaned'] ?? 0, 2 ),
 							'permille' => round( $data['kpi-index-cleaned'] * 10, 2 ),
 						],
 						'value'       => [
@@ -650,12 +650,12 @@ class Analytics {
 						'dimension'   => 'none',
 						'ratio'       => [
 							'raw'      => round( $data['kpi-main-login'] / 100, 6 ),
-							'percent'  => round( $data['kpi-main-login'], 2 ),
+							'percent'  => round( $data['kpi-main-login'] ?? 0, 2 ),
 							'permille' => round( $data['kpi-main-login'] * 10, 2 ),
 						],
 						'variation'   => [
 							'raw'      => round( $data['kpi-index-login'] / 100, 6 ),
-							'percent'  => round( $data['kpi-index-login'], 2 ),
+							'percent'  => round( $data['kpi-index-login'] ?? 0, 2 ),
 							'permille' => round( $data['kpi-index-login'] * 10, 2 ),
 						],
 						'value'       => [
@@ -679,12 +679,12 @@ class Analytics {
 						'dimension'   => 'none',
 						'ratio'       => [
 							'raw'      => round( $data['kpi-main-turnover'] / 100, 6 ),
-							'percent'  => round( $data['kpi-main-turnover'], 2 ),
+							'percent'  => round( $data['kpi-main-turnover'] ?? 0, 2 ),
 							'permille' => round( $data['kpi-main-turnover'] * 10, 2 ),
 						],
 						'variation'   => [
 							'raw'      => round( $data['kpi-index-turnover'] / 100, 6 ),
-							'percent'  => round( $data['kpi-index-turnover'], 2 ),
+							'percent'  => round( $data['kpi-index-turnover'] ?? 0, 2 ),
 							'permille' => round( $data['kpi-index-turnover'] * 10, 2 ),
 						],
 						'value'       => [
@@ -708,12 +708,12 @@ class Analytics {
 						'dimension'   => 'none',
 						'ratio'       => [
 							'raw'      => round( $data['kpi-main-user'] / 100, 6 ),
-							'percent'  => round( $data['kpi-main-user'], 2 ),
+							'percent'  => round( $data['kpi-main-user'] ?? 0, 2 ),
 							'permille' => round( $data['kpi-main-user'] * 10, 2 ),
 						],
 						'variation'   => [
 							'raw'      => round( $data['kpi-index-user'] / 100, 6 ),
-							'percent'  => round( $data['kpi-index-user'], 2 ),
+							'percent'  => round( $data['kpi-index-user'] ?? 0, 2 ),
 							'permille' => round( $data['kpi-index-user'] * 10, 2 ),
 						],
 						'value'       => [
@@ -737,12 +737,12 @@ class Analytics {
 						'dimension'   => 'none',
 						'ratio'       => [
 							'raw'      => round( $data['kpi-main-spam'] / 100, 6 ),
-							'percent'  => round( $data['kpi-main-spam'], 2 ),
+							'percent'  => round( $data['kpi-main-spam'] ?? 0, 2 ),
 							'permille' => round( $data['kpi-main-spam'] * 10, 2 ),
 						],
 						'variation'   => [
 							'raw'      => round( $data['kpi-index-spam'] / 100, 6 ),
-							'percent'  => round( $data['kpi-index-spam'], 2 ),
+							'percent'  => round( $data['kpi-index-spam'] ?? 0, 2 ),
 							'permille' => round( $data['kpi-index-spam'] * 10, 2 ),
 						],
 						'value'       => [
