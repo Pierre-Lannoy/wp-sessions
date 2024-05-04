@@ -3,7 +3,7 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.13.1] - Not Yet Released
+## [2.13.1] - 2024-05-04
 
 ### Changed
 - Updated DecaLog SDK from version 3.0.0 to version 4.1.0.
