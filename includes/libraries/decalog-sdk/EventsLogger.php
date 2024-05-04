@@ -9,7 +9,7 @@
 
 namespace DecaLog;
 
-if ( defined( 'DECALOG_VERSION' )  && version_compare(DECALOG_VERSION, '4.0.0', '<') ) {
+if ( defined( 'DECALOG_VERSION' )  && version_compare(DECALOG_VERSION, '3.11.0', '<') ) {
 
 	/**
 	 * DecaLog PSR-3 logger class. Failsafe for old PSR-3 versions.

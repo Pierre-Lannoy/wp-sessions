@@ -4,7 +4,7 @@ Tags: authentication, login, protection, role, session
 Requires at least: 6.2
 Requires PHP: 8.1
 Tested up to: 6.5
-Stable tag: 2.13.2
+Stable tag: 2.13.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
