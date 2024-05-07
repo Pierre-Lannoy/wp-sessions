@@ -3,6 +3,11 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.14.0] - 2024-05-07
+
+### Changed
+- The plugin now adapts its requirements to the PSR-3 loaded version.
+
 ## [2.13.3] - 2024-05-04
 
 ### Fixed

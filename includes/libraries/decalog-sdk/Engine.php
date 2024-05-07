@@ -26,7 +26,7 @@ class Engine {
 	 * @since  1.0.0
 	 * @var    string    $version    Maintains the engine version.
 	 */
-	private static $version = '4.1.0';
+	private static $version = '4.2.0';
 
 	/**
 	 * The logger instances and parameters.
@@ -39,7 +39,7 @@ class Engine {
 	/**
 	 * Registers a new logger.
 	 *
-	 * @param string $class   The class identifier, must be a value in ['plugin', 'theme'].
+	 * @param string $class   The class identifier, must be a value in ['plugin', 'theme', 'library'].
 	 * @param string $slug    The slug identifier.
 	 * @param string $name    The name of the component that will trigger events.
 	 * @param string $version The version of the component that will trigger events.
@@ -83,6 +83,28 @@ class Engine {
 	}
 
 	/**
+	 * Get the loaded version of PSR-3.
+	 *
+	 * @return  int  The PSR-3 main version.
+	 * @since 4.2.0
+	 */
+	public static function getPsrVersion() {
+		if ( class_exists( '\Psr\Log\NullLogger') ) {
+			$reflection = new \ReflectionMethod(\Psr\Log\NullLogger::class, 'log');
+			foreach ( $reflection->getParameters() as $param ) {
+				if ( 'message' === $param->getName() ) {
+					if ( str_contains($param->getType() ?? '', '|') ) {
+						return 3;
+					}
+				}
+			}
+		} else {
+			return 0;
+		}
+		return 1;
+	}
+
+	/**
 	 * Get the version of DecaLog.
 	 *
 	 * @return  string  The (SemVer) DecaLog version.
@@ -106,7 +128,7 @@ class Engine {
 			if ( ! defined( 'DECALOG_PRODUCT_NAME' ) ) {
 				define( 'DECALOG_PRODUCT_NAME', 'DecaLog' );
 			}
-			return DECALOG_PRODUCT_NAME . ' ' . self::getDecalogVersion() . ' (SDK ' . self::getSdkVersion() . ')';
+			return DECALOG_PRODUCT_NAME . ' ' . self::getDecalogVersion() . ' (SDK ' . self::getSdkVersion() . ' / PSR-3^' . self::getPsrVersion() . ')';
 		}
 		return '';
 	}
