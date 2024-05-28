@@ -80,11 +80,16 @@ class Libraries {
 			'license' => 'mit',
 			'langs'   => 'en',
 		];
+		if ( function_exists( 'decalog_get_psr_log_version' ) ) {
+			$psrlog_version = decalog_get_psr_log_version();
+		} else {
+			$psrlog_version = 1;
+		}
 		self::$psr4_libraries['psr-03']      = [
 			'name'    => 'PSR-3',
 			'prefix'  => 'Psr\\Log',
-			'base'    => POSE_VENDOR_DIR . 'psr/log/',
-			'version' => '3.0.0',
+			'base'    => POSE_VENDOR_DIR . 'psr/log-v' . $psrlog_version . '/',
+			'version' => $psrlog_version . '.0.0',
 			'author'  => 'PHP Framework Interop Group',
 			'url'     => 'https://www.php-fig.org/',
 			'license' => 'mit',
