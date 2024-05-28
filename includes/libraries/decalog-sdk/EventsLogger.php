@@ -266,7 +266,7 @@ if ( 3 === \DecaLog\Engine::getPsrVersion() ) {
 		}
 	}
 
-} else { // if version in not detected or equal to 1
+} else {
 
 	/**
 	 * DecaLog PSR-3 logger class. Failsafe for old PSR-3 versions.
