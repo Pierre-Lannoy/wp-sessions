@@ -417,7 +417,7 @@ class Sessions_Admin {
 				'max'         => 200000,
 				'step'        => 1000,
 				'description' => 'List size, in number of items.',
-				'full_width'  => true,
+				'full_width'  => false,
 				'enabled'     => true,
 			]
 		);
@@ -435,7 +435,7 @@ class Sessions_Admin {
 				'max'         => 1000,
 				'step'        => 10,
 				'description' => 'Batch size, in number of items.',
-				'full_width'  => true,
+				'full_width'  => false,
 				'enabled'     => true,
 			]
 		);
@@ -453,7 +453,7 @@ class Sessions_Admin {
 				'max'         => 1800,
 				'step'        => 60,
 				'description' => 'Semaphore auto release, in seconds.',
-				'full_width'  => true,
+				'full_width'  => false,
 				'enabled'     => true,
 			]
 		);
@@ -471,7 +471,7 @@ class Sessions_Admin {
 				'max'         => 1800,
 				'step'        => 30,
 				'description' => 'Cycle duration, in seconds. Must be less than semaphore value.',
-				'full_width'  => true,
+				'full_width'  => false,
 				'enabled'     => true,
 			]
 		);
