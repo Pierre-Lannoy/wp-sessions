@@ -64,7 +64,7 @@ class Libraries {
 			'base'    => POSE_VENDOR_DIR . 'feather/',
 			'version' => '4.24.1',
 			// phpcs:ignore
-			'author'  => sprintf( esc_html__( '%s & contributors', 'sessions' ), 'Cole Bemis' ),
+			'author'  => 'Cole Bemis',
 			'url'     => 'https://feathericons.com',
 			'license' => 'mit',
 			'langs'   => 'en',
@@ -75,7 +75,7 @@ class Libraries {
 			'base'    => POSE_VENDOR_DIR . 'markdown/',
 			'version' => '1.2.1',
 			// phpcs:ignore
-			'author'  => sprintf( esc_html__( '%s & contributors', 'sessions' ), 'Carsten Brandt' ),
+			'author'  => 'Carsten Brandt',
 			'url'     => 'https://github.com/cebe/markdown',
 			'license' => 'mit',
 			'langs'   => 'en',
@@ -217,7 +217,7 @@ class Libraries {
 		$item            = [];
 		$item['name']    = 'Date Range Picker';
 		$item['version'] = '3.0.5';
-		$item['author']  = sprintf( esc_html__( '%s & contributors', 'sessions' ), 'Dan Grossman' );
+		$item['author']  = 'Dan Grossman';
 		$item['url']     = 'https://github.com/dangrossman/daterangepicker';
 		$item['license'] = $this->license_name( 'mit' );
 		$item['langs']   = L10n::get_language_markup( [ 'en' ] );
@@ -225,21 +225,21 @@ class Libraries {
 		$item            = [];
 		$item['name']    = 'Moment';
 		$item['version'] = '2.29.4';
-		$item['author']  = sprintf( esc_html__( '%s & contributors', 'sessions' ), 'Tim Wood' );
+		$item['author']  = 'Tim Wood';
 		$item['url']     = 'https://github.com/moment/moment';
 		$item['license'] = $this->license_name( 'mit' );
 		$item['langs']   = L10n::get_language_markup( [ 'en' ] );
 		$list[]          = $item;
 		$item['name']    = 'SVG-Loaders';
 		$item['version'] = '1.0.2';
-		$item['author']  = sprintf( esc_html__( '%s & contributors', 'sessions' ), 'Sam Herbert' );
+		$item['author']  = 'Sam Herbert';
 		$item['url']     = 'https://github.com/SamHerbert/SVG-Loaders';
 		$item['license'] = $this->license_name( 'mit' );
 		$item['langs']   = L10n::get_language_markup( [ 'en' ] );
 		$list[]          = $item;
 		$item['name']    = 'Chartist-JS';
 		$item['version'] = '0.11.4';
-		$item['author']  = sprintf( esc_html__( '%s & contributors', 'sessions' ), 'Gion Kunz' );
+		$item['author']  = 'Gion Kunz';
 		$item['url']     = 'https://github.com/gionkunz/chartist-js';
 		$item['license'] = $this->license_name( 'mit' );
 		$item['langs']   = L10n::get_language_markup( [ 'en' ] );
@@ -249,7 +249,7 @@ class Libraries {
 			$items = [];
 			foreach ( $list as $library ) {
 				/* translators: as in the sentence "Product W version X by author Y (license Z)" */
-				$items[] = sprintf( __( '<a href="%1$s">%2$s %3$s</a>%4$s by %5$s (%6$s)', 'sessions' ), $library['url'], $library['name'], 'v' . $library['version'], $library['langs'], $library['author'], $library['license'] );
+				$items[] = sprintf( __( '<a href="%1$s">%2$s %3$s</a>%4$s by %5$s & contributors (%6$s)', 'sessions' ), $library['url'], $library['name'], 'v' . $library['version'], $library['langs'], $library['author'], $library['license'] );
 			}
 			$result = implode( ', ', $items );
 		}

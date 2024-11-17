@@ -40,10 +40,6 @@ class Initializer {
 		\POSessions\System\APCu::init();
 		\POSessions\Plugin\Feature\UserAdministration::init();
 		\POSessions\Plugin\Feature\ZooKeeper::init();
-		//if ( 'en_US' !== determine_locale() ) {
-			unload_textdomain( POSE_SLUG );
-			load_plugin_textdomain( POSE_SLUG );
-		//}
 	}
 
 	/**
