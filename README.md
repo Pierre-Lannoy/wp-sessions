@@ -8,8 +8,6 @@ __Sessions__ is a powerful sessions manager for WordPress with a multi-criteria 
 
 See [WordPress directory page](https://wordpress.org/plugins/sessions/) or [official website](https://perfops.one/sessions).
 
-> 🎁 Give this plugin a drive test on a free dummy site: [One-Click Test!](https://tastewp.com/new/?pre-installed-plugin-slug=sessions)
-
 You can limit concurrent sessions, on a per role basis for the following criteria:
 
 * count per user;

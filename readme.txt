@@ -14,8 +14,6 @@ Powerful sessions manager for WordPress with sessions limiter and full analytics
 
 **Sessions** is a powerful sessions manager for WordPress with a multi-criteria sessions limiter and full analytics reporting about logins, logouts and account creation. It relies on the standard WordPress sessions manager and add it extra features and controls.
 
-> 🎁 Give this plugin a drive test on a free dummy site: [One-Click Test!](https://tastewp.com/new/?pre-installed-plugin-slug=sessions)
-
 You can limit concurrent sessions, on a per role basis for the following criteria:
 
 * count per user;
