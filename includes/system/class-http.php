@@ -186,7 +186,7 @@ class Http {
 	 * @since  1.0.0
 	 */
 	public static function user_agent() {
-		return POSE_PRODUCT_NAME . ' (' . Environment::wordpress_version_id() . '; ' . Environment::plugin_version_id() . '; +' . POSE_PRODUCT_URL . ')';
+		return 'PerfOps One - ' . POSE_PRODUCT_NAME . ' / ' . POSE_VERSION . ' (https://perfops.one/' . POSE_SLUG . ')';
 	}
 
 	/**
