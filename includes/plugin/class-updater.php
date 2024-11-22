@@ -110,7 +110,7 @@ class Updater {
 	 * @return  object   The remote info.
 	 */
 	private function gather_info() {
-		$remotes = get_transient( 'update-' . $this->slug );
+		$remotes = Cache::get_global( 'data_update-infos' );
 		if ( ! $remotes ) {
 			$remotes = new \stdClass();
 
@@ -134,7 +134,7 @@ class Updater {
 			$remotes->author_profile = $plugin_info['author_profile'] ?? 'https://profiles.wordpress.org/pierrelannoy/';
 
 			$remote = wp_remote_get(
-				str_replace( 'github.com', 'api.github.com/repos', $this->product ) . '/releases/latest',
+				'https://releases.perfops.one/' . $this->slug . '.json',
 				[
 					'timeout' => 10,
 					'headers' => [
@@ -158,7 +158,7 @@ class Updater {
 				return false;
 			}
 
-			set_transient( 'update-' . $this->slug, $remotes, DAY_IN_SECONDS );
+			Cache::set_global( 'data_update-infos', $remotes, DAY_IN_SECONDS );
 		}
 
 		return $remotes;
