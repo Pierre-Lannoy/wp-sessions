@@ -3,6 +3,24 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2024-11-22
+
+### Added
+- Compatibility with WordPress 6.6 & 6.7.
+
+### Changed
+- Ability to self-update from Github.
+- The plugin user agent is now more consistent and "standard".
+
+### Fixed
+- There's a WordPress core "feature" which causes some PII to leak (to wp.org) during plugin and theme updates. This is no more the case for this plugin.
+- In some cases, a WordPress notice can be triggered concerning the loading sequence of translations.
+
+### Removed
+- Test site launching from wordpress.org plugin page.
+- All Databeam hooks and libraries, as the Databeam project is abandoned.
+- Dependency on wp.org for updates.
+
 ## [3.0.1] - Not Yet Released
 
 ### Changed
