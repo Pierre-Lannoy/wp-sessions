@@ -3,6 +3,11 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.1] - 2024-12-11
+
+### Fixed
+- [SEC006] XSS vulnerability.
+
 ## [3.1.0] - 2024-11-22
 
 ### Added

@@ -29,6 +29,14 @@ use POSessions\System\Timezone;
 class AnalyticsFactory {
 
 	/**
+	 * Allowed types.
+	 *
+	 * @since  3.1.1
+	 * @var    array    $allowed_types    Maintain the allowed types.
+	 */
+	private static $allowed_types = [ ];
+
+	/**
 	 * Ajax callback.
 	 *
 	 * @since    1.0.0
@@ -53,7 +61,7 @@ class AnalyticsFactory {
 		if ( ! ( $type = filter_input( INPUT_GET, 'type' ) ) ) {
 			$type = filter_input( INPUT_POST, 'type' );
 		}
-		if ( empty( $type ) ) {
+		if ( empty( $type ) || ! in_array( $type, self::$allowed_types ) ) {
 			$type = 'summary';
 		}
 		// Filters.
