@@ -357,15 +357,24 @@ class Sessions_Admin {
 				Option::network_set( 'rolemode', array_key_exists( 'pose_plugin_features_rolemode', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_features_rolemode', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'rolemode' ) );
 				Option::network_set( 'bad_ip_message', array_key_exists( 'pose_plugin_messages_bad_ip_message', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_messages_bad_ip_message', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) : Option::network_get( 'bad_ip_message' ) );
 				Option::network_set( 'blocked_message', array_key_exists( 'pose_plugin_messages_blocked_message', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_messages_blocked_message', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) : Option::network_get( 'blocked_message' ) );
-				Option::network_set( 'fallback', array_key_exists( 'pose_plugin_messages_fallback', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_messages_fallback', FILTER_SANITIZE_URL ) : Option::network_get( 'fallback' ) );
 				Option::network_set( 'zk_semaphore', array_key_exists( 'pose_plugin_advanced_zk_semaphore', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_advanced_zk_semaphore', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'zk_semaphore' ) );
 				Option::network_set( 'zk_cycle', array_key_exists( 'pose_plugin_advanced_zk_cycle', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_advanced_zk_cycle', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'zk_cycle' ) );
 				Option::network_set( 'zk_tsize', array_key_exists( 'pose_plugin_advanced_zk_tsize', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_advanced_zk_tsize', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'zk_tsize' ) );
 				Option::network_set( 'buffer_limit', array_key_exists( 'pose_plugin_advanced_buffer_limit', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_advanced_buffer_limit', FILTER_SANITIZE_NUMBER_INT ) : Option::network_get( 'buffer_limit' ) );
-				$message = esc_html__( 'Plugin settings have been saved.', 'sessions' );
-				$code    = 0;
-				add_settings_error( 'pose_no_error', $code, $message, 'updated' );
-				\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( 'Plugin settings updated.', [ 'code' => $code ] );
+				$fallback = array_key_exists( 'pose_plugin_messages_fallback', $_POST ) ? (string) filter_input( INPUT_POST, 'pose_plugin_messages_fallback', FILTER_SANITIZE_URL ) : Option::network_get( 'fallback' );
+				if ( filter_var( $fallback, FILTER_VALIDATE_URL ) ) {
+					Option::network_set( 'fallback', $fallback );
+					$message = esc_html__( 'Plugin settings have been saved.', 'sessions' );
+					$code    = 0;
+					add_settings_error( 'pose_no_error', $code, $message, 'updated' );
+					\DecaLog\Engine::eventsLogger( POSE_SLUG )->info( 'Plugin settings updated.', [ 'code' => $code ] );
+				} else {
+					Option::network_set( 'fallback', '' );
+					$message = esc_html__( 'Plugin settings have not been fully saved. Please verify the fallback page url.', 'sessions' );
+					$code    = 3;
+					add_settings_error( 'pose_nonce_error', $code, $message, 'error' );
+					\DecaLog\Engine::eventsLogger( POSE_SLUG )->warning( 'Plugin settings not fully updated.', [ 'code' => $code ] );
+				}
 			} else {
 				$message = esc_html__( 'Plugin settings have not been saved. Please try again.', 'sessions' );
 				$code    = 2;
