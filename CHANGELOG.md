@@ -3,11 +3,16 @@ All notable changes to **Sessions** are documented in this *changelog*.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and **Sessions** adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] - 2025-11-20
+
+### Added
+- Compatibility with WordPress 6.9.
+
 ## [3.2.1] - 2025-08-20
 
 ### Fixed
 - [SEC005] XSS vulnerability (thanks to [Nabil Irawan](https://patchstack.com/database/researcher/5ed330fb-186f-46e7-a384-7fa23435a9e0) from [Patchstack](https://patchstack.com)).
-- An error may be triggered while viewing plugin detail (in plugins page)
+- An error may be triggered while viewing plugin detail (in plugins page).
 
 ## [3.2.0] - 2025-04-14
 
