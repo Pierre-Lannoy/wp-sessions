@@ -218,7 +218,7 @@ class Schema {
 	 */
 	private function create_table() {
 		global $wpdb;
-		$charset_collate = 'DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci';
+		$charset_collate = 'DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci';
 		$sql             = 'CREATE TABLE IF NOT EXISTS ' . $wpdb->base_prefix . self::$statistics;
 		$sql            .= " (`timestamp` date NOT NULL DEFAULT '0000-00-00',";
 		$sql            .= " `cnt` int(11) UNSIGNED NOT NULL DEFAULT '0',";
