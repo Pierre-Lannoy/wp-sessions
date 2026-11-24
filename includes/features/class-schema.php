@@ -90,7 +90,7 @@ class Schema {
 		foreach ( $record as $k => $v ) {
 			$field_insert[] = '`' . $k . '`';
 			if ( 'timestamp' === $k ) {
-				$value_insert[] = "'" . $v . "'";
+				$value_insert[] = "'" . esc_sql( $v ) . "'";
 			} else {
 				$value_insert[] = (int) $v;
 				$value_update[] = '`' . $k . '`=`' . $k . '` + ' . (int) $v;
